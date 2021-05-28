@@ -20,4 +20,4 @@
 
 ## Project Management Tools
 
-* 📖 [GitHub]()
+* 📖 [GitHub](https://github.com/COS301-SE-2021/AR-VR-GAN/projects/1)
