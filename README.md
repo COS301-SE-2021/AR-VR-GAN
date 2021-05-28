@@ -1,1 +1,1 @@
-"# AR-VR-GAN" 
+# AR/VR-GAN 
