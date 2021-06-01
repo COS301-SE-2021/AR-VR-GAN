@@ -12,6 +12,11 @@ app.get('/', function(req, res) {
 io.on('connection', function(socket) {
    console.log('A user connected');
 
+   socket.on('Coords',(data)=>
+   {
+      console.log(data);
+   });
+
    //Whenever someone disconnects this piece of code executed
    socket.on('disconnect', function () {
       console.log('A user disconnected');
