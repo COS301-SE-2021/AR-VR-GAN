@@ -8,7 +8,7 @@ if __name__ == "__main__":
     modelEncapsulator = ModelEncapsulator()
 
     initialModel.train_CVAE(2)
-    modelEncapsulator.save_model(initialModel)
+    modelEncapsulator.save_model(initialModel.getModel())
     print("Model saved!")
     anotherModel = modelEncapsulator.load_model()
 
