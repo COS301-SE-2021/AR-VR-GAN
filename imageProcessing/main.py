@@ -1,13 +1,16 @@
 import tensorflow as tf
-import imageProcessing
+from imageProcessing import ImageProcessing, ModelEncapsulator
 
 if __name__ == "__main__":
     
-    initialModel = imageProcessing()
-    
-    initialModel.train_CVAE()
+    initialModel = None
+    initialModel = ImageProcessing()
+    modelEncapsulator = ModelEncapsulator()
 
-    initialModel.save_model()
+    initialModel.train_CVAE(2)
+    modelEncapsulator.save_model(initialModel)
+    print("Model saved!")
+    anotherModel = modelEncapsulator.load_model()
 
     (train_images, _), (test_images, _) = tf.keras.datasets.mnist.load_data()
 
@@ -23,4 +26,4 @@ if __name__ == "__main__":
     for test_batch in test_dataset.take(1):
         test_sample = test_batch[0:num_examples_to_generate, :, :, :]
 
-    initialModel.generate_image_and_save_images()
+    initialModel.generate_image_and_save_images(test_sample)

@@ -9,6 +9,7 @@ import tensorflow as tf
 import tensorflow_probability as tfp
 import time
 import pickle
+import os
 
 
 class CVAE(tf.keras.Model):
@@ -74,24 +75,17 @@ class ImageProcessing:
         It will save models it has trained into persistant memory and 
         load previously trained models. """
 
-    self.model = None
+    def __init__(self):
+        self.model = None
+        self.my_path = os.path.abspath(__file__)
+        self.optimizer = tf.keras.optimizers.Adam(1e-4)
 
-    optimizer = tf.keras.optimizers.Adam(1e-4)
+    def getModel(self):
+        return self.model
 
-    def save_model(self, file_name="./savedModels/CVAE_Model.pickle"):
-        """ This method saves a trained model """
-        file_to_store = open(file_name, "wb")
-        pickle.dump(self.model, file_to_store)
-        file_to_store.close()
-        print("FILE SAVED")
-
-    def load_model(self, file_name="./savedModels/CVAE_Model.pickle"):
-        """ This method loads a saved and trained model """
-        file_to_read = open(file_name, "rb")
-        self.model = pickle.load(file_to_read)
-        file_to_read.close()
-        print("FILE READ")
-
+    def setModel(self, model=None):
+        if model == None:
+            raise Exception("Model is set to `None`.")
 
     def CVAE_log_normal_pdf(self, sample, mean, logvar, raxis=1):
         log2pi = tf.math.log(2. * np.pi)
@@ -99,15 +93,14 @@ class ImageProcessing:
             -.5 * ((sample - mean) ** 2. * tf.exp(-logvar) + logvar + log2pi),
             axis=raxis)
 
-
     def CVAE_compute_loss(self, model, x):
         mean, logvar = model.encode(x)
         z = model.reparameterize(mean, logvar)
         x_logit = model.decode(z)
         cross_ent = tf.nn.sigmoid_cross_entropy_with_logits(logits=x_logit, labels=x)
         logpx_z = -tf.reduce_sum(cross_ent, axis=[1, 2, 3])
-        logpz = CVAE_log_normal_pdf(z, 0., 0.)
-        logqz_x = CVAE_log_normal_pdf(z, mean, logvar)
+        logpz = self.CVAE_log_normal_pdf(z, 0., 0.)
+        logqz_x = self.CVAE_log_normal_pdf(z, mean, logvar)
         return -tf.reduce_mean(logpx_z + logpz - logqz_x)
 
 
@@ -119,14 +112,14 @@ class ImageProcessing:
         update the model's parameters.
         """
         with tf.GradientTape() as tape:
-            loss = CVAE_compute_loss(model, x)
+            loss = self.CVAE_compute_loss(model, x)
         gradients = tape.gradient(loss, model.trainable_variables)
         optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
     def generate_and_save_images(self, test_sample, epoch=0, training_image=False):
         mean, logvar = self.model.encode(test_sample)
-        z = model.reparameterize(mean, logvar)
-        predictions = model.sample(z)
+        z = self.model.reparameterize(mean, logvar)
+        predictions = self.model.sample(z)
         fig = plt.figure(figsize=(4, 4))
 
         for i in range(predictions.shape[0]):
@@ -136,10 +129,10 @@ class ImageProcessing:
 
         # tight_layout minimizes the overlap between 2 sub-plots
         if(training_image == False):
-            plt.savefig('./savedImages/CVAE_image_at_epoch_{:04d}.png'.format(epoch))
+            plt.savefig(os.path.join(self.my_path , 'savedImages', 'CVAE_image_at_epoch_{:04d}.png'.format(epoch)))
         else:
-            plt.savefig('./savedImages/training/CVAE_image_at_epoch_{:04d}.png'.format(epoch))
-        # plt.show()
+            plt.savefig(os.path.join(self.my_path ,'savedImages', 'training', 'CVAE_image_at_epoch_{:04d}.png'.format(epoch)))
+            plt.show()
 
     def preprocess_images(self, images):
         images = images.reshape((images.shape[0], 28, 28, 1)) / 255.
@@ -148,16 +141,23 @@ class ImageProcessing:
     def display_image(self, epoch_no):
         return PIL.Image.open('image_at_epoch_{:04d}.png'.format(epoch_no))
 
-    def train_CVAE(self, epochs = 10, model = self.model):
+    def train_CVAE(self, epochs = 10, model = None):
         """ This functions trains the CVAE model """
+        latent_dim = 2
+        if model == None:
+            if self.model == None:
+                # We use 2 because that is the latent dimensions we want to use
+                self.model = CVAE(latent_dim)
+
+            model = self.model
 
         # This function get the dataset from keras datasets
         # In the final implementation we will use have this as the default dataset
         # and also have the user import their own custom dataset
         (train_images, _), (test_images, _) = tf.keras.datasets.mnist.load_data()
 
-        train_images = preprocess_images(train_images)
-        test_images = preprocess_images(test_images)
+        train_images = self.preprocess_images(train_images)
+        test_images = self.preprocess_images(test_images)
 
         train_size = 60000
         batch_size = 32
@@ -170,7 +170,6 @@ class ImageProcessing:
 
         # epochs = 10
         # set the dimensionality of the latent space to a plane for visualization later
-        latent_dim = 2
         num_examples_to_generate = 16
 
         # keeping the random vector constant for generation (prediction) so
@@ -185,23 +184,67 @@ class ImageProcessing:
         for test_batch in test_dataset.take(1):
             test_sample = test_batch[0:num_examples_to_generate, :, :, :]
 
-        self.generate_and_save_images(test_sample, 0, True)
+        # self.generate_and_save_images(test_sample, 0, True)
 
         for epoch in range(1, epochs + 1):
             start_time = time.time()
             print("Iteration: {}".format(epoch))
             for train_x in train_dataset:
-                CVAE_train_step(model, train_x, optimizer)
+                self.CVAE_train_step(model, train_x, self.optimizer)
             end_time = time.time()
 
             loss = tf.keras.metrics.Mean()
             for test_x in test_dataset:
-                loss(CVAE_compute_loss(model, test_x))
+                loss(self.CVAE_compute_loss(model, test_x))
             elbo = -loss.result()
             display.clear_output(wait=False)
             print('Epoch: {}, Test set ELBO: {}, time elapse for current epoch: {}'
                     .format(epoch, elbo, end_time - start_time))
-            self.generate_and_save_image(test_sample, epoch, True)
+            # self.generate_and_save_images(test_sample, epoch, True)
         
         print("Training complete")
 
+class ModelEncapsulator:
+    def __init__(self):
+        self.models = []
+
+    def getNumberOfModels(self):
+        return len(self.models)
+
+    def getModels(self):
+        return models
+
+    def getModel(self, index):
+        if len(self.models) == 0:
+            raise Exception("There are no available models")
+
+        if index >= len(self.models):
+            raise Exception("Index out of range available models")
+        elif index < len(self.modle):
+            raise Exception("Index out of range available models")
+        
+        return models[index]
+
+
+    def save_model(self, model=None, file_name="./savedModels/CVAE_Model.pickle"):
+        """ This method saves a trained model """
+        if model == None:
+            raise Exception("Model is set to `None`")
+        else:
+            file_to_store = open(file_name, "wb")
+            store = model
+            pickle.dump(store, file_to_store, pickle.HIGHEST_PROTOCOL)
+            file_to_store.close()
+            print("FILE SAVED")
+
+    def load_model(self, file_name="./savedModels/CVAE_Model.pickle"):
+        """ This method loads a saved and trained model """
+        file_to_read = open(file_name, "rb")
+        store = pickle.load(file_to_read)
+        file_to_read.close()
+        if store == None:
+            raise Exception("Model is set to `None`")
+        else:
+            print("FILE READ")
+            self.models.append(store)
+            return store
