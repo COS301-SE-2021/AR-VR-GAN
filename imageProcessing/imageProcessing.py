@@ -123,8 +123,8 @@ class ImageProcessing:
         gradients = tape.gradient(loss, model.trainable_variables)
         optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
-    def generate_and_save_images(self, model, epoch, test_sample, training_image=False):
-        mean, logvar = model.encode(test_sample)
+    def generate_and_save_images(self, test_sample, epoch=0, training_image=False):
+        mean, logvar = self.model.encode(test_sample)
         z = model.reparameterize(mean, logvar)
         predictions = model.sample(z)
         fig = plt.figure(figsize=(4, 4))
@@ -185,10 +185,11 @@ class ImageProcessing:
         for test_batch in test_dataset.take(1):
             test_sample = test_batch[0:num_examples_to_generate, :, :, :]
 
-        generate_and_save_images(model, 0, test_sample, True)
+        self.generate_and_save_images(test_sample, 0, True)
 
         for epoch in range(1, epochs + 1):
             start_time = time.time()
+            print("Iteration: {}".format(epoch))
             for train_x in train_dataset:
                 CVAE_train_step(model, train_x, optimizer)
             end_time = time.time()
@@ -200,4 +201,7 @@ class ImageProcessing:
             display.clear_output(wait=False)
             print('Epoch: {}, Test set ELBO: {}, time elapse for current epoch: {}'
                     .format(epoch, elbo, end_time - start_time))
-            generate_and_save_images(model, epoch, test_sample, True)
+            self.generate_and_save_image(test_sample, epoch, True)
+        
+        print("Training complete")
+
