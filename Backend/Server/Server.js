@@ -20,8 +20,9 @@ function Server () {
         image(req.body,req,res)
     })
 
+    //calls the login function if the post /login is called
     app.post('/login', (req,res) =>{
-        image(req.body,req,res)
+        login(req.body,req,res)
     })
 
     

@@ -22,6 +22,6 @@ describe('/login',() =>{
 
     //test that the /image POST request is correct
     it("respond with JSON containing the body", () =>{
-        return request.post("/image").send(data).expect(data).expect('Content-Type', /json/).expect(200)
+        return request.post("/login").send(data).expect(data).expect('Content-Type', /json/).expect(200)
     })
 })

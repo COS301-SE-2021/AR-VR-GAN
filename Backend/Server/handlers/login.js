@@ -6,7 +6,7 @@
  * @param {response object} res 
  */
 function login(data,req,res){
-    // TODO: communicate with Neural network and Unreal scripts
+    // TODO: Login User
     res.status(200).send(data)
 }
 
