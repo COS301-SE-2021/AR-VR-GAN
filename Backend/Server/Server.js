@@ -2,9 +2,10 @@
 
 const express = require('express')
 const image = require('./handlers/image')
+const login = require('./handlers/login')
 
 /**
- * 
+ * Acts as the server for the Program
  * @returns returns the express app
  */
 function Server () {
@@ -16,6 +17,10 @@ function Server () {
 
     //calls the image function if the post /image is called
     app.post('/image', (req,res) =>{
+        image(req.body,req,res)
+    })
+
+    app.post('/login', (req,res) =>{
         image(req.body,req,res)
     })
 
