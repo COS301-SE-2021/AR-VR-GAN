@@ -26,7 +26,7 @@ class CVAE(tf.keras.Model):
                 filters=64, kernel_size=3, strides=(2, 2), activation='relu'),
             tf.keras.layers.Flatten(),
             # No activation
-            tf.keras.layers.Dense(latent_dim + latent_dim),
+            tf.keras.layers.Dense(self.latent_dim + self.latent_dim),
         ]
     )
 
@@ -74,19 +74,21 @@ class ImageProcessing:
         It will save models it has trained into persistant memory and 
         load previously trained models. """
 
+    self.model = None
+
     optimizer = tf.keras.optimizers.Adam(1e-4)
 
-    def save_model(self, model, file_name="./savedModels/CVAE_Model.pickle"):
+    def save_model(self, file_name="./savedModels/CVAE_Model.pickle"):
         """ This method saves a trained model """
         file_to_store = open(file_name, "wb")
-        pickle.dump(model, file_to_store)
+        pickle.dump(self.model, file_to_store)
         file_to_store.close()
         print("FILE SAVED")
 
-    def load_model(self, model, file_name="./savedModels/CVAE_Model.pickle"):
+    def load_model(self, file_name="./savedModels/CVAE_Model.pickle"):
         """ This method loads a saved and trained model """
         file_to_read = open(file_name, "rb")
-        model = pickle.load(file_to_read)
+        self.model = pickle.load(file_to_read)
         file_to_read.close()
         print("FILE READ")
 
@@ -121,7 +123,7 @@ class ImageProcessing:
         gradients = tape.gradient(loss, model.trainable_variables)
         optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
-    def generate_and_save_images(self, model, epoch, test_sample):
+    def generate_and_save_images(self, model, epoch, test_sample, training_image=False):
         mean, logvar = model.encode(test_sample)
         z = model.reparameterize(mean, logvar)
         predictions = model.sample(z)
@@ -133,8 +135,11 @@ class ImageProcessing:
             plt.axis('off')
 
         # tight_layout minimizes the overlap between 2 sub-plots
-        plt.savefig('./savedImages/CVAE_image_at_epoch_{:04d}.png'.format(epoch))
-        plt.show()
+        if(training_image == False):
+            plt.savefig('./savedImages/CVAE_image_at_epoch_{:04d}.png'.format(epoch))
+        else:
+            plt.savefig('./savedImages/training/CVAE_image_at_epoch_{:04d}.png'.format(epoch))
+        # plt.show()
 
     def preprocess_images(self, images):
         images = images.reshape((images.shape[0], 28, 28, 1)) / 255.
@@ -143,8 +148,8 @@ class ImageProcessing:
     def display_image(self, epoch_no):
         return PIL.Image.open('image_at_epoch_{:04d}.png'.format(epoch_no))
 
-    def train_CVAE(self, epochs = 10):
-        """ This model trains the CVAE model """
+    def train_CVAE(self, epochs = 10, model = self.model):
+        """ This functions trains the CVAE model """
 
         # This function get the dataset from keras datasets
         # In the final implementation we will use have this as the default dataset
@@ -172,14 +177,15 @@ class ImageProcessing:
         # it will be easier to see the improvement.
         random_vector_for_generation = tf.random.normal(
             shape=[num_examples_to_generate, latent_dim])
-        model = CVAE(latent_dim)
+
+        # model = CVAE(latent_dim)
 
         # Pick a sample of the test set for generating output images
         assert batch_size >= num_examples_to_generate
         for test_batch in test_dataset.take(1):
             test_sample = test_batch[0:num_examples_to_generate, :, :, :]
 
-        generate_and_save_images(model, 0, test_sample)
+        generate_and_save_images(model, 0, test_sample, True)
 
         for epoch in range(1, epochs + 1):
             start_time = time.time()
@@ -194,4 +200,4 @@ class ImageProcessing:
             display.clear_output(wait=False)
             print('Epoch: {}, Test set ELBO: {}, time elapse for current epoch: {}'
                     .format(epoch, elbo, end_time - start_time))
-            generate_and_save_images(model, epoch, test_sample)
+            generate_and_save_images(model, epoch, test_sample, True)
