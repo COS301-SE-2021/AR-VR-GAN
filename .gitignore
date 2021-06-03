@@ -1,3 +1,5 @@
-
 Frontend/.DS_Store
+Backend/Server/node_modules
+Backend/node_modules
+Backend/.nyc_output
 .DS_Store
