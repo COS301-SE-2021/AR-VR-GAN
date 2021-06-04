@@ -1,6 +1,8 @@
 # AR/VR-GAN 
 
----
+## About
+
+AR/VR-GAN is a visualization tool allowing a user to explore the feature space of a Disentangled Deep Convolutional Variational Autoencoder in real time through an AR/VR Device.
 
 ## Team Members
 
@@ -11,7 +13,6 @@
 | ![Zachariah Idiculla](https://media-exp1.licdn.com/dms/image/C5603AQHLSQD47hbc0g/profile-displayphoto-shrink_200_200/0/1556744221192?e=1627516800&v=beta&t=bgzaGONTIZKsWB-Q2LPozoU0IsHuVX0t71cr_4BrdGU "Zachariah Idiculla") <br/> Zachariah Idiculla <br/> u17067210 | [GitHub](https://github.com/ZachariahIdiculla) <br/> [Profile Page](https://ZachariahIdiculla.github.io/) <br/> [LinkedIn](https://www.linkedin.com/in/zachariah-idiculla-349692184) <br/> | C++ <br/> Java <br/> Web Design |
 | ![Ethan Coryndon-Baker](https://media-exp1.licdn.com/dms/image/C4D03AQG8AArk1tzV4Q/profile-displayphoto-shrink_200_200/0/1594842560006?e=1627516800&v=beta&t=Ba7KoeGAs-FSTXYscJsmv27pZ26RFJIV-3eq9clT7eM "Ethan Coryndon-Baker") <br/> Ethan Coryndon-Baker <br/> u19200065 | [GitHub](https://github.com/ecoryndonbakeruni) <br/> [Profile Page](https://ecoryndonbakeruni.github.io/) <br/> [LinkedIn](https://www.linkedin.com/in/ethan-coryndon-baker-9360081b3/) <br/> | Waterpolo <br/> Backend <br/> Web Design <br/> Java |
 | ![Kabelo Leiee](https://media-exp1.licdn.com/dms/image/C5603AQHByIrhb-M3fA/profile-displayphoto-shrink_200_200/0/1622332350316?e=1628121600&v=beta&t=o9C4ONfDDiAClgykWI_BdGdcg481BaUMaOppdl-LIZs "Kabelo Leiee") <br/> Kabelo Leiee <br/> u19247070 | [GitHub](https://github.com/kabelo-tuks) <br/> [Profile Page](http://kabelo-tuks.github.io/) <br/> [LinkedIn](https://www.linkedin.com/in/kabelo-leiee-ba7168205/) <br/> | Gym <br/> Web Development <br/> Networks <br/> Artificial Intelligence <br/>C++ <br/> JavaScript <br/>  |
----
 
 ## Demo 1
 
