@@ -1,30 +1,34 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { RegisterUserDto } from './dto/register-user.dto';
+import { UserService } from './user.service';
+import { User } from './interfaces/user.interface';
 
 @Controller('user')
 export class UserController {
+    constructor(private readonly userService: UserService) {}
+
     @Get()
-    getAllUsers(): string {
-        return 'All users';
+    getAllUsers(): Promise<User[]> {
+        return this.userService.getAllUsers();
     }
 
     @Get(':id')
-    getUserById(@Param('id') id): string {
-        return `User ID: ${id}`;
+    getUserById(@Param('id') id): Promise<User> {
+        return this.userService.getUserById(id);
     }
 
     @Post()
-    registerUser(@Body() registerUserDto: RegisterUserDto): string {
-        return `Username: ${registerUserDto.username}, Email: ${registerUserDto.email}, Password: ${registerUserDto.password}`;
+    registerUser(@Body() registerUserDto: RegisterUserDto): Promise<User> {
+        return this.userService.registerUser(registerUserDto);
     }
 
     @Delete(':id')
-    deleteUserById(@Param('id') id): string {
-        return `Delete user with ID: ${id}`;
+    deleteUserById(@Param('id') id): Promise<User> {
+        return this.userService.deleteUserById(id);
     }
 
     @Put(':id')
-    updateUserWithId(@Param('id') id, @Body() updateItemDto: RegisterUserDto): string {
-        return `Update user with ID: ${id}, Username: ${updateItemDto.username}, Email: ${updateItemDto.email}, Password: ${updateItemDto.password}`;
+    updateUserWithId(@Param('id') id, @Body() updateUserDto: RegisterUserDto): Promise<User> {
+        return this.userService.updateUserWithId(id, updateUserDto);
     }
 }
