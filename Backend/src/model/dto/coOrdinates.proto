@@ -1,0 +1,25 @@
+syntax = "proto3"
+
+//declare the package name for this protobuf
+package coOrds;
+
+//service for the Model Controller
+service ModelController {
+    //rpc for the getCoOrdinates function
+    rpc getCoOrdinates ( coOrds ) returns ( mapCoOrdinates );
+}
+
+//types for the coOrdinates
+message coOrds{
+    double x = 1;
+    double y = 2;
+    double z = 3;
+}
+
+//for mapped coOrdinates [0,1]
+message mapCoOrdinates{
+    double x = 1;
+    double y = 2;
+    double z = 3;
+}
+
