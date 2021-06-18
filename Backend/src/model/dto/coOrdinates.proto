@@ -16,7 +16,7 @@ message coOrds{
     double z = 3;
 }
 
-//for mapped coOrdinates [0,1]
+//for mapped coOrdinates [0,1] 
 message mapCoOrdinates{
     double x = 1;
     double y = 2;
