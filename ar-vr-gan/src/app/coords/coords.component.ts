@@ -7,27 +7,25 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./coords.component.css']
 })
 export class CoordsComponent implements OnInit {
-  constructor(private http: HttpClient) { }
+  public response: any;
+  constructor(private http: HttpClient) { 
+  }
 
   ngOnInit(): void {
   }
 
-  postCoords() {
-    let x = this.getElementByID("x");
-    let y = this.getElementByID("y");
-    let z = this.getElementByID("z");
+  postCoords(x: string, y: string, z: string) {
+    console.log(x + " " + y + " " + z);
+    var xN: number = +x;
+    var yN: number = +y;
+    var zN: number = +z;
+    var data = [
+      xN, yN, zN
+    ];
 
-    var coords = 
-      {
-        "data": {
-          x,
-          y,
-          z
-        }
-      };
-
-    this.http.post<any>('http://localhost:3000/model/testGRPC', { coords }).subscribe(data => {
-      console.log(data.sum);
+    this.http.post<any>('http://localhost:3000/model/testGRPC', { data: data}).subscribe(resp => {
+      console.log(resp.sum);
+      this.response = resp.sum;
     })
   }
 
