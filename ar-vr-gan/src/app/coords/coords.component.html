@@ -2,9 +2,13 @@
       Server Coordinate Testing
   </p>
 
-  <input type="text" class="inputBoxes" id="x" placeholder="x"> <br>
-  <input type="text" class="inputBoxes" id="y" placeholder="y"> <br>
-  <input type="text" class="inputBoxes" id="z" placeholder="z"> <br>
+  <input type="text" class="inputBoxes" id="x" placeholder="x" #x> <br>
+  <input type="text" class="inputBoxes" id="y" placeholder="y" #y> <br>
+  <input type="text" class="inputBoxes" id="z" placeholder="z" #z> <br>
 
-  <input type="submit" class="button" (click)="postCoords()">
+  <input type="submit" class="button" (click)="postCoords(x.value, y.value, z.value)">
+  
 
+  <p id="response">
+    Server Response: {{ response }}
+  </p>
