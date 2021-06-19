@@ -6,23 +6,6 @@ import { MockUserService } from './mocks/user.mock'
 describe('UserController', () => {
   let controller: UserController;
 
-  //const mockUserService = MockUserService;
-
-  // const mockUserService = {
-  //   registerUser: jest.fn((dto) => {
-  //     return {
-  //       id: Date.now(),
-  //       ...dto
-  //     }
-  //   }),
-  //   updateUserWithId: jest.fn((id, dto) => {
-  //     return {
-  //       id,
-  //       ...dto
-  //     }
-  //   })
-  // }
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
@@ -55,4 +38,21 @@ describe('UserController', () => {
       ...dto
     })
   });
+
+  it('Get all users', () => {
+
+    expect(controller.getAllUsers()).toEqual("User List")
+  });
+
+  it('Get all users', () => {
+    const id = '12345';
+    const out = id + " Found"
+    expect(controller.getUserById(id)).toEqual(out)
+  });
+  it('Get all users', () => {
+    const id = '12345';
+    const out = id + " Deleted"
+    expect(controller.deleteUserById(id)).toEqual(out)
+  });
+
 });
