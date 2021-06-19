@@ -1,4 +1,4 @@
-import { Controller, Post, Body, OnModuleInit, Get } from '@nestjs/common';
+import { Controller, Post, Body, OnModuleInit, Logger } from '@nestjs/common';
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import { microserviceOptions } from './grpc.options';
 import { IGrpcService } from './grpc.interface';
@@ -7,7 +7,7 @@ import { IGrpcService } from './grpc.interface';
 export class AppController implements OnModuleInit {
   @Client(microserviceOptions)
   private client: ClientGrpc;
-
+  private logger = new Logger('AppController');
   private grpcService: IGrpcService;
 
   onModuleInit() {
@@ -16,6 +16,7 @@ export class AppController implements OnModuleInit {
 
   @Post('testGRPC')
   async accumulate(@Body() data: RequestDto)  {
+    this.logger.log(`The numbers to be added are: ${data.data}`);
     return this.grpcService.handleCoords(data); 
   }
 }

@@ -14,7 +14,11 @@ const microserviceOptions = {
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  app.connectMicroservice(microserviceOptions);              
+  app.connectMicroservice(microserviceOptions); 
+  app.enableCors({
+    allowedHeaders: '*',
+    origin: '*'
+  });             
   
   await app.startAllMicroservices();                                 
   await app.listen(3000);
