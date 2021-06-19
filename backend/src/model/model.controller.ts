@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 
 interface Request {
@@ -13,6 +13,17 @@ interface Response {
 export class ModelController {
     @GrpcMethod('ModelController', 'HandleCoords')
     handleCoords(request: Request, metadata: any): Response {
-        return {sum: 3};
+        let sum = 0;
+
+        for (let i = 0; i < request.data.length; i++) {
+            sum += request.data[i]
+        }
+
+        return { sum };
+    }
+
+    @Post('testGRPC')
+    testGRPC(@Body() request: Request): Response {
+        return this.handleCoords(request, "");
     }
 }
