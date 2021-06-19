@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package model;
+
+service ModelController {
+    rpc HandleCoords(RequestDto) returns (ResponseDto) {}
+}
+
+message RequestDto {
+    repeated double data = 1;
+}
+
+message ResponseDto {
+    double sum = 1;
+}
