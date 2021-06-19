@@ -48,14 +48,3 @@ mat-grid-tile {
     color:#000000;
     background-color:rgba(255, 255, 255, 0.9);
 }
-
-.inputBoxes {
-    background-color: rgba(255, 255, 255, 0);
-    color: white;
-    display: block;
-    text-align: center;
-}
-
-.inputBoxes::placeholder {
-    color: white;
-}
