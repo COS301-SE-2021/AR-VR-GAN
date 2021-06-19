@@ -10,18 +10,9 @@
     <p class="text">
       Required Device: Oculus Quest
     </p>
-    <img src="assets/top_img.png" class="oculus"></mat-grid-tile>
+    <img src="assets/top_img.png" class="oculus">
+  </mat-grid-tile>
   <mat-grid-tile [colspan]="2">
-    <p class="text">
-      Server Coordinate Testing
-    </p>
-
-    <form action="send coords to server">
-      <input type="text" class="inputBoxes" id="x" placeholder="x"> <br>
-      <input type="text" class="inputBoxes" id="y" placeholder="y"> <br>
-      <input type="text" class="inputBoxes" id="z" placeholder="z"> <br>
-
-      <input type="submit" class="button">
-  </form>
+    <app-coords></app-coords>
   </mat-grid-tile>
 </mat-grid-list>
