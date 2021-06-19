@@ -7,12 +7,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { UploadsComponent } from './uploads/uploads.component';
 import { HeaderComponent } from './header/header.component';
+import { CoordsComponent } from './coords/coords.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UploadsComponent,
-    HeaderComponent
+    HeaderComponent,
+    CoordsComponent
   ],
   imports: [
     BrowserModule,
