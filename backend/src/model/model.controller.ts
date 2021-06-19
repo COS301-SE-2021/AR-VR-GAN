@@ -11,9 +11,9 @@ export class ModelController {
 
     @GrpcMethod('ModelController','getCoOrdinates')
 
-    getMappedCoOrds( coOrds : ICoOrdinates ) : ICoOrdinates{                            //not sure if this function decleration needs to be the same as the proto
+    getCoOrdinates( coOrds : ICoOrdinates ) : ICoOrdinates{                            //not sure if this function decleration needs to be the same as the proto
         this.logger.log('Getting mapped Coordinates for ' + coOrds.toString);
-        return { coOrdinates : this.modelService.getMappedCoOrds(coOrds.coOrdinates)};  //should return x,y,z interface or number array interface?
+        return { coOrdinates : this.modelService.getCoOrdinates(coOrds.coOrdinates)};  //should return x,y,z interface or number array interface?
     }
 
 
