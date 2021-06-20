@@ -1,6 +1,6 @@
 import sys
 def main():
-    print(sys.argv[1])
+    print("python recieved "+ sys.argv[1])
     sys.stdout.flush()
 
 
