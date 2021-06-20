@@ -1,16 +1,18 @@
-  <p class="text">
-      Server Coordinate Testing
-  </p>
+<p class="text">
+  Server Coordinate Testing
+</p>
 
-  <input type="text" class="inputBoxes" id="x" placeholder="x" #x> <br>
-  <input type="text" class="inputBoxes" id="y" placeholder="y" #y> <br>
-  <input type="text" class="inputBoxes" id="z" placeholder="z" #z> <br>
+<input type="text" class="inputBoxes" id="x" placeholder="x" #x> <br>
+<input type="text" class="inputBoxes" id="y" placeholder="y" #y> <br>
+<input type="text" class="inputBoxes" id="z" placeholder="z" #z> <br>
 
-  <input type="submit" class="button" (click)="postCoords(x.value, y.value, z.value)">
-  
+<input type="submit" class="button" (click)="postCoords(x.value, y.value, z.value)">
 
-  <p id="response">
-    Server Response: {{ response }}
-  </p>
 
-  image: {{ image }}
+<p id="response">
+Server Response: {{ response }}
+</p>
+
+<img id="imageReturned" src={{image}}>
+
+<div class="track" (mousemove)="trackCoords($event)"></div>
