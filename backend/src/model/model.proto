@@ -18,5 +18,5 @@ message ResponseDto {
 }
 
 message ResponsePythonDTO {
-    repeated string data = 1;
+    string data = 1;
 }
