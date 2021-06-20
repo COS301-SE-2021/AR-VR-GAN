@@ -1,0 +1,63 @@
+.text {
+    position: absolute;
+    left: 20px;
+    top: 0;
+
+    font-size: 20px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: white;
+}
+
+.button{
+    display: inline-block;
+    padding:0.35em 1.2em;
+    border:0.1em solid #FFFFFF;
+    margin:0 0.3em 0.3em 0;
+    border-radius:0.12em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    color:#FFFFFF;
+    text-align:center;
+    transition: all 0.2s;
+    background-color:rgba(0, 0, 0, 0);
+
+    font-size: 15px;
+    margin-top: 20px;
+}
+
+.button:hover{
+    color:#000000;
+    background-color:rgba(255, 255, 255, 0.9);
+}
+
+input[type=file]::file-selector-button {
+    display: inline-block;
+    padding:0.35em 1.2em;
+    border:0.1em solid #FFFFFF;
+    margin:0 0.3em 0.3em 0;
+    border-radius:0.12em;
+    box-sizing: border-box;
+    text-decoration:none;
+    font-family:'Roboto',sans-serif;
+    font-weight:300;
+    color:#FFFFFF;
+    text-align:center;
+    transition: all 0.2s;
+    background-color:rgba(0, 0, 0, 0);
+}
+
+input[type=file]{
+    display: block;
+    position: absolute;
+
+    font-size: 15px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: white;
+}
+
+input[type=file]::file-selector-button:hover{
+    color:#000000;
+    background-color:rgba(255, 255, 255, 0.9);
+}

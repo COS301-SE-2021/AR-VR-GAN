@@ -1,0 +1,21 @@
+.header {
+    flex: 1 1 auto;
+}
+
+.writing {
+    font-size: 30px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    color: white;
+}
+
+.toolbar {
+    background-color: rgb(77, 75, 75);
+}
+
+* {
+    margin: 0;
+}
+
+img {
+    width: 100px;
+}
