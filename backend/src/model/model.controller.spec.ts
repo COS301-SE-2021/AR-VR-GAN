@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ModelController } from './model.controller';
 import { MockModelService } from './mocks/model.mock';
 import { ModelService } from './model.service';
-import { request } from 'express';
+
 describe('ModelController', () => {
   let controller: ModelController;
 
