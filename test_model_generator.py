@@ -10,7 +10,6 @@ class TestModelGenerator(unittest.TestCase):
     def tearDown(self) -> None:
         self.generator = None
 
-
     def test_load_model(self):
         self.assertTrue(self.generator.loadModel())
         with self.assertRaises(ModelException) as exceptionOne:
@@ -40,10 +39,8 @@ class TestModelGenerator(unittest.TestCase):
             self.generator.generateImage("RandomImageName.py")
         self.assertEqual(exceptionOne.exception.message, "File extension must be either be png, jpg, jpeg")
 
-if __name__ == "__main__":
 
+
+if __name__ == "__main__":
     unittest.main()
-    # generator = ModelGenerator()
-    # generator.loadModel()
-    # generator.saveModel("Testing")
-    # generator.generateImage("testing2.png")
+

@@ -1,6 +1,10 @@
+
 # Byte-compiled / optimized / DLL files
-results
-savedModels
+results/*
+savedModels/*
+testing/images/*
+testing/savedModels/*
+savedImages/*
 __pycache__/
 *.py[cod]
 *$py.class

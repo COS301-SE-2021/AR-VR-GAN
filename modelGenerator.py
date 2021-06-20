@@ -127,9 +127,9 @@ class ModelGenerator:
             
             if os.path.isfile(filepath):
                 modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
-                torch.save(self.model, modelPath)
                 print(filepath, " already exists!")
-                print("Model saved as savedModels/VAE-MODEL-"+modelPath+".pt")
+                torch.save(self.model, modelPath)
+                print("Model saved as savedModels/VAE-MODEL-"+modelPath)
                 return True
             else:
                 torch.save(self.model, filepath)
