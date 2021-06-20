@@ -10,6 +10,7 @@ from VAEModel import VAE
 import os
 from datetime import datetime
 from PIL import Image
+from modelExceptions import ModelException
 
 class ModelGenerator:
     def __init__(self):
@@ -55,6 +56,10 @@ class ModelGenerator:
 
         return BCE + KLD
 
+    def train_model(self, epochs):
+        for epoch in range(1, epochs + 1):
+            self.train(epoch)
+            self.test(epoch)
 
     def train(self, epoch):
         self.model.train()
@@ -89,7 +94,7 @@ class ModelGenerator:
                     comparison = torch.cat([data[:n],
                                         recon_batch.view(self.args.batch_size, 1, 28, 28)[:n]])
                     save_image(comparison.cpu(),
-                            'results/reconstruction_' + str(epoch) + '.png', nrow=n)
+                            'test/reconstruction_' + str(epoch) + '.png', nrow=n)
 
         test_loss /= len(self.test_loader.dataset)
         print('====> Test set loss: {:.4f}'.format(test_loss))
@@ -101,11 +106,12 @@ class ModelGenerator:
             return True
         else:
             if not os.path.isfile(filepath):
-                raise Exception(f"File {filepath} does not exist")
+                raise ModelException(f"File {filepath} does not exist")
             elif not filepath.endswith('.pt'):
-                raise Exception(f"File needs to be a pytorch file")
+                raise ModelException("File needs to be a pytorch file")
             else:
                 self.model = torch.load(filepath)
+                print(filepath+" VAE Model loaded")
                 return True
 
     def saveModel(self, filepath=""):
@@ -125,26 +131,31 @@ class ModelGenerator:
                 print(filepath, " already exists!")
                 print("Model saved as savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt")
             else:
-                self.model = torch.save(self.model, filepath)
+                torch.save(self.model, filepath)
                 print("Model saved as" + filepath)
                 return True
     
     def generateImage(self, filepath=""):
         if filepath == "":
             filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".png"
-        if not os.path.isfile(filepath):
-            raise Exception(f"File {filepath} does not exist")
-        else:
-            if not filepath.endswith(('.png', '.jpg', '.jpeg')):
-                Exception("File extension must be either be png, jpg, jpeg")
-            else:    
-                with torch.no_grad():
-                    # Returns a 1x20 array with random values from 0-1
-                    sample = torch.randn(1,20).to(self.device)
-                    sample = self.model.decode(sample).cpu() 
-                    save_image(sample.view(1, 1, 28, 28), filepath)
-                    image = Image.open(filepath)
-                    new_image = image.resize((400, 400))
-                    new_image.save(filepath)
-                    print("Imaged Saved as "+filepath)
-                    return True
+
+        if not filepath.endswith(('.png', '.jpg', '.jpeg')):
+            ModelException("File extension must be either be png, jpg, jpeg")
+        else:    
+            with torch.no_grad():
+                # Returns a 1x20 array with random values from 0-1
+                sample = torch.randn(1,20).to(self.device)
+                sample = self.model.decode(sample).cpu() 
+                save_image(sample.view(1, 1, 28, 28), filepath)
+                image = Image.open(filepath)
+                new_image = image.resize((400, 400))
+                new_image.save(filepath)
+                print("Imaged Saved as "+filepath)
+                return True
+
+    def clearModel(self):
+        self.model = None
+        self.model = VAE().to(self.device)
+
+    def loadDataset(self):
+        pass
