@@ -1,4 +1,6 @@
-export const MockModelService = {
+import { join } from "path";
+export const MockModelService= {
+
     handleCoords: jest.fn((dto) => {
         let sum = 0;
 
