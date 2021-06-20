@@ -11,6 +11,6 @@ export class ModelService {
             sum += request.data[i]
         }
 
-        return  sum;
+        return sum;
     }
 }
