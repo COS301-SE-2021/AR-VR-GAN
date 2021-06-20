@@ -1,13 +1,11 @@
 # Byte-compiled / optimized / DLL files
-cvae.py
 results
 savedModels
-vaeKeras.py
-anotherOne.py
 __pycache__/
 *.py[cod]
 *$py.class
-
+modelGenerator4.py
+modelGenerator5.py
 # C extensions
 *.so
 
