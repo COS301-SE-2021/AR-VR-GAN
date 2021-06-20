@@ -22,7 +22,7 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 ## Demo 2
 
 * 📺 [Demo Video]()
-* 📖 [Overleaf Document](https://www.overleaf.com/read/mxksffppsvgj)
+* 📖 [Overleaf Document](https://www.overleaf.com/read/vxwfzhmhmwsg)
 
 ## Project Management Tools
 
