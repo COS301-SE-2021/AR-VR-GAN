@@ -6,9 +6,7 @@ import { ModelService } from './model.service';
 
 @Controller('model')
 export class ModelController {
-
     constructor(private modelService: ModelService) {}
-
 
     @GrpcMethod('ModelController', 'HandleCoords')
     handleCoords(request: Request): Response {
