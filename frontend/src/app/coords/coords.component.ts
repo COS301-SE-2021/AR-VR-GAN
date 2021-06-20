@@ -16,7 +16,6 @@ export class CoordsComponent implements OnInit {
   }
 
   postCoords(x: string, y: string, z: string) {
-    console.log(x + " " + y + " " + z);
     var xN: number = +x;
     var yN: number = +y;
     var zN: number = +z;
@@ -24,24 +23,59 @@ export class CoordsComponent implements OnInit {
       xN, yN, zN
     ];
 
+    
     //fetching sum of coordinates
     this.http.post<any>('http://localhost:3000/model/testGRPC', { data: data}).subscribe(resp => {
-      console.log(resp.sum);
       this.response = resp.sum;
     })
 
+
     //fetching an image from the server based on coordinates
-    this.http.post<any>('http://localhost:3000/upload/getImageFromCoordinates', { data: data}).subscribe(resp => {
-      this.image = resp;
+    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    this.http.post('http://localhost:3000/upload/getImageFromCoordinates', { data: data }, { responseType: 'blob'}).subscribe(resp => {
+      this.createImageFromBlob(resp);
     })
   }
 
-  getElementByID(id: string){
-    return document.getElementById(id);
+  postNumber(x: number, y: number) {
+    var xN: number = +x;
+    var yN: number = +y;
+    var zN: number = +0;
+    var data = [
+      xN, yN, zN
+    ];
+
+    
+    //fetching sum of coordinates
+    this.http.post<any>('http://localhost:3000/model/testGRPC', { data: data}).subscribe(resp => {
+
+      this.response = resp.sum;
+    })
+
+
+    //fetching an image from the server based on coordinates
+    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    this.http.post('http://localhost:3000/upload/getImageFromCoordinates', { data: data }, { responseType: 'blob'}).subscribe(resp => {
+      this.createImageFromBlob(resp);
+    })
   }
 
+  createImageFromBlob(blob: Blob) {
+    let reader = new FileReader();
+    reader.addEventListener("load", () => {
+        this.image = reader.result;
+   }, false);
 
+   if (blob) {
+      reader.readAsDataURL(blob);
+   }
+  }
 
+  trackCoords(event: MouseEvent){
+    console.log(event.clientX + " " + event.clientY);
 
+    this.postNumber(event.clientX, event.clientY);
+
+  }
 
 }
