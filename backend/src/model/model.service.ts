@@ -16,22 +16,23 @@ export class ModelService {
         return  sum;
     }
 
-    public runPython(request: Request): number {
+    public runPython(request: Request): string[] {
 
-        var myPythonScriptPath = './mocks/py-script.py';
-        var options = {
-            mode: "text",
-            pythonOptions: ['-u'],
-            scriptPath: myPythonScriptPath
-        }
+        var myPythonScriptPath = join(__dirname, '../../src/model/mocks');
+        let options = {
+            pythonOptions: ['-u'], // get print results in real-time
+            scriptPath: join(__dirname, '../../src/model/mocks'),
+            args: [request.data.toString()]
+          };
 
-        console.log("here");
-        PythonShell.run(join(__dirname, '../../src/model/mocks/py-script.py'), null, function (err, results) {
+        let num: any
+        PythonShell.run('py-script.py', options, function (err, results) {
             if (err) throw err;
-
-            console.log('results: ', results);
+            
+            console.log(results[0]);
+            num = results[0];
         });
 
-        return 2;
+        return num;
     }
 }

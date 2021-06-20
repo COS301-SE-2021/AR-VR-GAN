@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Logger } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { Response } from './interfaces/response.interface'
+import { ResponsePython } from './interfaces/responsePython.interface';
 import { Request } from './interfaces/request.interface'
 import { ModelService } from './model.service';
 
@@ -16,8 +17,8 @@ export class ModelController {
     }
 
     @GrpcMethod('ModelController', 'RunPython')
-    runPython(request: Request): Response {
-        return { sum : this.modelService.runPython(request) };
+    runPython(request: Request): ResponsePython {
+        return { data : this.modelService.runPython(request) };
     }
 
     @Post('testGRPC')
@@ -26,7 +27,7 @@ export class ModelController {
     }
 
     @Post('testPython')
-    testPython(@Body() request: Request): Response {
-        return this.runPython(request);
+    testPython(@Body() request: Request): ResponsePython {
+        return  this.runPython(request);
     }
 }
