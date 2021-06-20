@@ -8,6 +8,8 @@ from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
 import os
+from datetime import datetime
+from PIL import Image
 
 class ModelGenerator:
     def __init__(self):
@@ -74,7 +76,6 @@ class ModelGenerator:
         print('====> Epoch: {} Average loss: {:.4f}'.format(
             epoch, train_loss / len(self.train_loader.dataset)))
 
-
     def test(self, epoch):
         self.model.eval()
         test_loss = 0
@@ -106,3 +107,41 @@ class ModelGenerator:
             else:
                 self.model = torch.load(filepath)
                 return True
+
+    def saveModel(self, filepath=""):
+        modelPath = ""
+        if filepath == "":
+            modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
+            torch.save(self.model, modelPath)
+            print("Model saved as savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt")
+            return True
+        else:
+            if not filepath.endswith('.pt'):
+                filepath+=".pt"
+            
+            if os.path.isfile(filepath):
+                modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
+                torch.save(self.model, modelPath)
+                print(filepath, " already exists!")
+                print("Model saved as savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt")
+            else:
+                self.model = torch.save(self.model, filepath)
+                print("Model saved as" + filepath)
+                return True
+    
+    def generateImage(self, filepath=""):
+        if filepath == "":
+            raise Exception("Enter an appropriate file")
+        else:
+            if not os.path.isfile(filepath):
+                raise Exception(f"File {filepath} does not exist")
+            else:
+                with torch.no_grad():
+                    # Returns a 1x20 array with random values from 0-1
+                    sample = torch.randn(1,20).to(self.device)
+                    sample = self.model.decode(sample).cpu() 
+                    save_image(sample.view(1, 1, 28, 28), filepath)
+                    image = Image.open(filepath)
+                    new_image = image.resize((400, 400))
+                    new_image.save(filepath)
+        pass
