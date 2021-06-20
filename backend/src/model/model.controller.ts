@@ -15,8 +15,18 @@ export class ModelController {
         return { sum : this.modelService.handleCoords(request) };
     }
 
+    @GrpcMethod('ModelController', 'RunPython')
+    runPython(request: Request): Response {
+        return { sum : this.modelService.runPython(request) };
+    }
+
     @Post('testGRPC')
     testGRPC(@Body() request: Request): Response {
         return this.handleCoords(request);
+    }
+
+    @Post('testPython')
+    testPython(@Body() request: Request): Response {
+        return this.runPython(request);
     }
 }
