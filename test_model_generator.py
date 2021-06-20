@@ -23,6 +23,11 @@ class TestModelGenerator(unittest.TestCase):
         
         self.assertTrue(self.generator.loadModel("defaultModels/Epochs-100.pt"))
 
+    def test_save_model(self):
+        self.assertTrue(self.generator.saveModel())
+        self.assertTrue(self.generator.saveModel("testing/savedModels/testModel.pt"))
+        self.assertTrue(self.generator.saveModel("testing/savedModels/testModel.pt"))
+
 if __name__ == "__main__":
 
     unittest.main()
