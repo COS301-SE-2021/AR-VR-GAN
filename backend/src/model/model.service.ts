@@ -15,7 +15,7 @@ export class ModelService {
             sum += request.data[i]
         }
 
-        return  sum;
+        return sum;
     }
 
     public runPython(request: Request): string {

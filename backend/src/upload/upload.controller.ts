@@ -1,11 +1,14 @@
-import { Controller, Post, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Res, Body } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { UploadService } from './upload.service';
+import { RequestBody } from './interfaces/coordinates.interface';
+import { ModelService } from 'src/model/model.service';
 
 @Controller('upload')
 export class UploadController {
-    constructor(private readonly uploadService: UploadService) {}
+    constructor(private readonly uploadService: UploadService, private readonly modelService: ModelService) {}
 
     @Post('file')
     @UseInterceptors(
@@ -24,5 +27,22 @@ export class UploadController {
         };
 
         return response;
+    }
+
+    @Post('getImageFromCoordinates')
+    getImageFromCoordinates(@Res() res: Response, @Body() requestBody: RequestBody) {
+        let sum = Math.floor(this.modelService.handleCoords(requestBody)) % 10;
+        let filename = sum.toString() + '.jpg';
+
+        const options = {
+            root: './uploads',
+            dotfiles: 'deny',
+            headers: {
+              'x-timestamp': Date.now(),
+              'x-sent': true
+            }
+        }
+    
+        res.sendFile(filename, options)
     }
 }
