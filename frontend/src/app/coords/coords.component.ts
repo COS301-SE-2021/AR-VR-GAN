@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CoordsComponent implements OnInit {
   public response: any;
+  public image: any;
   constructor(private http: HttpClient) { 
   }
 
@@ -23,9 +24,15 @@ export class CoordsComponent implements OnInit {
       xN, yN, zN
     ];
 
+    //fetching sum of coordinates
     this.http.post<any>('http://localhost:3000/model/testGRPC', { data: data}).subscribe(resp => {
       console.log(resp.sum);
       this.response = resp.sum;
+    })
+
+    //fetching an image from the server based on coordinates
+    this.http.post<any>('http://localhost:3000/upload/getImageFromCoordinates', { data: data}).subscribe(resp => {
+      this.image = resp;
     })
   }
 
