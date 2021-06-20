@@ -1,12 +1,14 @@
 Frontend/.DS_Store
 .DS_Store
 # Byte-compiled / optimized / DLL files
-results/*
-savedModels/*
-testing/images/*
-testing/savedModels/*
-savedImages/*
+generativeModelFiles/results/*
+generativeModelFiles/savedModels/*
+generativeModelFiles/testing/images/*
+generativeModelFiles/testing/savedModels/*
+generativeModelFiles/savedImages/*
+.DS_Store
 __pycache__/
+data/*
 *.py[cod]
 *$py.class
 modelGenerator4.py
