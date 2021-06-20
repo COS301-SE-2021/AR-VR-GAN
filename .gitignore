@@ -1,5 +1,7 @@
 # Byte-compiled / optimized / DLL files
 cvae.py
+results
+savedModels
 vaeKeras.py
 anotherOne.py
 __pycache__/

@@ -122,12 +122,35 @@ def test(epoch):
     print('====> Test set loss: {:.4f}'.format(test_loss))
 
 if __name__ == "__main__":
-    for epoch in range(1, args.epochs + 1):
+    for epoch in range(1, 50 + 1):
         train(epoch)
         test(epoch)
-        torch.save(model, "savedModels")
         with torch.no_grad():
             sample = torch.randn(64, 20).to(device)
             sample = model.decode(sample).cpu()
             save_image(sample.view(64, 1, 28, 28),
                        'results/sample_' + str(epoch) + '.png')
+    torch.save(model, f"savedModels/Epochs-{50}.pt")
+
+    for epoch in range(1, 100 + 1):
+        train(epoch)
+        test(epoch)
+        with torch.no_grad():
+            sample = torch.randn(64, 20).to(device)
+            sample = model.decode(sample).cpu()
+            save_image(sample.view(64, 1, 28, 28),
+                       'results/sample_' + str(epoch) + '.png')
+    torch.save(model, f"savedModels/Epochs-{100}.pt")
+
+    for epoch in range(1, 1000 + 1):
+        train(epoch)
+        test(epoch)
+        with torch.no_grad():
+            sample = torch.randn(64, 20).to(device)
+            sample = model.decode(sample).cpu()
+            save_image(sample.view(64, 1, 28, 28),
+                       'results/sample_' + str(epoch) + '.png')
+    torch.save(model, f"savedModels/Epochs-{1000}.pt")
+
+    # model = torch.load("savedModels")
+    # train(1)
