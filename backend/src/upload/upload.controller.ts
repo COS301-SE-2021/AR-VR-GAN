@@ -4,11 +4,10 @@ import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { UploadService } from './upload.service';
 import { RequestBody } from './interfaces/coordinates.interface';
-import { ModelService } from 'src/model/model.service';
 
 @Controller('upload')
 export class UploadController {
-    constructor(private readonly uploadService: UploadService, private readonly modelService: ModelService) {}
+    constructor(private readonly uploadService: UploadService) {}
 
     @Post('file')
     @UseInterceptors(
@@ -31,7 +30,7 @@ export class UploadController {
 
     @Post('getImageFromCoordinates')
     getImageFromCoordinates(@Res() res: Response, @Body() requestBody: RequestBody) {
-        let sum = Math.floor(this.modelService.handleCoords(requestBody)) % 10;
+        let sum = Math.floor(this.uploadService.handleCoords(requestBody)) % 10;
         let filename = sum.toString() + '.jpg';
 
         const options = {

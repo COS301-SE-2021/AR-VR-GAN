@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UploadController } from './upload.controller';
+import { MockUploadService } from './mocks/upload.mock';
+import { UploadService } from './upload.service';
+
 
 describe('UploadController', () => {
   let controller: UploadController;
@@ -7,7 +10,8 @@ describe('UploadController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UploadController],
-    }).compile();
+      providers: [UploadService]
+    }).overrideProvider(UploadService).useValue(MockUploadService).compile();
 
     controller = module.get<UploadController>(UploadController);
   });

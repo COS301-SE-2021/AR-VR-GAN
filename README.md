@@ -19,6 +19,11 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 * 📺 [Demo Video](https://youtu.be/mmZrfHTx3tM)
 * 📖 [Overleaf Document](https://www.overleaf.com/read/mxksffppsvgj)
 
+## Demo 2
+
+* 📺 [Demo Video]()
+* 📖 [Overleaf Document](https://www.overleaf.com/read/mxksffppsvgj)
+
 ## Project Management Tools
 
 * 📖 [GitHub](https://github.com/COS301-SE-2021/AR-VR-GAN/projects/1)

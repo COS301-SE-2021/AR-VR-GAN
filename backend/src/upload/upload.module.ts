@@ -6,6 +6,6 @@ import { ModelService } from 'src/model/model.service';
 @Module({
   imports: [],
   controllers: [UploadController],
-  providers: [UploadService, ModelService],
+  providers: [UploadService],
 })
 export class UploadModule {}

@@ -1,4 +1,5 @@
-export const MockModelService = {
+export const MockModelService= {
+
     handleCoords: jest.fn((dto) => {
         let sum = 0;
 
