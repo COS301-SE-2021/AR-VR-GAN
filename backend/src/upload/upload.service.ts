@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { extname } from 'path';
+import { Request } from '../model/interfaces/request.interface';
 
 @Injectable()
 export class UploadService {
@@ -14,5 +15,15 @@ export class UploadService {
             .join('');
     
         callback(null, `${name}-${randomName}${fileExtName}`);
+    }
+
+    public handleCoords(request: Request): number {
+        let sum = 0;
+
+        for (let i = 0; i < request.data.length; i++) {
+            sum += request.data[i]
+        }
+
+        return sum;
     }
 }
