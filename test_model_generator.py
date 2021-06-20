@@ -28,6 +28,18 @@ class TestModelGenerator(unittest.TestCase):
         self.assertTrue(self.generator.saveModel("testing/savedModels/testModel.pt"))
         self.assertTrue(self.generator.saveModel("testing/savedModels/testModel.pt"))
 
+    def test_image_generation(self):
+        self.generator.loadModel("defaultModels/Epochs-100.pt")
+        self.assertTrue(self.generator.generateImage(""))
+
+        self.assertTrue(self.generator.generateImage("testing/images/testingImages.png"))
+        self.assertTrue(self.generator.generateImage("testing/images/testingImages.jpeg"))
+        self.assertTrue(self.generator.generateImage("testing/images/testingImages.jpg"))
+
+        with self.assertRaises(ModelException) as exceptionOne:
+            self.generator.generateImage("RandomImageName.py")
+        self.assertEqual(exceptionOne.exception.message, "File extension must be either be png, jpg, jpeg")
+
 if __name__ == "__main__":
 
     unittest.main()
