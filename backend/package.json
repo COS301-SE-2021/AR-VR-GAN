@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^7.6.15",
     "grpc": "^1.24.10",
     "mongoose": "^5.12.14",
+    "python-shell": "^3.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6"
