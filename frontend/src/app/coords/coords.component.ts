@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { ModelControllerClient } from '../proto/model/model_pb_service';
+import { RequestDto, ResponseDto } from '../proto/model/model_pb';
+import { BrowserHeaders } from 'browser-headers';
 
 @Component({
   selector: 'app-coords',
@@ -8,7 +11,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CoordsComponent implements OnInit {
   public response: any;
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private client: ModelControllerClient) { 
+    this.client = new ModelControllerClient("http://localhost:3000")
   }
 
   ngOnInit(): void {
@@ -31,6 +35,27 @@ export class CoordsComponent implements OnInit {
 
   getElementByID(id: string){
     return document.getElementById(id);
+  }
+
+  grpcRequest(){
+    var xN: number = +x;
+    var yN: number = +y;
+    var zN: number = +z;
+    const req = new RequestDto();
+    var data = [
+      xN, yN, zN
+    ];
+    req.addData(xN);
+    req.addData(yN);
+    req.addData(zN);
+
+
+    this.client.handleCoords(req, "", (err, response: ResponseDto) => {
+      if (err) {
+        console.log("error with grpc");
+      }
+      console.log(response.getSum());
+    });
   }
 
 

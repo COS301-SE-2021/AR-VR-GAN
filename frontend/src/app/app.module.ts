@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { UploadsComponent } from './uploads/uploads.component';
 import { HeaderComponent } from './header/header.component';
 import { CoordsComponent } from './coords/coords.component';
+import { ProtoComponent } from './proto/proto.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     UploadsComponent,
     HeaderComponent,
-    CoordsComponent
+    CoordsComponent,
+    ProtoComponent
   ],
   imports: [
     BrowserModule,
