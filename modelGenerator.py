@@ -131,11 +131,13 @@ class ModelGenerator:
     
     def generateImage(self, filepath=""):
         if filepath == "":
-            raise Exception("Enter an appropriate file")
+            filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".png"
+        if not os.path.isfile(filepath):
+            raise Exception(f"File {filepath} does not exist")
         else:
-            if not os.path.isfile(filepath):
-                raise Exception(f"File {filepath} does not exist")
-            else:
+            if not filepath.endswith(('.png', '.jpg', '.jpeg')):
+                Exception("File extension must be either be png, jpg, jpeg")
+            else:    
                 with torch.no_grad():
                     # Returns a 1x20 array with random values from 0-1
                     sample = torch.randn(1,20).to(self.device)
@@ -144,4 +146,5 @@ class ModelGenerator:
                     image = Image.open(filepath)
                     new_image = image.resize((400, 400))
                     new_image.save(filepath)
-        pass
+                    print("Imaged Saved as "+filepath)
+                    return True
