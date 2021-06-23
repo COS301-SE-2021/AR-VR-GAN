@@ -111,6 +111,10 @@ class ModelGenerator:
             self.optimizer.zero_grad()
             # This returns the output from forward in VAE model
             recon_batch, mu, logvar = self.model(data)
+            # `recon_batch` returns all 128 images reconstructed
+            # The shape is torch.Size([128, 784]) implying that there are 128 images and
+            # the dimensions have been reduced to a single array since sqrt(784) and 
+            # earlier it is stated that the dimensions of an mnist image is 28x28.
             print(recon_batch.size())
             print("="*10)
             print(mu.size())
