@@ -94,9 +94,9 @@ class ModelGenerator:
         # From Medium https://medium.com/@o.kroeger/tensorflow-mnist-and-your-own-handwritten-digits-4d1cd32bbab4: 
         # All images are size normalized to fit in a 20x20 pixel box and there are centered in a 28x28 image using the center of mass.
         for batch_idx, (data, _) in enumerate(self.train_loader):
-            print(f"Batch IDX TYPE: {type(batch_idx)}")
-            print(f"Batch IDX: {batch_idx}")
-            print(f"DATA TYPE: {type(data)}")
+            # print(f"Batch IDX TYPE: {type(batch_idx)}")
+            # print(f"Batch IDX: {batch_idx}")
+            # print(f"DATA TYPE: {type(data)}")
             # To view tensor in text file (Note returns a LARGE array of float values
             # which supposed to represent each pixel in an image )
             # numpy.savetxt('my_file.txt', data.numpy().reshape(4,-1))
@@ -115,13 +115,13 @@ class ModelGenerator:
             # The shape is torch.Size([128, 784]) implying that there are 128 images and
             # the dimensions have been reduced to a single array since sqrt(784) and 
             # earlier it is stated that the dimensions of an mnist image is 28x28.
-            print(recon_batch.size())
-            print("="*10)
-            print(mu.size())
-            print("="*10)
-            print(logvar.size())
-            print("="*10)
-            input()
+            # print(recon_batch.size())
+            # print("="*10)
+            # print(mu.size())
+            # print("="*10)
+            # print(logvar.size())
+            # print("="*10)
+            # input()
             loss = self.loss_function(recon_batch, data, mu, logvar)
             loss.backward()
             train_loss += loss.item()
@@ -199,7 +199,12 @@ class ModelGenerator:
         else:    
             with torch.no_grad():
                 # Returns a 1x20 array with random values from 0-1
-                sample = torch.randn(1,20).to(self.device)
+                # The second value in the randn decides the the dimesion check VAEModel
+                # sample = torch.randn(1,2).to(self.device)
+                sample = torch.tensor([[-99.1, 99.0]]).to(self.device)
+                print(sample)
+                print(sample.size())
+                # input()
                 sample = self.model.decode(sample).cpu() 
                 save_image(sample.view(1, 1, 28, 28), filepath)
                 image = Image.open(filepath)
@@ -219,5 +224,6 @@ class ModelGenerator:
 if __name__ == "__main__":
     generator = ModelGenerator()
     generator.train(1)
-    print(generator.test_loader)
+    generator.generateImage()
+    # print(generator.test_loader)
     # generator.model.encode()
