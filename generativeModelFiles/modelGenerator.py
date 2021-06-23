@@ -1,9 +1,11 @@
 from __future__ import print_function
 import argparse
+import numpy
 import torch
 import torch.utils.data
 from torch import nn, optim
 from torch.nn import functional as F
+from torch.utils.data import sampler
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
@@ -14,6 +16,10 @@ from modelExceptions import ModelException
 
 class ModelGenerator:
     def __init__(self):
+
+        # This section dealt with taking in default arguements in the orginal VAE MNIST Example
+        # This section is unecessary for AR-VR-GAN, we just have to replace the arguement values
+        # in the appropriate places.
         self.parser = argparse.ArgumentParser(description='VAE MNIST Example')
         self.parser.add_argument('--batch-size', type=int, default=128, metavar='N',
                             help='input batch size for training (default: 128)')
@@ -28,15 +34,29 @@ class ModelGenerator:
         self.args = self.parser.parse_args()
         self.args.cuda = not self.args.no_cuda and torch.cuda.is_available()
 
+        # Sets the seed for generating random numbers. Returns a torch.Generator object.
         torch.manual_seed(self.args.seed)
 
+        # A torch.device is an object representing the device on which a torch.
+        # Tensor is or will be allocated. The torch.device contains a device type ('cpu' or 'cuda')
+        # and optional device ordinal for the device type. If the device ordinal is not present, 
+        # this object will always represent the current device for the device type, 
+        # even after torch.cuda.set_device() is called.
         self.device = torch.device("cuda" if self.args.cuda else "cpu")
 
         kwargs = {'num_workers': 1, 'pin_memory': True} if self.args.cuda else {}
+
+        # Loads the MNIST dataset 
+        # You can change from MNIST to any other torch dataset by changing
+        # datsets.MNIST to datasets.Caltect 101
+        # Go to https://pytorch.org/vision/stable/datasets.html for more information
+
+        # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         self.train_loader = torch.utils.data.DataLoader(
             datasets.MNIST('../data', train=True, download=True,
                         transform=transforms.ToTensor()),
             batch_size= self.args.batch_size, shuffle=True, **kwargs)
+
         self.test_loader = torch.utils.data.DataLoader(
             datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
             batch_size=self.args.batch_size, shuffle=True, **kwargs)
@@ -64,10 +84,40 @@ class ModelGenerator:
     def train(self, epoch):
         self.model.train()
         train_loss = 0
+        # Note torch.DataLoader combines a dataset and a sampler, and provides an 
+        # iterable over the given dataset. Therefore `batch_idx` gives an index of 
+        # which image the function is on (it is an int), `data` provides the image 
+        # (it is a tensor and its shape is torch.Size([128, 1, 28, 28])) and `_` is
+        #  the sampler (also a tensor and it shape is torch.Size([128])). 
+        # Note that 128 is a common number because that is the batch size of the dataset
+        # And 28 is the height and width of the image in pixels. 
+        # From Medium https://medium.com/@o.kroeger/tensorflow-mnist-and-your-own-handwritten-digits-4d1cd32bbab4: 
+        # All images are size normalized to fit in a 20x20 pixel box and there are centered in a 28x28 image using the center of mass.
         for batch_idx, (data, _) in enumerate(self.train_loader):
+            print(f"Batch IDX TYPE: {type(batch_idx)}")
+            print(f"Batch IDX: {batch_idx}")
+            print(f"DATA TYPE: {type(data)}")
+            # To view tensor in text file (Note returns a LARGE array of float values
+            # which supposed to represent each pixel in an image )
+            # numpy.savetxt('my_file.txt', data.numpy().reshape(4,-1))
+            # print(f"DATA: {data.size()}")
+            # print(f"Underscore TYPE: {type(_)}")
+            # print(f"Underscore: {_.size()}")
+
+
+            # Converts `data` to a tensor with a specified dtype
             data = data.to(self.device)
+            # Info on this https://stackoverflow.com/questions/48001598/why-do-we-need-to-call-zero-grad-in-pytorch0
             self.optimizer.zero_grad()
+            # This returns the output from forward in VAE model
             recon_batch, mu, logvar = self.model(data)
+            print(recon_batch.size())
+            print("="*10)
+            print(mu.size())
+            print("="*10)
+            print(logvar.size())
+            print("="*10)
+            input()
             loss = self.loss_function(recon_batch, data, mu, logvar)
             loss.backward()
             train_loss += loss.item()
@@ -160,3 +210,10 @@ class ModelGenerator:
 
     def loadDataset(self):
         pass
+
+
+if __name__ == "__main__":
+    generator = ModelGenerator()
+    generator.train(1)
+    print(generator.test_loader)
+    # generator.model.encode()

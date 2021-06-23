@@ -5,6 +5,7 @@ generativeModelFiles/savedModels/*
 generativeModelFiles/testing/images/*
 generativeModelFiles/testing/savedModels/*
 generativeModelFiles/savedImages/*
+generativeModelFiles/*.txt
 .DS_Store
 __pycache__/
 data/*
