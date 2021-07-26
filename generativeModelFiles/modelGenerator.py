@@ -61,7 +61,7 @@ class ModelGenerator:
             datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
             batch_size=self.args.batch_size, shuffle=True, **kwargs)
 
-        self.model = VAE().to(self.device)
+        self.model = VAE(3).to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
     # Reconstruction + KL divergence losses summed over all elements and batch
@@ -147,8 +147,8 @@ class ModelGenerator:
                     n = min(data.size(0), 8)
                     comparison = torch.cat([data[:n],
                                         recon_batch.view(self.args.batch_size, 1, 28, 28)[:n]])
-                    save_image(comparison.cpu(),
-                            'test/reconstruction_' + str(epoch) + '.png', nrow=n)
+                    # save_image(comparison.cpu(),
+                    #         'test/reconstruction_' + str(epoch) + '.png', nrow=n)
 
         test_loss /= len(self.test_loader.dataset)
         print('====> Test set loss: {:.4f}'.format(test_loss))
@@ -190,7 +190,7 @@ class ModelGenerator:
                 print("Model saved as" + filepath)
                 return True
     
-    def generateImage(self, filepath=""):
+    def generateImage(self, vector = None, filepath=""):
         if filepath == "":
             filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".png"
 
@@ -201,10 +201,12 @@ class ModelGenerator:
                 # Returns a 1x20 array with random values from 0-1
                 # The second value in the randn decides the the dimesion check VAEModel
                 # sample = torch.randn(1,2).to(self.device)
-                sample = torch.tensor([[-99.1, 99.0]]).to(self.device)
+                if self.model.retrieve_latent_size() != len(vector):
+                    raise ModelException("Input vector not the same size as model's vector")
+
+                sample = torch.tensor([vector]).to(self.device)
                 print(sample)
                 print(sample.size())
-                # input()
                 sample = self.model.decode(sample).cpu() 
                 save_image(sample.view(1, 1, 28, 28), filepath)
                 image = Image.open(filepath)
@@ -217,13 +219,19 @@ class ModelGenerator:
         self.model = None
         self.model = VAE().to(self.device)
 
+    def set_latent_size(self, latent_size):
+        self.latent_size = latent_size
+
+
     def loadDataset(self):
         pass
 
 
 if __name__ == "__main__":
     generator = ModelGenerator()
-    generator.train(1)
-    generator.generateImage()
+    generator.loadModel("savedModels/50iterations.pt")
+    # generator.train_model(50)
+    # generator.saveModel("savedModels/50iterations.pt")
+    generator.generateImage([0.000000, 0.000, 0.00])
     # print(generator.test_loader)
     # generator.model.encode()
