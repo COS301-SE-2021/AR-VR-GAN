@@ -15,7 +15,7 @@ from PIL import Image
 from modelExceptions import ModelException
 
 class ModelGenerator:
-    def __init__(self):
+    def __init__(self) -> None:
 
         # This section dealt with taking in default arguements in the orginal VAE MNIST Example
         # This section is unecessary for AR-VR-GAN, we just have to replace the arguement values
@@ -65,7 +65,7 @@ class ModelGenerator:
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
     # Reconstruction + KL divergence losses summed over all elements and batch
-    def loss_function(self,recon_x, x, mu, logvar):
+    def loss_function(self,recon_x, x, mu, logvar) -> float:
         BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
 
         # see Appendix B from VAE paper:
@@ -76,12 +76,12 @@ class ModelGenerator:
 
         return BCE + KLD
 
-    def train_model(self, epochs):
+    def train_model(self, epochs) -> None:
         for epoch in range(1, epochs + 1):
             self.train(epoch)
             self.test(epoch)
 
-    def train(self, epoch):
+    def train(self, epoch) -> None:
         self.model.train()
         train_loss = 0
         # Note torch.DataLoader combines a dataset and a sampler, and provides an 
@@ -135,7 +135,7 @@ class ModelGenerator:
         print('====> Epoch: {} Average loss: {:.4f}'.format(
             epoch, train_loss / len(self.train_loader.dataset)))
 
-    def test(self, epoch):
+    def test(self, epoch, generate = False) -> None:
         self.model.eval()
         test_loss = 0
         with torch.no_grad():
@@ -147,13 +147,14 @@ class ModelGenerator:
                     n = min(data.size(0), 8)
                     comparison = torch.cat([data[:n],
                                         recon_batch.view(self.args.batch_size, 1, 28, 28)[:n]])
-                    # save_image(comparison.cpu(),
-                    #         'test/reconstruction_' + str(epoch) + '.png', nrow=n)
+                    if generate == True:
+                        save_image(comparison.cpu(),
+                                'test/reconstruction_' + str(epoch) + '.png', nrow=n)
 
         test_loss /= len(self.test_loader.dataset)
         print('====> Test set loss: {:.4f}'.format(test_loss))
 
-    def loadModel(self, filepath=""):
+    def loadModel(self, filepath="") -> bool:
         if filepath == "":
             self.model = torch.load("defaultModels/Epochs-50.pt")
             print("Default VAE Model loaded")
@@ -168,7 +169,7 @@ class ModelGenerator:
                 print(filepath+" VAE Model loaded")
                 return True
 
-    def saveModel(self, filepath=""):
+    def saveModel(self, filepath="") -> bool:
         modelPath = ""
         if filepath == "":
             modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
@@ -190,7 +191,7 @@ class ModelGenerator:
                 print("Model saved as" + filepath)
                 return True
     
-    def generateImage(self, vector = None, filepath=""):
+    def generateImage(self, vector = None, filepath="") -> bool:
         if filepath == "":
             filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".png"
 
@@ -215,15 +216,15 @@ class ModelGenerator:
                 print("Imaged Saved as "+filepath)
                 return True
 
-    def clearModel(self):
+    def clearModel(self) -> None:
         self.model = None
         self.model = VAE().to(self.device)
 
-    def set_latent_size(self, latent_size):
+    def set_latent_size(self, latent_size) -> None:
         self.latent_size = latent_size
 
 
-    def loadDataset(self):
+    def loadDataset(self) -> None:
         pass
 
 
