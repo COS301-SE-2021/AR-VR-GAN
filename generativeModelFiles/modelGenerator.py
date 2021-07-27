@@ -15,6 +15,58 @@ from PIL import Image
 from modelExceptions import ModelException
 
 class ModelGenerator:
+    """ This class trains VAE models and generates images from said models
+
+    This class trains and saves VAE models. It also generates and saves images
+    generated from said models. 
+    
+    Attributes
+    ----------
+    model : VAE
+        a formatted string to print out what the animal says
+    train_loader : torch.utils.data.DataLoader
+        An object that stores the set of training images
+    test_loader : torch.utils.data.DataLoader
+        An object that stores the set of test images
+
+    Methods
+    -------
+    loss_function()
+        Produces the loss the of training iteration
+
+    train_model(epochs)
+        Trains and test the model over a set of iterations(epochs)
+
+    train(epoch=int)
+        Trains the model on the set of images in train_loader
+
+    test(epoch=int, generate=bool)
+        Tests the accuracy of the model with the set of images in test_loader
+
+    loadModel(filepath=str)
+        Loads a previously saved model to be used by the model generator
+
+    saveModel(filepath=str)
+        Saves the model currently held by the model generator 
+
+    generateImage(vector=list, filepath=str)
+        Generates an image from the model from the vector pass into the function
+
+    clearModel()
+        Removes the current model and replaces it with a new untrained model
+
+    set_latent_size(latent_size=int)
+        Sets the latent vector to a new size, specified by the user
+
+    loadDataset()
+        Loads a new dataset to train the model on 
+
+    """
+    # TODO: Remove unessecarry code
+    # TODO: Create detailed comments
+    # TODO: Handel edge cases in function i.e when a model is not loaded raise an exception
+    # TODO: Create a throughout main i.e one that handles executes all the functions 
+    # TODO: Adjust test files so that it can handle file changes made 
     def __init__(self) -> None:
 
         # This section dealt with taking in default arguements in the orginal VAE MNIST Example
@@ -61,7 +113,9 @@ class ModelGenerator:
             datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
             batch_size=self.args.batch_size, shuffle=True, **kwargs)
 
-        self.model = VAE(3).to(self.device)
+        # self.model = VAE(3).to(self.device)
+        self.model = None
+        self.latent_size = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
     # Reconstruction + KL divergence losses summed over all elements and batch
@@ -77,11 +131,30 @@ class ModelGenerator:
         return BCE + KLD
 
     def train_model(self, epochs) -> None:
+        """ Trains and test the model over a set of iterations(epochs)
+
+        Parameters
+        ----------
+        epochs : int
+            The number of iterations the model will be tested
+        """
+
+        # Check whether a valid integer is passed and pass through the fuction
+        # if not throw an exception. Make sure that it is in fact an integer and
+        # that it is greater than zero.
         for epoch in range(1, epochs + 1):
             self.train(epoch)
             self.test(epoch)
 
     def train(self, epoch) -> None:
+        """Trains the model on the set of images in train_loader
+
+        Parameters
+        ----------
+        epoch : int
+            The iteration the training is currently executing
+
+        """
         self.model.train()
         train_loss = 0
         # Note torch.DataLoader combines a dataset and a sampler, and provides an 
@@ -115,13 +188,6 @@ class ModelGenerator:
             # The shape is torch.Size([128, 784]) implying that there are 128 images and
             # the dimensions have been reduced to a single array since sqrt(784) and 
             # earlier it is stated that the dimensions of an mnist image is 28x28.
-            # print(recon_batch.size())
-            # print("="*10)
-            # print(mu.size())
-            # print("="*10)
-            # print(logvar.size())
-            # print("="*10)
-            # input()
             loss = self.loss_function(recon_batch, data, mu, logvar)
             loss.backward()
             train_loss += loss.item()
@@ -136,6 +202,18 @@ class ModelGenerator:
             epoch, train_loss / len(self.train_loader.dataset)))
 
     def test(self, epoch, generate = False) -> None:
+        """Tests the accuracy of the model with the set of images in test_loader
+
+        If generate is set to True then the function will produce a comparison image 
+        comparing the test data compared the image by the model
+
+        Parameters
+        ----------
+        epoch : int
+            The iteration the training is currently executing
+        generate : bool, optional
+            To decide whether or not to save an image displaying the comparison between the model and the actual results
+        """
         self.model.eval()
         test_loss = 0
         with torch.no_grad():
@@ -155,6 +233,21 @@ class ModelGenerator:
         print('====> Test set loss: {:.4f}'.format(test_loss))
 
     def loadModel(self, filepath="") -> bool:
+        """Loads a previously saved model to be used by the model generator
+
+        If a file path is not specified then the model generator will load the default model.
+        
+        Parameters
+        ----------
+        filepath : str
+            The destination of a saved model
+
+        Raises
+        ------
+        ModelException
+            If the destination of the file does not exist or 
+            if the file path is not a pytorch file.
+        """
         if filepath == "":
             self.model = torch.load("defaultModels/Epochs-50.pt")
             print("Default VAE Model loaded")
@@ -166,10 +259,23 @@ class ModelGenerator:
                 raise ModelException("File needs to be a pytorch file")
             else:
                 self.model = torch.load(filepath)
+                self.set_latent_size(self.model.retrieve_latent_size())
                 print(filepath+" VAE Model loaded")
                 return True
 
     def saveModel(self, filepath="") -> bool:
+        """Saves the model currently held by the model generator 
+
+        If a file path is not specified or the file path already exists then the model generator 
+        will give the model the default name of "VAE-MODEL-" with a the timestamp appended to the 
+        file name.
+        
+        Parameters
+        ----------
+        filepath : str
+            The destination of a saved model
+
+        """
         modelPath = ""
         if filepath == "":
             modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
@@ -191,7 +297,21 @@ class ModelGenerator:
                 print("Model saved as" + filepath)
                 return True
     
-    def generateImage(self, vector = None, filepath="") -> bool:
+    def generateImage(self, vector, filepath="") -> str:
+        """ Generates an image from the model from the vector pass into the function
+
+        Parameters
+        ----------
+        vector: list
+            The reparameterization vector specified by the user
+        filepath : str
+            The destination the image will be saved
+        
+        Raises
+        ------
+        ModelException
+            If the input vector dimensions are not the same as the ones specified in the model
+        """
         if filepath == "":
             filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".png"
 
@@ -214,17 +334,22 @@ class ModelGenerator:
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
                 print("Imaged Saved as "+filepath)
-                return True
+                return filepath
 
     def clearModel(self) -> None:
+        """Removes the current model and replaces it with a new untrained model
+        """
         self.model = None
-        self.model = VAE().to(self.device)
+        self.model = VAE(self.latent_size).to(self.device)
 
     def set_latent_size(self, latent_size) -> None:
         self.latent_size = latent_size
 
-
     def loadDataset(self) -> None:
+        # @TODO Complete this function but first create dataset loader class
+        #       and related variables that need to created in this class.
+        """Loads a new dataset to train the model on 
+        """
         pass
 
 
