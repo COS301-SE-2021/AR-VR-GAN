@@ -5,10 +5,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
+    constructor(@InjectModel('User') private readonly userModel: Model<User>, private readonly jwtService: JwtService) {}
 
     /**
      * The method allows a new user to be registered.
@@ -56,6 +57,12 @@ export class UserService {
         }
     }
 
+    /**
+     * Login a user with a given username and password.
+     * 
+     * @param user 
+     * @returns A variable that indicates a successful login and a JWTToken for the user's session.
+     */
     async loginUser(user: LoginUserDto): Promise<UserResponse> {
         if (user == null) {
             return new UserResponse(false, 'Please send a username and password.');
@@ -79,7 +86,34 @@ export class UserService {
             return new UserResponse(false, 'The password is incorrect.');
         }
         
-        // User logged in successfully - issue a JWT token 
+        const payload = { username: userWithUsername.username, sub: userWithUsername.id };
+        var JWTToken = this.jwtService.sign(payload);
+
+        var userWithJWTToken = await this.userModel.findOne(
+            { jwtToken: JWTToken }
+        );
+
+        while (userWithJWTToken != null) {
+            JWTToken = this.jwtService.sign(payload);
+
+            userWithJWTToken = await this.userModel.findOne(
+                { jwtToken: JWTToken }
+            );
+        }
+
+        var updateToken = await this.userModel.updateOne({ username: userWithUsername.username }, { jwtToken: JWTToken });
+
+        while (updateToken.nModified != 1) {
+            updateToken = await this.userModel.updateOne({ username: userWithUsername.username }, { jwtToken: JWTToken });
+        }
+
+        var updateLastLoggedIn = await this.userModel.updateOne({ username: userWithUsername.username }, { lastLoggedIn: Date.now() });
+
+        while (updateLastLoggedIn.nModified != 1) {
+            updateLastLoggedIn = await this.userModel.updateOne({ username: userWithUsername.username }, { lastLoggedIn: Date.now() });
+        }
+
+        return new UserResponse(true, JWTToken);
     }
 
     async getAllUsers(): Promise<User[]> {
