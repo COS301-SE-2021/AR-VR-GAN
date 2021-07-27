@@ -4,18 +4,11 @@ import { UserResponse } from './dto/user-response.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Injectable()
 export class UserService {
     constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
-
-    async getAllUsers(): Promise<User[]> {
-        return await this.userModel.find();
-    }
-
-    async getUserById(id: string): Promise<User> {
-        return await this.userModel.findOne({ _id: id });
-    }
 
     /**
      * The method allows a new user to be registered.
@@ -61,6 +54,40 @@ export class UserService {
         } else {
             return new UserResponse(false, 'The user was not registered successfully.');
         }
+    }
+
+    async loginUser(user: LoginUserDto): Promise<UserResponse> {
+        if (user == null) {
+            return new UserResponse(false, 'Please send a username and password.');
+        }
+
+        if (!(('username' in user) && ('password' in user))) {
+            return new UserResponse(false, 'Please send a username and password.');
+        }
+
+        const userWithUsername = await this.userModel.findOne(
+            { username: user.username }
+        );
+
+        if (userWithUsername == null) {
+            return new UserResponse(false, 'The user with the specified username does not exist.');
+        }
+
+        const isMatch = await bcrypt.compare(user.password, userWithUsername.password);
+
+        if (!isMatch) {
+            return new UserResponse(false, 'The password is incorrect.');
+        }
+        
+        // User logged in successfully - issue a JWT token 
+    }
+
+    async getAllUsers(): Promise<User[]> {
+        return await this.userModel.find();
+    }
+
+    async getUserById(id: string): Promise<User> {
+        return await this.userModel.findOne({ _id: id });
     }
 
     async deleteUserById(id: string): Promise<User> {
