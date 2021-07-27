@@ -3,10 +3,16 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { UserService } from './user.service';
 import { User } from './interfaces/user.interface';
 import { UserResponse } from './dto/user-response.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 @Controller('user')
 export class UserController {
     constructor(private readonly userService: UserService) {}
+
+    @Post('/login')
+    loginUser(@Body() loginUserDto: LoginUserDto): Promise<UserResponse> {
+        return this.userService.loginUser(loginUserDto);
+    }
 
     @Get()
     getAllUsers(): Promise<User[]> {
