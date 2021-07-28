@@ -10,6 +10,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { GetUserByUsernameResponse } from './dto/get-user-by-username.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 import { UserResponse } from './dto/user-response.dto';
+import config from '../config/keys';
 
 @Injectable()
 export class UserService {
@@ -48,8 +49,7 @@ export class UserService {
             return new UserResponse(false, 'This email is already taken.');
         }
 
-        const saltOrRounds = 10;
-        const hash = await bcrypt.hash(user.password, saltOrRounds);
+        const hash = await bcrypt.hash(user.password, config.saltOrRounds);
         user.password = hash;
         const newUser = new this.userModel(user);
         const newUserSaved =  await newUser.save();
@@ -323,8 +323,7 @@ export class UserService {
 
         if (updateUserWithUsernameDto.newPassword != null) {
             if (updateUserWithUsernameDto.newPassword.length > 0) {
-                const saltOrRounds = 10;
-                const hash = await bcrypt.hash(updateUserWithUsernameDto.newPassword, saltOrRounds);
+                const hash = await bcrypt.hash(updateUserWithUsernameDto.newPassword, config.saltOrRounds);
 
                 var updatePassword = await this.userModel.updateOne({ _id: currentUserId }, { password: hash });
 
