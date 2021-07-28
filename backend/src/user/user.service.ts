@@ -6,6 +6,10 @@ import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
 import { LoginUserDto } from './dto/login-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { GetAllUsersResponse } from './dto/get-all-users.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { GetUserByUsernameResponse } from './dto/get-user-by-username.dto';
+import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 
 @Injectable()
 export class UserService {
@@ -17,7 +21,7 @@ export class UserService {
      * @param user 
      * @returns A message containing a success variable and a descriptive message.
      */
-    async registerUser(user: User): Promise<UserResponse> {
+    async registerUser(user: RegisterUserDto): Promise<UserResponse> {
         if (user == null) {
             return new UserResponse(false, 'Please send a username, password and email address.');
         }
@@ -116,19 +120,226 @@ export class UserService {
         return new UserResponse(true, JWTToken);
     }
 
-    async getAllUsers(): Promise<User[]> {
-        return await this.userModel.find();
+    /**
+     * Returns a list of all users in the database if an admin user makes the request.
+     * 
+     * @param jwtToken 
+     * @returns 
+     */
+    async getAllUsers(jwtToken: string): Promise<GetAllUsersResponse> {
+        if (jwtToken == null) {
+            return new GetAllUsersResponse(false, 'Please provide a valid JWTToken.', null);
+        }
+
+        if (jwtToken.length < 1) {
+            return new GetAllUsersResponse(false, 'Please provide a valid JWTToken.', null);
+        }
+
+        const userWithJWTToken = await this.userModel.findOne(
+            { jwtToken : jwtToken }
+        );
+
+        if (userWithJWTToken == null) {
+            return new GetAllUsersResponse(false, 'This JWTToken does not exist.', null);
+        }
+
+        if (!userWithJWTToken.isAdmin) {
+            return new GetAllUsersResponse(false, 'The JWTToken does not belong to an admin user.', null);
+        }
+
+        const users = await this.userModel.find();
+        
+        return new GetAllUsersResponse(true, 'The list of all users is attatched.', users);
     }
 
-    async getUserById(id: string): Promise<User> {
-        return await this.userModel.findOne({ _id: id });
+    /**
+     * Return the user with the given username provided that the user requesting it is an admin.
+     * 
+     * @param jwtToken 
+     * @param username 
+     * @returns 
+     */
+    async getUserByUsername(jwtToken: string, username: string): Promise<GetUserByUsernameResponse> {
+        if (jwtToken == null) {
+            return new GetUserByUsernameResponse(false, 'Please provide a valid JWTToken.', null);
+        }
+
+        if (jwtToken.length < 1) {
+            return new GetUserByUsernameResponse(false, 'Please provide a valid JWTToken.', null);
+        }
+
+        const userWithJWTToken = await this.userModel.findOne(
+            { jwtToken : jwtToken }
+        );
+
+        if (userWithJWTToken == null) {
+            return new GetUserByUsernameResponse(false, 'This JWTToken does not exist.', null);
+        }
+
+        if (!userWithJWTToken.isAdmin) {
+            return new GetUserByUsernameResponse(false, 'The JWTToken does not belong to an admin user.', null);
+        }
+
+        const userWithUsername = await this.userModel.findOne(
+            { username : username }
+        );
+
+        if (userWithUsername == null) {
+            return new GetUserByUsernameResponse(false, 'There is no user with the given username.', null);
+        }
+
+        return new GetUserByUsernameResponse(true, 'The required user is attatched.', userWithUsername);
     }
 
-    async deleteUserById(id: string): Promise<User> {
-        return await this.userModel.findByIdAndRemove(id);
+    /**
+     * Remove a user with a given username provided that the user requesting the action is an admin user.
+     * 
+     * @param jwtToken 
+     * @param username 
+     * @returns 
+     */
+    async deleteUserByUsername(jwtToken: string, username: string): Promise<UserResponse> {
+        if (jwtToken == null) {
+            return new UserResponse(false, 'Please provide a valid JWTToken.');
+        }
+
+        if (jwtToken.length < 1) {
+            return new UserResponse(false, 'Please provide a valid JWTToken.');
+        }
+
+        const userWithJWTToken = await this.userModel.findOne(
+            { jwtToken : jwtToken }
+        );
+
+        if (userWithJWTToken == null) {
+            return new UserResponse(false, 'This JWTToken does not exist.');
+        }
+
+        if (!userWithJWTToken.isAdmin) {
+            return new UserResponse(false, 'The JWTToken does not belong to an admin user.');
+        }
+
+        const userWithUsername = await this.userModel.findOne(
+            { username : username }
+        );
+
+        if (userWithUsername == null) {
+            return new UserResponse(false, 'There is no user with the given username.');
+        }
+
+        await this.userModel.findByIdAndDelete(userWithUsername.id);
+
+        return new UserResponse(true, 'The user has been removed.');
     }
 
-    async updateUserWithId(id: string, user: User): Promise<User> {
-        return await this.userModel.findByIdAndUpdate(id, user, { new: true });
+    /**
+     * Allow an admin user to update any user's details and also allow a user to update their own details.
+     * 
+     * @param updateUserWithUsernameDto 
+     * @returns 
+     */
+    async updateUserWithUsername(updateUserWithUsernameDto: UpdateUserByUsernameDto): Promise<UserResponse> {
+        if (updateUserWithUsernameDto.jwtToken == null) {
+            return new UserResponse(false, 'Please provide a valid JWTToken.');
+        }
+
+        if (updateUserWithUsernameDto.currentUsername == null) {
+            return new UserResponse(false, 'Please provide a valid current username.');
+        }
+
+        if (updateUserWithUsernameDto.jwtToken.length < 1) {
+            return new UserResponse(false, 'Please provide a valid JWTToken.');
+        }
+
+        if (updateUserWithUsernameDto.currentUsername.length < 1) {
+            return new UserResponse(false, 'Please provide a valid current username.');
+        }
+
+        const userWithJWTToken = await this.userModel.findOne(
+            { jwtToken : updateUserWithUsernameDto.jwtToken }
+        );
+
+        if (userWithJWTToken == null) {
+            return new UserResponse(false, 'This JWTToken does not exist.');
+        }
+
+        if (!userWithJWTToken.isAdmin) {
+            if (updateUserWithUsernameDto.currentUsername != userWithJWTToken.username) {
+                return new UserResponse(false, 'You are not an admin user, you may only update your own account.');
+            }
+        }
+
+        const userWithCurrentUsername = await this.userModel.findOne(
+            { username: updateUserWithUsernameDto.currentUsername }
+        );
+
+        if (userWithCurrentUsername == null) {
+            return new UserResponse(false, 'The user with the username you are trying to update does not exist.');
+        }
+
+        const currentUserId = userWithCurrentUsername.id;
+
+        var message = '';
+
+        if (updateUserWithUsernameDto.newUsername != null) {
+            if (updateUserWithUsernameDto.newUsername.length > 0) {
+                const userWithUsername = await this.userModel.findOne(
+                    { username : updateUserWithUsernameDto.newUsername }
+                );
+
+                if (userWithUsername != null) {
+                    message += 'The username you are trying to update to is already taken. ';
+                } else {
+                    var updateUsername = await this.userModel.updateOne({ id: currentUserId }, { username: updateUserWithUsernameDto.newUsername });
+
+                    while (updateUsername.nModified != 1) {
+                        updateUsername = await this.userModel.updateOne({ id: currentUserId }, { username: updateUserWithUsernameDto.newUsername });
+                    }
+
+                    message += `The username was updated to ${updateUserWithUsernameDto.newUsername}. `;
+                }
+            }
+        }
+
+        if (updateUserWithUsernameDto.newEmail != null) {
+            if (updateUserWithUsernameDto.newEmail.length > 0) {
+                const userWithEmail = await this.userModel.findOne(
+                    { email : updateUserWithUsernameDto.newEmail }
+                );
+
+                if (userWithEmail != null) {
+                    message += 'The email you are trying to update to is already taken. ';
+                } else {
+                    var updateEmail = await this.userModel.updateOne({ id: currentUserId }, { email: updateUserWithUsernameDto.newEmail });
+
+                    while (updateEmail.nModified != 1) {
+                        updateEmail = await this.userModel.updateOne({ id: currentUserId }, { email: updateUserWithUsernameDto.newEmail });
+                    }
+
+                    message += `The email was updated to ${updateUserWithUsernameDto.newEmail}. `;
+                }
+            }
+        }
+
+        if (updateUserWithUsernameDto.newPassword != null) {
+            if (updateUserWithUsernameDto.newPassword.length > 0) {
+                const saltOrRounds = 10;
+                const hash = await bcrypt.hash(updateUserWithUsernameDto.newPassword, saltOrRounds);
+
+                var updatePassword = await this.userModel.updateOne({ id: currentUserId }, { password: hash });
+
+                while (updatePassword.nModified != 1) {
+                    updatePassword = await this.userModel.updateOne({ id: currentUserId }, { password: hash });
+                }
+
+                message += `The password was updated to ${updateUserWithUsernameDto.newPassword}. `;
+            }
+        }
+
+        if (message.length <= 1) {
+            return new UserResponse(false, 'No fields were requested to be updated.');
+        }
+
+        return new UserResponse(true, message);
     }
 }
