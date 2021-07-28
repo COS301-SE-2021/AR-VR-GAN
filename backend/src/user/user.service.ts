@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { User } from './interfaces/user.interface';
-import { UserResponse } from './dto/user-response.dto';
+import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import * as bcrypt from 'bcrypt';
+import { User } from './interfaces/user.interface';
 import { LoginUserDto } from './dto/login-user.dto';
-import { JwtService } from '@nestjs/jwt';
 import { GetAllUsersResponse } from './dto/get-all-users.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { GetUserByUsernameResponse } from './dto/get-user-by-username.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
+import { UserResponse } from './dto/user-response.dto';
 
 @Injectable()
 export class UserService {
@@ -290,10 +290,10 @@ export class UserService {
                 if (userWithUsername != null) {
                     message += 'The username you are trying to update to is already taken. ';
                 } else {
-                    var updateUsername = await this.userModel.updateOne({ id: currentUserId }, { username: updateUserWithUsernameDto.newUsername });
+                    var updateUsername = await this.userModel.updateOne({ _id: currentUserId }, { username: updateUserWithUsernameDto.newUsername });
 
                     while (updateUsername.nModified != 1) {
-                        updateUsername = await this.userModel.updateOne({ id: currentUserId }, { username: updateUserWithUsernameDto.newUsername });
+                        updateUsername = await this.userModel.updateOne({ _id: currentUserId }, { username: updateUserWithUsernameDto.newUsername });
                     }
 
                     message += `The username was updated to ${updateUserWithUsernameDto.newUsername}. `;
@@ -310,10 +310,10 @@ export class UserService {
                 if (userWithEmail != null) {
                     message += 'The email you are trying to update to is already taken. ';
                 } else {
-                    var updateEmail = await this.userModel.updateOne({ id: currentUserId }, { email: updateUserWithUsernameDto.newEmail });
+                    var updateEmail = await this.userModel.updateOne({ _id: currentUserId }, { email: updateUserWithUsernameDto.newEmail });
 
                     while (updateEmail.nModified != 1) {
-                        updateEmail = await this.userModel.updateOne({ id: currentUserId }, { email: updateUserWithUsernameDto.newEmail });
+                        updateEmail = await this.userModel.updateOne({ _id: currentUserId }, { email: updateUserWithUsernameDto.newEmail });
                     }
 
                     message += `The email was updated to ${updateUserWithUsernameDto.newEmail}. `;
@@ -326,10 +326,10 @@ export class UserService {
                 const saltOrRounds = 10;
                 const hash = await bcrypt.hash(updateUserWithUsernameDto.newPassword, saltOrRounds);
 
-                var updatePassword = await this.userModel.updateOne({ id: currentUserId }, { password: hash });
+                var updatePassword = await this.userModel.updateOne({ _id: currentUserId }, { password: hash });
 
                 while (updatePassword.nModified != 1) {
-                    updatePassword = await this.userModel.updateOne({ id: currentUserId }, { password: hash });
+                    updatePassword = await this.userModel.updateOne({ _id: currentUserId }, { password: hash });
                 }
 
                 message += `The password was updated to ${updateUserWithUsernameDto.newPassword}. `;
