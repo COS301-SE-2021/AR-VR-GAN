@@ -4,10 +4,8 @@ package model;
 
 service ModelController {
     rpc HandleCoords(RequestDto) returns (ResponseDto) {}
-    rpc runPython(RequestDto) returns (ResponsePythonDTO) {}
+    rpc RunPython(RequestDto) returns (ResponsePythonDTO) {}
 }
-
-
 
 message RequestDto {
     repeated double data = 1;
