@@ -24,8 +24,8 @@ export const MockUserService = {
       return resp;
     }),
 
-    deleteUserById:jest.fn((id) => {
-      const out = id + " Deleted";
-      return out
+    deleteUserByUsername:jest.fn((id) => {
+      let resp = new UserResponse(true,"deleted succesfully!")
+      return resp
     }),
   }
