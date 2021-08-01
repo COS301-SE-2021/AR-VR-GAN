@@ -1,5 +1,6 @@
 import { RegisterUserDto } from '../dto/register-user.dto';
 import { GetUserByUsernameResponse } from '../dto/get-user-by-username.dto';
+import { UserResponse } from '../dto/user-response.dto';
 
 export const MockUserService = {
     registerUser: jest.fn((dto) => {
@@ -7,13 +8,11 @@ export const MockUserService = {
         ...dto
       }
     }),
-    updateUserWithId: jest.fn((id, dto) => {
-      return {
-        id,
-        ...dto
-      }
+    updateUserWithUsername: jest.fn((dto) => {
+      let resp = new UserResponse(true,"updated succesfully!")
+      return resp
     }),
-    
+
     getAllUsers: jest.fn(() => {
       return "User List"
     }),
