@@ -2,6 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { MockUserService } from './mocks/user.mock'
+import { RegisterUserDto } from './dto/register-user.dto';
+import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
+import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 
 describe('UserController', () => {
   let controller: UserController;
@@ -20,39 +23,45 @@ describe('UserController', () => {
   });
 
   it('should register a user', () => {
-    const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
 
-    expect(controller.registerUser(dto)).toEqual({
-      id: expect.any(Number),
-      username: dto.username,
-      email: dto.email,
-      password: dto.password
+    expect(controller.registerUser(registerDto)).toEqual({
+      username: registerDto.username,
+      email: registerDto.email,
+      password: registerDto.password
     });
   });
 
-  it('should update a user', () => {
-    const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
+  // it('should update a user', () => {
+  //   const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
 
-    expect(controller.updateUserWithUsername('12415352', dto)).toEqual({
-      id: '12415352',
-      ...dto
+  //   expect(controller.updateUserWithUsername('12415352', dto)).toEqual({
+  //     id: '12415352',
+  //     ...dto
+  //   })
+  // });
+
+  // it('Get all users', () => {
+
+  //   expect(controller.getAllUsers()).toEqual("User List")
+  // });
+
+  it('Get user by the username', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
+    const dto = new GetUserByUsernameDto("jwtToken","test123");
+    expect(controller.getUserByUsername(dto)).toEqual({
+      success: true,
+      message: dto.username,
+      user: dto.jwtToken
     })
   });
 
-  it('Get all users', () => {
-
-    expect(controller.getAllUsers()).toEqual("User List")
-  });
-
-  it('Get all users', () => {
-    const id = '12345';
-    const out = id + " Found"
-    expect(controller.getUserByUsername(id)).toEqual(out)
-  });
-  it('Get all users', () => {
-    const id = '12345';
-    const out = id + " Deleted"
-    expect(controller.deleteUserByUsername(id)).toEqual(out)
-  });
+  // it('delete a user by a username', () => {
+  //   const id = '12345';
+  //   const out = id + " Deleted"
+  //   expect(controller.deleteUserByUsername(id)).toEqual(out)
+  // });
 
 });
