@@ -1,6 +1,7 @@
 import { RegisterUserDto } from '../dto/register-user.dto';
 import { GetUserByUsernameResponse } from '../dto/get-user-by-username.dto';
 import { UserResponse } from '../dto/user-response.dto';
+import { GetAllUsersDto, GetAllUsersResponse } from '../dto/get-all-users.dto';
 
 export const MockUserService = {
     registerUser: jest.fn((dto) => {
@@ -13,8 +14,9 @@ export const MockUserService = {
       return resp
     }),
 
-    getAllUsers: jest.fn(() => {
-      return "User List"
+    getAllUsers: jest.fn((dto) => {
+      let resp = new GetAllUsersResponse(true,"all users list",dto)
+      return resp
     }),
 
     getUserByUsername:jest.fn((token,username) => {
