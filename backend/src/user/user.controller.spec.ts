@@ -64,10 +64,12 @@ describe('UserController', () => {
     })
   });
 
-  // it('delete a user by a username', () => {
-  //   const id = '12345';
-  //   const out = id + " Deleted"
-  //   expect(controller.deleteUserByUsername(id)).toEqual(out)
-  // });
+  it('delete a user by a username', () => {
+    let deleteDto =  new GetUserByUsernameDto("jwtToken","test123")
+    expect(controller.deleteUserByUsername(deleteDto)).toEqual({
+      success: true,
+      message: "deleted succesfully!"
+    })
+  });
 
 });
