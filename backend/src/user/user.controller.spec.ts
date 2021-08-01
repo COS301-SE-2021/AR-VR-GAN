@@ -5,6 +5,7 @@ import { MockUserService } from './mocks/user.mock'
 import { RegisterUserDto } from './dto/register-user.dto';
 import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
+import { GetAllUsersDto, GetAllUsersResponse } from './dto/get-all-users.dto';
 
 
 describe('UserController', () => {
@@ -42,10 +43,14 @@ describe('UserController', () => {
     })
   });
 
-  // it('Get all users', () => {
-
-  //   expect(controller.getAllUsers()).toEqual("User List")
-  // });
+  it('Get all users', () => {
+    let allUserDto = new GetAllUsersDto("jwtToken")
+    expect(controller.getAllUsers(allUserDto)).toEqual({
+      success: true,
+      message: "all users list",
+      users: "jwtToken"
+    })
+  });
 
   it('Get user by the username', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
