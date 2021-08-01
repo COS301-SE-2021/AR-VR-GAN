@@ -6,6 +6,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 
+
 describe('UserController', () => {
   let controller: UserController;
 
@@ -32,14 +33,14 @@ describe('UserController', () => {
     });
   });
 
-  // it('should update a user', () => {
-  //   const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
+  it('should update a user', () => {
+    const updateDto = new UpdateUserByUsernameDto("jwtToken","test123","newUser","newPass","newEmail");
 
-  //   expect(controller.updateUserWithUsername('12415352', dto)).toEqual({
-  //     id: '12415352',
-  //     ...dto
-  //   })
-  // });
+    expect(controller.updateUserWithUsername(updateDto)).toEqual({
+      success: true,
+      message: "updated succesfully!"
+    })
+  });
 
   // it('Get all users', () => {
 

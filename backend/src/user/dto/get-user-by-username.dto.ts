@@ -19,6 +19,5 @@ export class GetUserByUsernameDto {
     constructor(jwtToken: string, username: string) {
         this.jwtToken = jwtToken;
         this.username = username;
-
     }
 }
