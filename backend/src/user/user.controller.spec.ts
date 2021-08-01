@@ -33,7 +33,7 @@ describe('UserController', () => {
   it('should update a user', () => {
     const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
 
-    expect(controller.updateUserWithId('12415352', dto)).toEqual({
+    expect(controller.updateUserWithUsername('12415352', dto)).toEqual({
       id: '12415352',
       ...dto
     })
@@ -47,12 +47,12 @@ describe('UserController', () => {
   it('Get all users', () => {
     const id = '12345';
     const out = id + " Found"
-    expect(controller.getUserById(id)).toEqual(out)
+    expect(controller.getUserByUsername(id)).toEqual(out)
   });
   it('Get all users', () => {
     const id = '12345';
     const out = id + " Deleted"
-    expect(controller.deleteUserById(id)).toEqual(out)
+    expect(controller.deleteUserByUsername(id)).toEqual(out)
   });
 
 });
