@@ -6,6 +6,7 @@ import { RegisterUserDto } from './dto/register-user.dto';
 import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 import { GetAllUsersDto, GetAllUsersResponse } from './dto/get-all-users.dto';
+import { LoginUserDto } from './dto/login-user.dto';
 
 
 describe('UserController', () => {
@@ -32,6 +33,14 @@ describe('UserController', () => {
       email: registerDto.email,
       password: registerDto.password
     });
+  });
+
+  it('login a user', () => {
+    let loginDto =  new LoginUserDto("test123","test123")
+    expect(controller.loginUser(loginDto)).toEqual({
+      success: true,
+      message: "login succesful!"
+    })
   });
 
   it('should update a user', () => {

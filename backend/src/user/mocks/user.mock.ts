@@ -9,6 +9,12 @@ export const MockUserService = {
         ...dto
       }
     }),
+
+    loginUser:jest.fn((username,password) => {
+      let resp = new UserResponse(true,"login succesful!")
+      return resp
+    }),
+
     updateUserWithUsername: jest.fn((dto) => {
       let resp = new UserResponse(true,"updated succesfully!")
       return resp
