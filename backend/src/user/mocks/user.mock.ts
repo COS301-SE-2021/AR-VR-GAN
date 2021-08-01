@@ -1,7 +1,9 @@
+import { RegisterUserDto } from '../dto/register-user.dto';
+import { GetUserByUsernameResponse } from '../dto/get-user-by-username.dto';
+
 export const MockUserService = {
     registerUser: jest.fn((dto) => {
       return {
-        id: Date.now(),
         ...dto
       }
     }),
@@ -11,13 +13,16 @@ export const MockUserService = {
         ...dto
       }
     }),
+    
     getAllUsers: jest.fn(() => {
       return "User List"
     }),
-    getUserById:jest.fn((id) => {
-      const out = id + " Found";
-      return out
+
+    getUserByUsername:jest.fn((token,username) => {
+      let resp = new GetUserByUsernameResponse(true,username,token)
+      return resp;
     }),
+
     deleteUserById:jest.fn((id) => {
       const out = id + " Deleted";
       return out
