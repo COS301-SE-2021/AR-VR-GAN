@@ -12,7 +12,7 @@ message RequestDto {
 }
 
 message ResponseDto {
-    double sum = 1;
+    double data = 1;
 }
 
 message ResponsePythonDTO {
