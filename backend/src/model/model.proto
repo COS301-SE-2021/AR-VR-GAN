@@ -3,7 +3,7 @@ syntax = "proto3";
 package model;
 
 service ModelController {
-    rpc HandleCoords(RequestDto) returns (ResponseDto) {}
+    rpc HandleCoords(stream RequestDto) returns (stream ResponseDto) {}
     rpc RunPython(RequestDto) returns (ResponsePythonDTO) {}
 }
 
