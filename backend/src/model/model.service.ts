@@ -5,6 +5,7 @@ import { join } from 'path';
 @Injectable()
 export class ModelService {
     private num: string
+    
     public handleCoords(request: Request): number {
         let sum = 0;
 
