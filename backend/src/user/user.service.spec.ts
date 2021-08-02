@@ -18,7 +18,7 @@ describe('UserService', () => {
         UserService,
         {
           provide : getModelToken('User'),
-          useValue : MockUserModel
+          useClass : MockUserModel
         },
         {
           provide: JwtService,
