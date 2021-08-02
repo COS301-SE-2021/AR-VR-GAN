@@ -10,7 +10,8 @@ public class TrackCoords : MonoBehaviour
     private void FixedUpdate()
     {
         Vector3 coords = transform.position;
-        print("x: " + coords.x + "\ny: " + coords.y + "\nz: " + coords.z);
+        //print("x: " + coords.x + "\ny: " + coords.y + "\nz: " + coords.z);
+        //print(transform.name);
     }
 
     private void Request()
