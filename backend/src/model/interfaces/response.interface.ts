@@ -1,3 +1,3 @@
 export interface Response {
-    data: any;
+    data: number;
 }
