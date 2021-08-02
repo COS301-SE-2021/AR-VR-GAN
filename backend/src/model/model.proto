@@ -3,8 +3,8 @@ syntax = "proto3";
 package model;
 
 service ModelController {
-    rpc HandleCoords(RequestDto) returns (ResponseDto) {}
-    rpc RunPython(RequestDto) returns (ResponsePythonDTO) {}
+    rpc HandleCoords(stream RequestDto) returns (stream ResponseDto) {}
+    rpc RunPython(RequestDto) returns (ResponsePythonDto) {}
 }
 
 message RequestDto {
@@ -12,9 +12,9 @@ message RequestDto {
 }
 
 message ResponseDto {
-    double sum = 1;
+    double data = 1;
 }
 
-message ResponsePythonDTO {
+message ResponsePythonDto {
     string data = 1;
 }
