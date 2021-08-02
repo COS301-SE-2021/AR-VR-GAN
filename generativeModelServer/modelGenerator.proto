@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+service ModelGeneration{
+    rpc GenerateImage (ImageRequest) returns (ImageResponse); 
+    rpc LoadDataset (LoadDatasetRequest) returns (LoadDatasetResponse);
+    rpc TrainModel (TrainModelRequest) returns (TrainModelResponse);
+    rpc LoadModel (LoadModelRequest) returns (LoadModelResponse);
+    // - Delete Model // Could be used later
+}
+
+message ImageRequest{
+    repeated float vector = 1;
+}
+
+// This could be unnescessary rather have all its needs in the trainModelRequest
+// Same applies for the corresponding response
+message LoadDatasetRequest{
+    string datasetName = 1;
+    string datasetType = 2;
+    bytes dataset = 3;
+}
+
+message TrainModelRequest{
+    string modelName = 1;
+    int32 trainingEpochs = 2;
+    int32 latentSize = 3;
+    string datasetName = 4;
+    bytes dataset = 5;
+}
+
+message LoadModelRequest{
+    string modelName = 1;
+}
+
+message ImageResponse{
+    int32 width = 1;
+    int32 height = 2;
+    bytes image = 3;
+}
+
+message LoadDatasetResponse{
+    bool succesful = 1;
+    string message = 2;
+}
+
+message TrainModelResponse{
+    bool succesful = 1;
+    string message = 2;
+}
+
+message LoadModelResponse{
+    bool succesful = 1;
+    string message = 2;
+}
+
