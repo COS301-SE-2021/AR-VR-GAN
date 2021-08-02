@@ -32,6 +32,8 @@ message TrainModelRequest{
 
 message LoadModelRequest{
     string modelName = 1;
+    // have a bytes section then the client sends over a model
+    // from its database.
 }
 
 message ImageResponse{
