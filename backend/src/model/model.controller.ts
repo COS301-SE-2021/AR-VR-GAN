@@ -10,44 +10,28 @@ import { Observable, ReplaySubject, Subject } from 'rxjs';
 export class ModelController {
     constructor(private modelService: ModelService) {}
 
-    // @GrpcMethod('ModelController', 'HandleCoords')
-    // handleCoords(request: Request): Response {
-    //     return { sum : this.modelService.handleCoords(request) };
-    // }
+    @GrpcStreamMethod()
+    handleCoords(messages: Observable<Request>): Observable<Response> {
+        const subject = new Subject<Response>();
 
-    // @GrpcStreamMethod('ModelController', 'HandleCoords')
-    // handleCoords(request: Observable<Request>): Observable<Response> {
-    //     return ({ sum : this.modelService.handleCoords(Observable<request>) }).asObservable();
-    // }
-    @GrpcStreamMethod('ModelController', 'HandleCoords')
-    handleCoords(data$: Observable<Request>): Observable<Response> {
-      const hero$ = new Subject<Response>();
-  
-      const onNext = (request: Request) => {
-        const item = { sum : this.modelService.handleCoords(request) };
-        hero$.next(item);
-      };
-      const onComplete = () => hero$.complete();
-      data$.subscribe({
-        next: onNext,
-        complete: onComplete,
-      });
+        const onNext = (message: Request) => {
+            subject.next({
+                data: this.modelService.handleCoords(message)
+            });
+        };
 
-      return hero$.asObservable();
+        const onComplete = () => subject.complete();
+
+        messages.subscribe({
+            next: onNext,
+            complete: onComplete,
+        });
+
+        return subject.asObservable();
     }
 
     @GrpcMethod('ModelController', 'RunPython')
     runPython(request: Request): ResponsePython {
         return { data : this.modelService.runPython(request) };
-    }
-
-    // @Post('testGRPC')
-    // testGRPC(@Body() request: Request): Response {
-    //     return this.handleCoords(request);
-    // }
-
-    @Post('testPython')
-    testPython(@Body() request: Request): ResponsePython {
-        return  this.runPython(request);
     }
 }
