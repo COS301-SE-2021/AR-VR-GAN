@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package ModelGenerator;
+
 service ModelGeneration{
     rpc GenerateImage (ImageRequest) returns (ImageResponse); 
     rpc LoadDataset (LoadDatasetRequest) returns (LoadDatasetResponse);
