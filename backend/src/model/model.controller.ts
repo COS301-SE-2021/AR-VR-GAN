@@ -5,20 +5,22 @@ import { ResponsePython } from './interfaces/responsePython.interface';
 import { Request } from './interfaces/request.interface'
 import { ModelService } from './model.service';
 import { Observable, Subject } from 'rxjs';
-import * as fs from 'fs';
 import { join } from 'path';
+import * as fs from 'fs';
+
 
 @Controller('model')
 export class ModelController {
     constructor(private modelService: ModelService) {}
 
-    @GrpcStreamMethod()
+    @GrpcStreamMethod('ModelController', 'HandleCoords')
     handleCoords(messages: Observable<Request>): Observable<Response> {
         const subject = new Subject<Response>();
 
-        const img = fs.readFileSync(join(__dirname, '../../uploads/0.jpg'));
-
         const onNext = (message: Request) => {
+            var imageNumber = Math.floor(this.modelService.handleCoords(message) % 10);
+            var img = fs.readFileSync(join(__dirname, `../../uploads/${imageNumber}.jpg`));
+
             subject.next({
                 data: img
             });
