@@ -1,4 +1,3 @@
-from generativeModelServer.modelGenerator_pb2 import LoadModelResponse
 import grpc
 import concurrent
 from concurrent import futures
@@ -20,7 +19,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
     def LoadModel(self, request, context):
         print(f"The Model: {request.modelName}")
-        
+
         response = modelGenerator_pb2.LoadModelResponse()
         response.successful = True
         response.message = "Successful"
