@@ -58,11 +58,21 @@ export class ModelController {
         return subject.asObservable();
     }
 
+    /**
+     * handles the grpc request to run the python script be calling the service
+     * @param request 
+     * @returns 
+     */
     @GrpcMethod('ModelController', 'RunPython')
     runPython(request: Request): ResponsePython {
         return { data : this.modelService.runPython(request) };
     }
 
+    /**
+     * handles the post requests to call the pytho scripts
+     * @param request 
+     * @returns 
+     */
     @Post('testPython')
     testPython(@Body() request: Request): ResponsePython {
         return  this.runPython(request);
