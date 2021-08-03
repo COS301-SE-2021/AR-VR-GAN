@@ -3,6 +3,9 @@ import { UserService } from './user.service';
 import { MockUserModel } from './mocks/userRepository.mock'
 import { UserSchema } from './schemas/user.schema'
 import { getModelToken } from '@nestjs/mongoose';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import config from '../config/keys';
 
 describe('UserService', () => {
   let service: UserService;
@@ -15,7 +18,11 @@ describe('UserService', () => {
         UserService,
         {
           provide : getModelToken('User'),
-          useValue : MockUserModel
+          useClass : MockUserModel
+        },
+        {
+          provide: JwtService,
+          useValue: JwtService
         }],
     }).compile();
 
@@ -26,13 +33,22 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should register a user', async () => {
-    const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
+  // it('should register a user', async () => {
+  //   const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
 
-    expect(await service.registerUser(dto)).toEqual({
-      username: dto.username,
-      email: dto.email,
-      password: dto.password
+  //   expect(await service.registerUser(dto)).toEqual({
+  //     username: dto.username,
+  //     email: dto.email,
+  //     password: dto.password
+  //   });
+  // });
+
+  it('should register a user', async () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    
+    expect(await (await service.registerUser(registerDto))).toEqual({
+      success:true,
+      message: 'The user was registered successfully.'
     });
   });
 

@@ -5,6 +5,7 @@ import { join } from 'path';
 @Injectable()
 export class ModelService {
     private num: string
+    
     public handleCoords(request: Request): number {
         let sum = 0;
 
@@ -15,9 +16,7 @@ export class ModelService {
         return sum;
     }
 
-    public runPython(request: Request): string {
-
-        
+    public runPython(request: Request): string {    
         var myPythonScriptPath = join(__dirname, '../../src/model/mocks/py-script.py');
 
         const spawn = require("child_process").spawn;
