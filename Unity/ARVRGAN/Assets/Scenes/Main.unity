@@ -480,7 +480,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6751bd8df155b482b9b751b04f2259ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  imgPlane: {fileID: 260349208}
+  plane: {fileID: 260349208}
+  mat: {fileID: 2100000, guid: 998f07b570604479fb75974b4dbdc759, type: 2}
 --- !u!1 &573263217
 GameObject:
   m_ObjectHideFlags: 0
