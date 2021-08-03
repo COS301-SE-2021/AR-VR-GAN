@@ -62,4 +62,9 @@ export class ModelController {
     runPython(request: Request): ResponsePython {
         return { data : this.modelService.runPython(request) };
     }
+
+    @Post('testPython')
+    testPython(@Body() request: Request): ResponsePython {
+        return  this.runPython(request);
+    }
 }
