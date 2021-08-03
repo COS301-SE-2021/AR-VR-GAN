@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package model;
+
+service ModelController {
+    rpc HandleCoords(stream RequestDto) returns (stream ResponseDto) {}
+    rpc RunPython(RequestDto) returns (ResponsePythonDto) {}
+}
+
+message RequestDto {
+    repeated double data = 1;
+}
+
+message ResponseDto {
+    bytes data = 1;
+}
+
+message ResponsePythonDto {
+    string data = 1;
+}
