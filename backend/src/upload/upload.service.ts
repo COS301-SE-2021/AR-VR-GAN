@@ -4,6 +4,12 @@ import { Request } from '../model/interfaces/request.interface';
 
 @Injectable()
 export class UploadService {
+    /**
+     * saves an uploaded file to the uploads directory
+     * @param req 
+     * @param file 
+     * @param callback 
+     */
     static customeFileName(req, file, callback) {
         const name = file.originalname.split('.')[0];
         
