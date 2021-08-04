@@ -4,10 +4,10 @@ from concurrent import futures
 
 import modelGenerator_pb2
 import modelGenerator_pb2_grpc
-from generativeModelFiles.modelGenerator import ModelGenerator
+# from generativeModelFiles.modelGenerator import ModelGenerator
 
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
-    m_generator = ModelGenerator()
+    # m_generator = ModelGenerator()
     def GenerateImage(self, request, context):
         pass
 
@@ -21,7 +21,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         print(f"The Model: {request.modelName}")
 
         response = modelGenerator_pb2.LoadModelResponse()
-        response.successful = True
+        response.succesful = True
         response.message = "Successful"
         return response
 
