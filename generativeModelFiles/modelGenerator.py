@@ -334,11 +334,11 @@ class ModelGenerator:
                 save_image(sample.view(1, 1, 28, 28), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
+                new_image.save(filepath)
                 
                 img_byte_array = io.BytesIO()
                 new_image.save(img_byte_array, format='JPEG')
                 img_byte_array.getvalue()
-                # new_image.save(filepath)
                 # print("Imaged Saved as "+filepath)
                 return img_byte_array
 
