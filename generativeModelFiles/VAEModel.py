@@ -1,5 +1,4 @@
 from __future__ import print_function
-import argparse
 import torch
 from torch.functional import Tensor
 from torch.types import Number
