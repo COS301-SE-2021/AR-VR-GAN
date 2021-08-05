@@ -9,22 +9,19 @@ public class GRPCService : MonoBehaviour
     private GRPCClient client;
     //public Material imgPlane;
     public GameObject plane;
-    public Material mat;
     
     // Start is called before the first frame update
     void Start()
     {
+        plane.GetComponent<Renderer>().material.color = Color.cyan;
         client = new GRPCClient();
-        getImage(mat, plane);
+        fetchImage(plane);
+        //GenerativeModel gm = new GenerativeModel();
+        //gm.FetchImagePython();
     }
 
-    public void getImage(Material mat, GameObject plane)
+    public void fetchImage(GameObject plane)
     {
-        fetchImage(mat, plane);
-    }
-
-    public void fetchImage(Material mat, GameObject plane)
-    {
-        var image = client.HandleCoords(mat, plane);
+        client.HandleCoords(plane);
     }
 }
