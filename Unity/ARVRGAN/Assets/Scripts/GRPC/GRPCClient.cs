@@ -18,6 +18,7 @@ public class GRPCClient : MonoBehaviour
     private readonly ModelController.ModelControllerClient client;
     private readonly Channel channel;
     private readonly string server = "127.0.0.1:3001";
+    private Texture2D tex;
 
     internal GRPCClient()
     {
@@ -25,9 +26,9 @@ public class GRPCClient : MonoBehaviour
         client = new ModelController.ModelControllerClient(channel);
     }
 
-    public async Task HandleCoords(Material mat, GameObject plane)
+    public async void HandleCoords(GameObject plane)
     {
-        double[] arr1 = {1.0, 0.0, 0.0};
+        double[] arr1 = {1.0, 2.0, 3.0};
 
         try
         {
@@ -44,10 +45,17 @@ public class GRPCClient : MonoBehaviour
                     {
                         var note = call.ResponseStream.Current;
                         print(note.Data.Length);
-
+                        
                         byte [] bytes = note.Data.ToByteArray();
-                        LoadNewTexture(bytes, mat, plane);
-
+                        System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", bytes);
+                        plane.GetComponent<Renderer>().material.color = Color.cyan;
+                        //LoadNewTexture(bytes, mat, plane);
+                        tex = new Texture2D(2, 2);
+                        tex.LoadImage(bytes);
+                        //tex.Apply();
+                        //tex.EncodeToJPG();
+                        plane.GetComponent<Renderer>().material.mainTexture = tex;
+                        
                     }
                     
                     
@@ -72,7 +80,7 @@ public class GRPCClient : MonoBehaviour
             print("GRPC Failed");
         }
     }
-
+/*
     public void LoadNewTexture(byte [] arr, Material mat, GameObject plane)
     {
         var tex = new Texture2D(1, 1);
@@ -86,7 +94,7 @@ public class GRPCClient : MonoBehaviour
 
         print("material changed");
     }
-    
+    */
 
     public RequestDto Request(double[] coords)
     {
