@@ -26,16 +26,16 @@ namespace Model {
           string.Concat(
             "Cgttb2RlbC5wcm90bxIFbW9kZWwiGgoKUmVxdWVzdER0bxIMCgRkYXRhGAEg",
             "AygBIhsKC1Jlc3BvbnNlRHRvEgwKBGRhdGEYASABKAwiIQoRUmVzcG9uc2VQ",
-            "eXRob25EdG8SDAoEZGF0YRgBIAEoCTKKAQoPTW9kZWxDb250cm9sbGVyEjsK",
+            "eXRob25EVE8SDAoEZGF0YRgBIAEoCTKOAQoPTW9kZWxDb250cm9sbGVyEjsK",
             "DEhhbmRsZUNvb3JkcxIRLm1vZGVsLlJlcXVlc3REdG8aEi5tb2RlbC5SZXNw",
-            "b25zZUR0byIAKAEwARI6CglSdW5QeXRob24SES5tb2RlbC5SZXF1ZXN0RHRv",
-            "GhgubW9kZWwuUmVzcG9uc2VQeXRob25EdG8iAGIGcHJvdG8z"));
+            "b25zZUR0byIAKAEwARI+CglSdW5QeXRob24SES5tb2RlbC5SZXF1ZXN0RHRv",
+            "GhgubW9kZWwuUmVzcG9uc2VQeXRob25EVE8iACgBMAFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Model.RequestDto), global::Model.RequestDto.Parser, new[]{ "Data" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Model.ResponseDto), global::Model.ResponseDto.Parser, new[]{ "Data" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Model.ResponsePythonDto), global::Model.ResponsePythonDto.Parser, new[]{ "Data" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Model.ResponsePythonDTO), global::Model.ResponsePythonDTO.Parser, new[]{ "Data" }, null, null, null, null)
           }));
     }
     #endregion
@@ -269,6 +269,9 @@ namespace Model {
     /// <summary>Field number for the "data" field.</summary>
     public const int DataFieldNumber = 1;
     private pb::ByteString data_ = pb::ByteString.Empty;
+    /// <summary>
+    ///double data = 1;
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pb::ByteString Data {
@@ -411,16 +414,16 @@ namespace Model {
 
   }
 
-  public sealed partial class ResponsePythonDto : pb::IMessage<ResponsePythonDto>
+  public sealed partial class ResponsePythonDTO : pb::IMessage<ResponsePythonDTO>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<ResponsePythonDto> _parser = new pb::MessageParser<ResponsePythonDto>(() => new ResponsePythonDto());
+    private static readonly pb::MessageParser<ResponsePythonDTO> _parser = new pb::MessageParser<ResponsePythonDTO>(() => new ResponsePythonDTO());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ResponsePythonDto> Parser { get { return _parser; } }
+    public static pb::MessageParser<ResponsePythonDTO> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -436,7 +439,7 @@ namespace Model {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ResponsePythonDto() {
+    public ResponsePythonDTO() {
       OnConstruction();
     }
 
@@ -444,15 +447,15 @@ namespace Model {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ResponsePythonDto(ResponsePythonDto other) : this() {
+    public ResponsePythonDTO(ResponsePythonDTO other) : this() {
       data_ = other.data_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ResponsePythonDto Clone() {
-      return new ResponsePythonDto(this);
+    public ResponsePythonDTO Clone() {
+      return new ResponsePythonDTO(this);
     }
 
     /// <summary>Field number for the "data" field.</summary>
@@ -470,12 +473,12 @@ namespace Model {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as ResponsePythonDto);
+      return Equals(other as ResponsePythonDTO);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ResponsePythonDto other) {
+    public bool Equals(ResponsePythonDTO other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -548,7 +551,7 @@ namespace Model {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ResponsePythonDto other) {
+    public void MergeFrom(ResponsePythonDTO other) {
       if (other == null) {
         return;
       }
