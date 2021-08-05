@@ -19,6 +19,7 @@ public class GRPCClient : MonoBehaviour
     private readonly Channel channel;
     private readonly string server = "127.0.0.1:3001";
     private Texture2D tex;
+    private byte [] bytes;
 
     internal GRPCClient()
     {
@@ -26,9 +27,10 @@ public class GRPCClient : MonoBehaviour
         client = new ModelController.ModelControllerClient(channel);
     }
 
-    public async void HandleCoords(GameObject plane)
+    public async void HandleCoords(GameObject plane, GameObject camera)
     {
-        double[] arr1 = {1.0, 2.0, 3.0};
+        Vector3 coords = camera.transform.position;
+        double[] arr1 = {coords.x, coords.y, coords.z};
 
         try
         {
@@ -46,16 +48,9 @@ public class GRPCClient : MonoBehaviour
                         var note = call.ResponseStream.Current;
                         print(note.Data.Length);
                         
-                        byte [] bytes = note.Data.ToByteArray();
-                        System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", bytes);
-                        plane.GetComponent<Renderer>().material.color = Color.cyan;
-                        //LoadNewTexture(bytes, mat, plane);
-                        tex = new Texture2D(2, 2);
-                        tex.LoadImage(bytes);
-                        //tex.Apply();
-                        //tex.EncodeToJPG();
-                        plane.GetComponent<Renderer>().material.mainTexture = tex;
-                        
+                        bytes = note.Data.ToByteArray();
+                        //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", bytes);
+
                     }
                     
                     
@@ -70,7 +65,13 @@ public class GRPCClient : MonoBehaviour
 
                 await call.RequestStream.CompleteAsync();
                 await responseReaderTask;
-
+                //plane.GetComponent<Renderer>().material.color = Color.white;
+                //LoadNewTexture(bytes, mat, plane);
+                tex = new Texture2D(2, 2);
+                tex.LoadImage(bytes);
+                //tex.Apply();
+                //tex.EncodeToJPG();
+                plane.GetComponent<Renderer>().material.mainTexture = tex;
                 print("Finished");
             }
 
