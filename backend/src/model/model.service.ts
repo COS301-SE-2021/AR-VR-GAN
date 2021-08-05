@@ -27,11 +27,17 @@ export class ModelService {
      */
     public runPython(request: Request): string {
 
-        var myPythonScriptPath = join(__dirname, '../../src/model/mocks/py-script.py');
+        var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
+        var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
 
         const spawn = require("child_process").spawn;
 
-        var process = spawn('python',[myPythonScriptPath,request.data.toString()]);
+        var commaSplitList = request.data.toString().split(',');
+        var coord1 = parseFloat(commaSplitList[0]);
+        var coord2 = parseFloat(commaSplitList[1]);
+        var coord3 = parseFloat(commaSplitList[2]);
+
+        var process = spawn('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
         
         //on data recieved from the python script
         process.stdout.on('data',async data =>{

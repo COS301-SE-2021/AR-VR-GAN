@@ -315,7 +315,7 @@ class ModelGenerator:
             If the input vector dimensions are not the same as the ones specified in the model
         """
         if filepath == "":
-            filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".jpg"
+            filepath = "../generativeModelFiles/savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".jpg"
 
         if not filepath.endswith(('.png', '.jpg', '.jpeg')):
             ModelException("File extension must be either be png, jpg, jpeg")
