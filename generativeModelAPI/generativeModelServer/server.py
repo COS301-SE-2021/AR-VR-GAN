@@ -1,13 +1,17 @@
 import grpc
 import concurrent
 from concurrent import futures
+import sys
+import pathlib
+sys.path.append(str(pathlib.Path(__file__).parent.parent)+"\generativeModelFiles")
+
 
 import modelGenerator_pb2
 import modelGenerator_pb2_grpc
-# from generativeModelFiles.modelGenerator import ModelGenerator
+from generativeModelFiles.modelGenerator import ModelGenerator
+m_generator = ModelGenerator()
 
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
-    # m_generator = ModelGenerator()
     def GenerateImage(self, request, context):
         pass
 
@@ -22,7 +26,10 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
         response = modelGenerator_pb2.LoadModelResponse()
         response.succesful = True
-        response.message = "Successful"
+        sys.path
+        m_generator.loadModel("../generativeModelFiles/defaultModels/Epochs-50.pt")
+        response.message = "Successful: "+ m_generator.model.retrieve_latent_size()
+        # response.message = "Successful: "
         return response
 
 if __name__ == "__main__":

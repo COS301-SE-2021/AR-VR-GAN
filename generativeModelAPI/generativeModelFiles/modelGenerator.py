@@ -8,11 +8,11 @@ from torch.nn import functional as F
 from torch.utils.data import sampler
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
-from VAEModel import VAE
+from .VAEModel import VAE
 import os
 from datetime import datetime
 from PIL import Image
-from modelExceptions import ModelException
+from .modelExceptions import ModelException
 
 class ModelGenerator:
     """ This class trains VAE models and generates images from said models
@@ -113,8 +113,8 @@ class ModelGenerator:
             datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
             batch_size=self.args.batch_size, shuffle=True, **kwargs)
 
-        # self.model = VAE(3).to(self.device)
-        self.model = None
+        self.model = VAE(3).to(self.device)
+        # self.model = None
         self.latent_size = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
