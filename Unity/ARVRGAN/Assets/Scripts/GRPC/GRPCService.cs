@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,19 +10,19 @@ public class GRPCService : MonoBehaviour
     private GRPCClient client;
     //public Material imgPlane;
     public GameObject plane;
-    
-    // Start is called before the first frame update
-    void Start()
+    public GameObject camera;
+
+    private void Start()
     {
-        plane.GetComponent<Renderer>().material.color = Color.cyan;
-        client = new GRPCClient();
-        fetchImage(plane);
-        //GenerativeModel gm = new GenerativeModel();
-        //gm.FetchImagePython();
+        plane.GetComponent<Renderer>().material.color = Color.white;
     }
 
-    public void fetchImage(GameObject plane)
+    // Start is called before the first frame update
+    void LateUpdate()
     {
-        client.HandleCoords(plane);
-    }
-}
+        //plane.GetComponent<Renderer>().material.color = Color.cyan;
+        client = new GRPCClient();
+        client.HandleCoords(plane, camera);
+        //GenerativeModel gm = new GenerativeModel();
+        //gm.FetchImagePython();
+    } }
