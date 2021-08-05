@@ -50,7 +50,7 @@ namespace Model {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Model.ResponseDto> __Marshaller_model_ResponseDto = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Model.ResponseDto.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Model.ResponsePythonDto> __Marshaller_model_ResponsePythonDto = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Model.ResponsePythonDto.Parser));
+    static readonly grpc::Marshaller<global::Model.ResponsePythonDTO> __Marshaller_model_ResponsePythonDTO = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Model.ResponsePythonDTO.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Model.RequestDto, global::Model.ResponseDto> __Method_HandleCoords = new grpc::Method<global::Model.RequestDto, global::Model.ResponseDto>(
@@ -61,12 +61,12 @@ namespace Model {
         __Marshaller_model_ResponseDto);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Model.RequestDto, global::Model.ResponsePythonDto> __Method_RunPython = new grpc::Method<global::Model.RequestDto, global::Model.ResponsePythonDto>(
-        grpc::MethodType.Unary,
+    static readonly grpc::Method<global::Model.RequestDto, global::Model.ResponsePythonDTO> __Method_RunPython = new grpc::Method<global::Model.RequestDto, global::Model.ResponsePythonDTO>(
+        grpc::MethodType.DuplexStreaming,
         __ServiceName,
         "RunPython",
         __Marshaller_model_RequestDto,
-        __Marshaller_model_ResponsePythonDto);
+        __Marshaller_model_ResponsePythonDTO);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -85,7 +85,7 @@ namespace Model {
       }
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Model.ResponsePythonDto> RunPython(global::Model.RequestDto request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task RunPython(grpc::IAsyncStreamReader<global::Model.RequestDto> requestStream, grpc::IServerStreamWriter<global::Model.ResponsePythonDTO> responseStream, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -130,24 +130,14 @@ namespace Model {
         return CallInvoker.AsyncDuplexStreamingCall(__Method_HandleCoords, null, options);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Model.ResponsePythonDto RunPython(global::Model.RequestDto request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncDuplexStreamingCall<global::Model.RequestDto, global::Model.ResponsePythonDTO> RunPython(grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
-        return RunPython(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return RunPython(new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Model.ResponsePythonDto RunPython(global::Model.RequestDto request, grpc::CallOptions options)
+      public virtual grpc::AsyncDuplexStreamingCall<global::Model.RequestDto, global::Model.ResponsePythonDTO> RunPython(grpc::CallOptions options)
       {
-        return CallInvoker.BlockingUnaryCall(__Method_RunPython, null, options, request);
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Model.ResponsePythonDto> RunPythonAsync(global::Model.RequestDto request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return RunPythonAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Model.ResponsePythonDto> RunPythonAsync(global::Model.RequestDto request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_RunPython, null, options, request);
+        return CallInvoker.AsyncDuplexStreamingCall(__Method_RunPython, null, options);
       }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -175,7 +165,7 @@ namespace Model {
     public static void BindService(grpc::ServiceBinderBase serviceBinder, ModelControllerBase serviceImpl)
     {
       serviceBinder.AddMethod(__Method_HandleCoords, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Model.RequestDto, global::Model.ResponseDto>(serviceImpl.HandleCoords));
-      serviceBinder.AddMethod(__Method_RunPython, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Model.RequestDto, global::Model.ResponsePythonDto>(serviceImpl.RunPython));
+      serviceBinder.AddMethod(__Method_RunPython, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Model.RequestDto, global::Model.ResponsePythonDTO>(serviceImpl.RunPython));
     }
 
   }
