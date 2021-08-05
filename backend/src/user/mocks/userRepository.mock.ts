@@ -1,8 +1,8 @@
-// export function MockUserModel(dto: any){
-//     this.data = dto;
-//     this.save = () => { return this.data};
-//     this.findOne = null
-//   };
+export function MockUserModel(dto: any){
+    this.data = dto;
+    this.save = () => { return this.data};
+    this.findOne = null
+  };
   
 
 // export class MockUserModel{
@@ -13,12 +13,12 @@
 //   userModel(data){}
 // };
 
-export function MockUserModel(dto: any) {
-  this.data = dto;
-  this.save  = () => {
-    return this.data;
-  };
-  this.findOne  = () => {
-    return this.data;
-  };
-}
+// export function MockUserModel(dto: any) {
+//   this.data = dto;
+//   this.save  = () => {
+//     return this.data;
+//   };
+//   this.findOne  = () => {
+//     return this.data;
+//   };
+// }
