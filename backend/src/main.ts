@@ -6,6 +6,10 @@ import { join } from 'path';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
+  /**
+   * hadles the TCP communications on server, POST/GET requests that are done to the server 
+   * runs on port 3000
+   */
   const microserviceTCP = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
@@ -13,6 +17,10 @@ async function bootstrap() {
     }
   });
 
+  /**
+   * handles the GRPC communication on the server
+   * runs on port 3001
+   */
   const microserviceGRPC = app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,  
     options: {

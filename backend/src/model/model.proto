@@ -4,7 +4,7 @@ package model;
 
 service ModelController {
     rpc HandleCoords(stream RequestDto) returns (stream ResponseDto) {}
-    rpc RunPython(RequestDto) returns (ResponsePythonDto) {}
+    rpc RunPython(stream RequestDto) returns (stream ResponsePythonDTO) {}
 }
 
 message RequestDto {
@@ -13,8 +13,9 @@ message RequestDto {
 
 message ResponseDto {
     bytes data = 1;
+    //double data = 1;
 }
 
-message ResponsePythonDto {
+message ResponsePythonDTO {
     string data = 1;
 }

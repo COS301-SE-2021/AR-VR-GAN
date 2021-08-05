@@ -36,8 +36,48 @@ export class ModelController {
         return subject.asObservable();
     }
 
-    @GrpcMethod('ModelController', 'RunPython')
-    runPython(request: Request): ResponsePython {
-        return { data : this.modelService.runPython(request) };
+    /**
+     * handles the grpc request to run the python script be calling the service
+     * @param request 
+     * @returns 
+     */
+    // @GrpcMethod('ModelController', 'RunPython')
+    // runPython(request: Request): ResponsePython {
+    //     return { data : this.modelService.runPython(request) };
+    // }
+
+    /**
+     * handles the streaming of coordinates to a python script
+     * @param messages 
+     * @returns 
+     */
+    @GrpcStreamMethod('ModelController', 'RunPython')
+    runPython(messages: Observable<Request>): Observable<ResponsePython> {
+        const subject = new Subject<Response>();
+
+        const onNext = (message: Request) => {
+            subject.next({
+                data: this.modelService.runPython(message)
+            });
+        };
+
+        const onComplete = () => subject.complete();
+
+        messages.subscribe({
+            next: onNext,
+            complete: onComplete,
+        });
+
+        return subject.asObservable();
     }
+
+    /**
+     * handles the post requests to call the pytho scripts
+     * @param request 
+     * @returns 
+     */
+    // @Post('testPython')
+    // testPython(@Body() request: Request): ResponsePython {
+    //     return  this.runPython(request);
+    // }
 }

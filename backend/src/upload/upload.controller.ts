@@ -9,6 +9,11 @@ import { RequestBody } from './interfaces/coordinates.interface';
 export class UploadController {
     constructor(private readonly uploadService: UploadService) {}
 
+    /**
+     * handles the post request to upload a file to the server
+     * @param file file to be saved
+     * @returns 
+     */
     @Post('file')
     @UseInterceptors(
         FileInterceptor('file', {
@@ -28,6 +33,11 @@ export class UploadController {
         return response;
     }
 
+    /**
+     * handles the post request to retrieve an image from given coordinates
+     * @param res 
+     * @param requestBody 
+     */
     @Post('getImageFromCoordinates')
     getImageFromCoordinates(@Res() res: Response, @Body() requestBody: RequestBody) {
         let sum = Math.floor(this.uploadService.handleCoords(requestBody)) % 10;
