@@ -27,7 +27,7 @@ public class GenerativeModel : MonoBehaviour
         client = new ModelController.ModelControllerClient(channel);
     }
 
-    public async Task FetchImagePython()
+    public async void FetchImagePython()
     {
         print("Starting python script");
         double [] dataPoints = {1.0, 1.3, 1.2};
@@ -43,24 +43,25 @@ public class GenerativeModel : MonoBehaviour
                 while (await call.ResponseStream.MoveNext())
                 {
                     var note = call.ResponseStream.Current;
-                    print("stream received");
-                    //print(note.Data);
+                    //print("stream received");
+                    print(note.Data);
 
                     String [] byt = note.Data.Split(',');
-                    print(note.Data);
+                    //print(note.Data[0]);
                     bytes = byt.Select(byte.Parse).ToArray();
 
-                    //MemoryStream ms = new MemoryStream(bytes);
+                // //MemoryStream ms = new MemoryStream(bytes);
 
                 }
             });
 
             await call.RequestStream.WriteAsync(request);
             await call.RequestStream.CompleteAsync();
-            //print(bytes);
+            await responseReaderTask;
+            print(bytes);
             //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", bytes);
-                    //byte [] bytes = note.Data.ToByteArray();
-                    //LoadNewTexture(bytes, mat, plane);
+            //         //byte [] bytes = note.Data.ToByteArray();
+            //         //LoadNewTexture(bytes, mat, plane);
 
             print("done");
         }
