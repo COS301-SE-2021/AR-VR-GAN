@@ -78,8 +78,9 @@ export class ModelController {
         const subject = new Subject<Response>();
 
         const onNext =(message: Request) => {
+            const bufferArray = this.modelService.runPython(message).split(",");
             subject.next({
-                data: Buffer.from(this.modelService.runPython(message), 'utf8')
+                data: bufferArray
             });
         };
 
