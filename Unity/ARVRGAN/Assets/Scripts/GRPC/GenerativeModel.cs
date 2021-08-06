@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Google.Protobuf.Collections;
@@ -18,6 +19,7 @@ public class GenerativeModel : MonoBehaviour
     private readonly ModelController.ModelControllerClient client;
     private readonly Channel channel;
     private readonly string server = "127.0.0.1:3001";
+    private byte [] bytes;
 
     internal GenerativeModel()
     {
@@ -27,7 +29,8 @@ public class GenerativeModel : MonoBehaviour
 
     public async Task FetchImagePython()
     {
-        double [] dataPoints = {2, 3, 4};
+        print("Starting python script");
+        double [] dataPoints = {1.0, 1.3, 1.2};
 
         RequestDto request = new RequestDto(Request(dataPoints));
 
@@ -40,21 +43,26 @@ public class GenerativeModel : MonoBehaviour
                 while (await call.ResponseStream.MoveNext())
                 {
                     var note = call.ResponseStream.Current;
+                    print("stream received");
+                    //print(note.Data);
+
+                    String [] byt = note.Data.Split(',');
                     print(note.Data);
-                   
-                    byte[] bytes = Encoding.ASCII.GetBytes(note.Data);
+                    bytes = byt.Select(byte.Parse).ToArray();
 
                     //MemoryStream ms = new MemoryStream(bytes);
-                   
-                    //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", bytes);
-                    //byte [] bytes = note.Data.ToByteArray();
-                    //LoadNewTexture(bytes, mat, plane);
 
                 }
             });
 
             await call.RequestStream.WriteAsync(request);
             await call.RequestStream.CompleteAsync();
+            //print(bytes);
+            //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", bytes);
+                    //byte [] bytes = note.Data.ToByteArray();
+                    //LoadNewTexture(bytes, mat, plane);
+
+            print("done");
         }
 
     }
