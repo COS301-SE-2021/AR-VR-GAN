@@ -78,6 +78,6 @@ export class ModelService {
 
         var process = spawnSync('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
 
-        return process.output.toString();
+        return process.stdout.toString();
     }
 }
