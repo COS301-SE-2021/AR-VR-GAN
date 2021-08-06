@@ -46,7 +46,7 @@ public class GRPCClient : MonoBehaviour
                     while (await call.ResponseStream.MoveNext())
                     {
                         var note = call.ResponseStream.Current;
-                        print(note.Data.Length);
+                        //print(note.Data.Length);
                         
                         bytes = note.Data.ToByteArray();
                         //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", bytes);
@@ -58,7 +58,7 @@ public class GRPCClient : MonoBehaviour
 
                 foreach (RequestDto request in requests)
                 {
-                    print("Request: " + request.Data);
+                    //print("Request: " + request.Data);
 
                     await call.RequestStream.WriteAsync(request);
                 }
@@ -72,7 +72,7 @@ public class GRPCClient : MonoBehaviour
                 //tex.Apply();
                 //tex.EncodeToJPG();
                 plane.GetComponent<Renderer>().material.mainTexture = tex;
-                print("Finished");
+                //print("Finished");
             }
 
         }
