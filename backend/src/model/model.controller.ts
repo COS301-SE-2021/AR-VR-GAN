@@ -57,7 +57,7 @@ export class ModelController {
 
         const onNext =(message: Request) => {
             subject.next({
-                data: this.modelService.runPython(message)
+                data: Buffer.from(this.modelService.runPython(message), 'utf8')
             });
         };
 

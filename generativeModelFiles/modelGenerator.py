@@ -343,10 +343,10 @@ class ModelGenerator:
                 with open(filepath, "rb") as image:
                     f = image.read()
                     b = bytearray(f)
-                ls = []
-                for value in b:
-                    ls.append(value)
-                return ls
+                # ls = []
+                # for value in b:
+                #     ls.append(value)
+                return list(b)
 
     def clearModel(self) -> None:
         """Removes the current model and replaces it with a new untrained model

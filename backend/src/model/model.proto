@@ -13,9 +13,8 @@ message RequestDto {
 
 message ResponseDto {
     bytes data = 1;
-    //double data = 1;
 }
 
 message ResponsePythonDTO {
-    string data = 1;
+    bytes data = 1;
 }
