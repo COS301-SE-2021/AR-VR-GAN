@@ -55,7 +55,7 @@ export class ModelController {
     runPython(messages: Observable<Request>): Observable<ResponsePython> {
         const subject = new Subject<Response>();
 
-        const onNext = (message: Request) => {
+        const onNext =(message: Request) => {
             subject.next({
                 data: this.modelService.runPython(message)
             });
