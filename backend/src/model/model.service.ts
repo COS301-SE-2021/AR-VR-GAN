@@ -38,7 +38,8 @@ export class ModelService {
     //         var coord2 = parseFloat(commaSplitList[1]);
     //         var coord3 = parseFloat(commaSplitList[2]);
     //         var process = null;
-    //         var process = spawn('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
+    //         var process = spawn('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath],{ encoding : 'utf8' });
+            
             
     //         //on data recieved from the python script
     //         process.stdout.on('data', async data =>{
@@ -78,6 +79,32 @@ export class ModelService {
 
         var process = spawnSync('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
 
-        return process.stdout.toString();
+        return process.stdout.toString()
     }
+
+    // /**
+    //  * executes the python script and returns the data returned from the script -- execFile
+    //  * @param request 
+    //  * @returns 
+    //  */
+    // public async runPython(request: Request): Promise<string> {
+
+    //     var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
+    //     var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
+
+    //     var commaSplitList = request.data.toString().split(',');
+    //     var coord1 = parseFloat(commaSplitList[0]);
+    //     var coord2 = parseFloat(commaSplitList[1]);
+    //     var coord3 = parseFloat(commaSplitList[2]);
+
+    //     const util = require('util');
+    //     const execFile = util.promisify(require('child_process').execFile);
+    //     async function getImage(){
+    //         const { stdout } = await execFile('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
+    //         return stdout;
+    //     }
+    //     return await getImage();
+
+    // }
+
 }
