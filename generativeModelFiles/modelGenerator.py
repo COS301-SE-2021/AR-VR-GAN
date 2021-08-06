@@ -336,11 +336,17 @@ class ModelGenerator:
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
                 
-                img_byte_array = io.BytesIO()
-                new_image.save(img_byte_array, format='JPEG')
-                img_byte_array.getvalue()
+                # img_byte_array = io.BytesIO()
+                # new_image.save(img_byte_array, format='JPEG')
+                # img_byte_array.getvalue()
                 # print("Imaged Saved as "+filepath)
-                return img_byte_array
+                with open(filepath, "rb") as image:
+                    f = image.read()
+                    b = bytearray(f)
+                ls = []
+                for value in b:
+                    ls.append(value)
+                return ls
 
     def clearModel(self) -> None:
         """Removes the current model and replaces it with a new untrained model
@@ -380,6 +386,6 @@ if __name__ == "__main__":
     if args.coordinates == None:
         raise "Cannot generate an image"
     else:
-        print(generator.generateImage(args.coordinates).getvalue())
+        print(generator.generateImage(args.coordinates))
     # print(generator.test_loader)
     # generator.model.encode()
