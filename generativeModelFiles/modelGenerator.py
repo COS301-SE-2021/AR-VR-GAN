@@ -331,13 +331,14 @@ class ModelGenerator:
                 # print(sample)
                 # print(sample.size())
                 sample = self.model.decode(sample).cpu() 
+                print(sample)
                 save_image(sample.view(1, 1, 28, 28), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
                 
                 img_byte_array = io.BytesIO()
-                new_image.save(img_byte_array, format='JPEG')
+                new_image.save(img_byte_array, format='JPG')
                 img_byte_array.getvalue()
                 # print("Imaged Saved as "+filepath)
                 return img_byte_array
