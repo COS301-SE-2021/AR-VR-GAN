@@ -78,7 +78,7 @@ export class ModelService {
         var coord3 = parseFloat(commaSplitList[2]);
 
         var process = spawnSync('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
-
+        console.log(process.stderr.toString())
         return process.stdout.toString()
     }
 
