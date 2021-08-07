@@ -62,30 +62,11 @@ class ModelGenerator:
         Loads a new dataset to train the model on 
 
     """
-    # TODO: Remove unessecarry code
     # TODO: Create detailed comments
-    # TODO: Handel edge cases in function i.e when a model is not loaded raise an exception
+    # TODO: Handle edge cases in function i.e when a model is not loaded raise an exception
     # TODO: Create a throughout main i.e one that handles executes all the functions 
     # TODO: Adjust test files so that it can handle file changes made 
     def __init__(self) -> None:
-
-        # This section dealt with taking in default arguements in the orginal VAE MNIST Example
-        # This section is unecessary for AR-VR-GAN, we just have to replace the arguement values
-        # in the appropriate places.
-        # self.parser = argparse.ArgumentParser(description='VAE MNIST Example')
-        # self.parser.add_argument('--batch-size', type=int, default=128, metavar='N',
-        #                     help='input batch size for training (default: 128)')
-        # self.parser.add_argument('--epochs', type=int, default=10, metavar='N',
-        #                     help='number of epochs to train (default: 10)')
-        # self.parser.add_argument('--no-cuda', action='store_true', default=False,
-        #                     help='disables CUDA training')
-        # self.parser.add_argument('--seed', type=int, default=1, metavar='S',
-        #                     help='random seed (default: 1)')
-        # self.parser.add_argument('--log-interval', type=int, default=10, metavar='N',
-        #                     help='how many batches to wait before logging training status')
-        # self.args = self.parser.parse_args()
-        # self.args.cuda = not self.args.no_cuda and torch.cuda.is_available()
-
         # Sets the seed for generating random numbers. Returns a torch.Generator object.
         torch.manual_seed(1)
 
@@ -115,7 +96,6 @@ class ModelGenerator:
             batch_size=128, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
-        # self.model = None
         self.latent_size = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
@@ -168,16 +148,9 @@ class ModelGenerator:
         # From Medium https://medium.com/@o.kroeger/tensorflow-mnist-and-your-own-handwritten-digits-4d1cd32bbab4: 
         # All images are size normalized to fit in a 20x20 pixel box and there are centered in a 28x28 image using the center of mass.
         for batch_idx, (data, _) in enumerate(self.train_loader):
-            # print(f"Batch IDX TYPE: {type(batch_idx)}")
-            # print(f"Batch IDX: {batch_idx}")
-            # print(f"DATA TYPE: {type(data)}")
             # To view tensor in text file (Note returns a LARGE array of float values
             # which supposed to represent each pixel in an image )
             # numpy.savetxt('my_file.txt', data.numpy().reshape(4,-1))
-            # print(f"DATA: {data.size()}")
-            # print(f"Underscore TYPE: {type(_)}")
-            # print(f"Underscore: {_.size()}")
-
 
             # Converts `data` to a tensor with a specified dtype
             data = data.to(self.device)
@@ -193,6 +166,7 @@ class ModelGenerator:
             loss.backward()
             train_loss += loss.item()
             self.optimizer.step()
+            # Displays training data
             # if batch_idx % 10 == 0: # Change the 10 to the log_interval (self.args.log_interval)
                 # print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                 #     epoch, batch_idx * len(data), len(self.train_loader.dataset),
@@ -215,7 +189,7 @@ class ModelGenerator:
         generate : bool, optional
             To decide whether or not to save an image displaying the comparison between the model and the actual results
         """
-        # Note to self change 128 to batch size
+        # Note to self change 128 to batch size and 28 to the pixels
         self.model.eval()
         test_loss = 0
         with torch.no_grad():
@@ -331,7 +305,7 @@ class ModelGenerator:
                 # print(sample)
                 # print(sample.size())
                 sample = self.model.decode(sample).cpu() 
-                print(sample)
+                # print(sample)
                 save_image(sample.view(1, 1, 28, 28), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
