@@ -1,18 +1,25 @@
 from __future__ import print_function
 import argparse
 import io
+from onnx_tf.backend_rep import TensorflowRep
 import torch
 import torch.utils.data
+
 from torch import nn, optim
 from torch.nn import functional as F
 from torch.utils.data import sampler
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
+
 import os
 from datetime import datetime
 from PIL import Image
 from modelExceptions import ModelException
+
+from torch.autograd import Variable
+import onnx
+from onnx_tf.backend import prepare
 
 class ModelGenerator:
     """ This class trains VAE models and generates images from said models
@@ -92,7 +99,7 @@ class ModelGenerator:
             batch_size= 128, shuffle=True, **kwargs)
 
         self.test_loader = torch.utils.data.DataLoader(
-            datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
+            datasets.MNIST('../data', train=False, transform=transforms.Compose(transforms.Scale((28,28))).ToTensor()),
             batch_size=128, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
@@ -326,6 +333,20 @@ class ModelGenerator:
     def set_latent_size(self, latent_size) -> None:
         self.latent_size = latent_size
 
+    def to_tensor(self, filepath: str, newName: str = "") -> TensorflowRep:
+        trained_model = VAE()
+        trained_model.load_state_dict(torch.load(filepath))
+        dummy_input = Variable(torch.randn(1, 1, 28, 28))
+        # Have a conditional statement to check whether newName is empty 
+        # if it is empty get the pytorch file name and remove extension
+        torch.onnx.export(trained_model, dummy_input, "testing.onnx")
+
+        model = onnx.load('testing.onnx')
+        tf_rep = prepare(model)
+
+        return tf_rep
+
+
     def loadDataset(self) -> None:
         # @TODO Complete this function but first create dataset loader class
         #       and related variables that need to created in this class.
@@ -348,13 +369,15 @@ if __name__ == "__main__":
 
     generator = ModelGenerator()
     generator.loadModel(args.model)
+
+    
     # print(generator.model.retrieve_latent_size())
     # input()
     # generator.train_model(50)
     # generator.saveModel("savedModels/50iterations.pt")
-    if args.coordinates == None:
-        raise "Cannot generate an image"
-    else:
-        print(generator.generateImage(args.coordinates).getvalue())
+    # if args.coordinates == None:
+    #     raise "Cannot generate an image"
+    # else:
+    #     print(generator.generateImage(args.coordinates).getvalue())
     # print(generator.test_loader)
     # generator.model.encode()
