@@ -99,7 +99,7 @@ class ModelGenerator:
             batch_size= 128, shuffle=True, **kwargs)
 
         self.test_loader = torch.utils.data.DataLoader(
-            datasets.MNIST('../data', train=False, transform=transforms.Compose(transforms.Scale((28,28))).ToTensor()),
+            datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
             batch_size=128, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
@@ -334,8 +334,8 @@ class ModelGenerator:
         self.latent_size = latent_size
 
     def to_tensor(self, filepath: str, newName: str = "") -> TensorflowRep:
-        trained_model = VAE()
-        trained_model.load_state_dict(torch.load(filepath))
+        trained_model = self.model
+        # trained_model.load_state_dict(torch.load(filepath))
         dummy_input = Variable(torch.randn(1, 1, 28, 28))
         # Have a conditional statement to check whether newName is empty 
         # if it is empty get the pytorch file name and remove extension
@@ -370,7 +370,7 @@ if __name__ == "__main__":
     generator = ModelGenerator()
     generator.loadModel(args.model)
 
-    
+    generator.to_tensor("./defaultModels/Epochs-50.pt")
     # print(generator.model.retrieve_latent_size())
     # input()
     # generator.train_model(50)
