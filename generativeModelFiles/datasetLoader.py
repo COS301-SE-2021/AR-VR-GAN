@@ -30,8 +30,17 @@ class DataLoaderHandler:
         self.number_of_dataloaders: int = 0
         self.generateDefaults()
 
-    def createDataLoader(self, cls: any) -> None:
+    def createDataLoader(self, dataset) -> None:
         pass
+
+    def getDataLoader(self, key: str) -> DataLoader:
+        value = self.availableDataLoaders.get(key)
+
+        if value == None:
+            # Raise an exception
+            pass
+
+        return value
 
 
     def generateDefaults(self) -> None:
