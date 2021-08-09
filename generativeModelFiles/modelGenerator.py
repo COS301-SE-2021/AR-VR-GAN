@@ -1,6 +1,7 @@
 from __future__ import print_function
 import argparse
 import io
+from numpy import testing
 from onnx_tf.backend_rep import TensorflowRep
 import torch
 import torch.utils.data
@@ -11,7 +12,7 @@ from torch.utils.data import sampler
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
-
+import tensorflowjs
 import os
 from datetime import datetime
 from PIL import Image
@@ -333,7 +334,7 @@ class ModelGenerator:
     def set_latent_size(self, latent_size) -> None:
         self.latent_size = latent_size
 
-    def to_tensor(self, filepath: str, newName: str = "") -> TensorflowRep:
+    def to_tensorflow(self, filepath: str, newName: str = "") -> TensorflowRep:
         trained_model = self.model
         # trained_model.load_state_dict(torch.load(filepath))
         dummy_input = Variable(torch.randn(1, 1, 28, 28))
@@ -344,6 +345,8 @@ class ModelGenerator:
         model = onnx.load('testing.onnx')
         tf_rep = prepare(model)
 
+        tf_rep.export_graph("testing")
+        tensorflowjs.converters.convert_tf_saved_model("testing", ".", skip_op_check=True)
         return tf_rep
 
 
@@ -370,7 +373,7 @@ if __name__ == "__main__":
     generator = ModelGenerator()
     generator.loadModel(args.model)
 
-    generator.to_tensor("./defaultModels/Epochs-50.pt")
+    generator.to_tensorflow("./defaultModels/Epochs-50.pt")
     # print(generator.model.retrieve_latent_size())
     # input()
     # generator.train_model(50)
