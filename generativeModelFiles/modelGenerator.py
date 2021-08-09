@@ -233,7 +233,7 @@ class ModelGenerator:
             if the file path is not a pytorch file.
         """
         if filepath == "":
-            self.model = torch.load("defaultModels/Epochs-50.pt")
+            self.model = torch.load("defaultModels/pytorch/Epochs-50.pt")
             # print("Default VAE Model loaded")
             return True
         else:
@@ -334,20 +334,37 @@ class ModelGenerator:
     def set_latent_size(self, latent_size) -> None:
         self.latent_size = latent_size
 
-    def to_tensorflow(self, filepath: str, newName: str = "") -> TensorflowRep:
+    def to_tensorflow(self, filepath: str, newName: str = "") -> None:
         trained_model = self.model
+        path = os.path.abspath(".")
+        onnx_dir = path+"\\defaultModels\\tensorflow\onnx\\"
+        tfjs_dir = path+"\\defaultModels\\tensorflow\\tensorflowjs\\"
+        print(onnx_dir)
+        # input()
+
         # trained_model.load_state_dict(torch.load(filepath))
         dummy_input = Variable(torch.randn(1, 1, 28, 28))
         # Have a conditional statement to check whether newName is empty 
         # if it is empty get the pytorch file name and remove extension
-        torch.onnx.export(trained_model, dummy_input, "testing.onnx")
 
-        model = onnx.load('testing.onnx')
-        tf_rep = prepare(model)
+        timestamp = ""
+        if newName == "":
+            timestamp = datetime.now().strftime("%d%m%Y%H%M%S")
+            newName = "defaultModels/tensorflow/onnx/"+timestamp
 
-        tf_rep.export_graph("testing")
-        tensorflowjs.converters.convert_tf_saved_model("testing", ".", skip_op_check=True)
-        return tf_rep
+        os.makedirs(onnx_dir+"/"+timestamp+newName+"/")
+        os.makedirs(tfjs_dir+"/"+timestamp+newName+"/")
+        onnx_dir = onnx_dir + timestamp + newName + ".onnx"
+        tfjs_dir = tfjs_dir + timestamp + newName
+
+        torch.onnx.export(trained_model, dummy_input, onnx_dir)
+
+        onnx_model = onnx.load(onnx_dir)
+        tf_rep = prepare(onnx_model)
+
+        tf_rep.export_graph(tfjs_dir)
+        tensorflowjs.converters.convert_tf_saved_model(tfjs_dir, tfjs_dir, skip_op_check=True)
+        return None
 
 
     def loadDataset(self) -> None:
@@ -363,7 +380,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Model Generator Model')
     parser.add_argument('--latent-size', type=int, default=3, metavar='N',
                         help='Determines the size latent size of the model to be trained')
-    parser.add_argument('--model', type=str, default="defaultModels/Epochs-50.pt", metavar='N',
+    parser.add_argument('--model', type=str, default="defaultModels/pytorch/Epochs-50.pt", metavar='N',
                         help='Choose the pre-saved model')
     parser.add_argument('--coordinates', default=None, type=float, nargs='+',
                         help='the latent vector to be used by the model to generate an image')
@@ -373,7 +390,7 @@ if __name__ == "__main__":
     generator = ModelGenerator()
     generator.loadModel(args.model)
 
-    generator.to_tensorflow("./defaultModels/Epochs-50.pt")
+    generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
     # print(generator.model.retrieve_latent_size())
     # input()
     # generator.train_model(50)

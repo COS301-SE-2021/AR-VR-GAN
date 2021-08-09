@@ -7,6 +7,8 @@ generativeModelFiles/testing/savedModels/*
 generativeModelFiles/savedImages/*
 generativeModelFiles/*.txt
 generativeModelFiles/test
+generativeModelFiles/defaultModels/tensorflow/onnx/*
+generativeModelFiles/defaultModels/tensorflow/tensorflowjs/*
 .DS_Store
 __pycache__/
 data/*
