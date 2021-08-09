@@ -78,7 +78,8 @@ export class ModelController {
         const subject = new Subject<Response>();
 
         const onNext =(message: Request) => {
-            const bufferArray = this.modelService.runPython(message).split(",");
+            //when recievimg data from the python we need to remove the [] using replace
+            const bufferArray = this.modelService.runPython(message).replace(/[\[\]']+/g,'').split(",");
             subject.next({
                 data: bufferArray
             });
