@@ -30,13 +30,18 @@ public class GenerativeModel : MonoBehaviour
     public async void FetchImagePython()
     {
         print("Starting python script");
-        double [] dataPoints = {1.0, 1.3, 1.2};
+        double [] arr1 = {1.0, 1.3, 1.2};
 
-        RequestDto request = new RequestDto(Request(dataPoints));
+        //RequestDto arr1 = new RequestDto(Request(dataPoints));
 
         using (var call = client.RunPython())
         {
-            var response = client.RunPython();
+            //var response = client.RunPython();
+
+            var requests = new List<RequestDto>
+            {
+                Request(arr1)
+            };
 
             var responseReaderTask = Task.Run(async () =>
             {
@@ -44,22 +49,27 @@ public class GenerativeModel : MonoBehaviour
                 {
                     var note = call.ResponseStream.Current;
                     //print("stream received");
-                    print(note.Data);
+                    print(note.Data[0]);
+                    System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", note.Data.ToByteArray());
 
-                    String [] byt = note.Data.Split(',');
+                    //String [] byt = note.Data.Split(',');
                     //print(note.Data[0]);
-                    bytes = byt.Select(byte.Parse).ToArray();
+                    bytes = note.Data.ToByteArray();
 
                 // //MemoryStream ms = new MemoryStream(bytes);
 
                 }
             });
 
-            await call.RequestStream.WriteAsync(request);
+            foreach (RequestDto request in requests)
+            {
+                //print("Request: " + request.Data);
+
+                await call.RequestStream.WriteAsync(request);
+            }
             await call.RequestStream.CompleteAsync();
             await responseReaderTask;
-            print(bytes);
-            //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", bytes);
+            //print(bytes.ToString());
             //         //byte [] bytes = note.Data.ToByteArray();
             //         //LoadNewTexture(bytes, mat, plane);
 
