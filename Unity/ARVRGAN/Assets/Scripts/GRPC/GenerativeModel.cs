@@ -20,6 +20,7 @@ public class GenerativeModel : MonoBehaviour
     private readonly Channel channel;
     private readonly string server = "127.0.0.1:3001";
     private byte [] bytes;
+    private Texture2D tex;
 
     internal GenerativeModel()
     {
@@ -27,10 +28,13 @@ public class GenerativeModel : MonoBehaviour
         client = new ModelController.ModelControllerClient(channel);
     }
 
-    public async void FetchImagePython()
+    public async void FetchImagePython(GameObject plane, GameObject camera)
     {
         print("Starting python script");
-        double [] arr1 = {1.0, 1.3, 1.2};
+        Vector3 coords = camera.transform.position;
+        double[] arr1 = {coords.x*2.0, coords.y*3.0, coords.z*2};
+        print(coords);
+        //double [] arr1 = {1.0, 1.3, 1.2};
 
         //RequestDto arr1 = new RequestDto(Request(dataPoints));
 
@@ -50,11 +54,12 @@ public class GenerativeModel : MonoBehaviour
                     var note = call.ResponseStream.Current;
                     //print("stream received");
                     print(note.Data[0]);
-                    System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", note.Data.ToByteArray());
+                    //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", note.Data.ToByteArray());
 
                     //String [] byt = note.Data.Split(',');
                     //print(note.Data[0]);
                     bytes = note.Data.ToByteArray();
+
 
                 // //MemoryStream ms = new MemoryStream(bytes);
 
@@ -63,12 +68,16 @@ public class GenerativeModel : MonoBehaviour
 
             foreach (RequestDto request in requests)
             {
-                //print("Request: " + request.Data);
-
                 await call.RequestStream.WriteAsync(request);
             }
             await call.RequestStream.CompleteAsync();
             await responseReaderTask;
+            tex = new Texture2D(2, 2);
+            tex.LoadImage(bytes);
+            //tex.Apply();
+            //tex.EncodeToJPG();
+            plane.GetComponent<Renderer>().material.mainTexture = tex;
+
             //print(bytes.ToString());
             //         //byte [] bytes = note.Data.ToByteArray();
             //         //LoadNewTexture(bytes, mat, plane);
