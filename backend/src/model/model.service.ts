@@ -65,7 +65,7 @@ export class ModelService {
      * @param request 
      * @returns 
      */
-    public runPython(request: Request): string {
+    public runPython(request: Request): any {
 
         var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
         var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');

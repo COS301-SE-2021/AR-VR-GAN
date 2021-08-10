@@ -1,28 +1,49 @@
-import { Controller } from '@nestjs/common';
-import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
+import { Controller} from '@nestjs/common';
+import { GrpcStreamMethod } from '@nestjs/microservices';
 import { Response } from './interfaces/response.interface'
 import { ResponsePython } from './interfaces/responsePython.interface';
 import { Request } from './interfaces/request.interface'
 import { ModelService } from './model.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable,Subject } from 'rxjs';
 import { join } from 'path';
 import * as fs from 'fs';
-
 
 @Controller('model')
 export class ModelController {
     constructor(private modelService: ModelService) {}
 
-    @GrpcStreamMethod('ModelController', 'HandleCoords')
+    // @GrpcStreamMethod()
+    // handleCoords(messages: Observable<Request>): Observable<Response> {
+    //     const subject = new Subject<Response>();
+
+    //     const onNext = (message: Request) => {
+    //         subject.next({
+    //             data: this.modelService.handleCoords(message)
+    //         });
+    //     };
+
+    //     const onComplete = () => subject.complete();
+
+    //     messages.subscribe({
+    //         next: onNext,
+    //         complete: onComplete,
+    //     });
+
+    //     return subject.asObservable();
+    // }
+
+    /**
+     * streaming the image back to the client
+     * @param messages 
+     * @returns 
+     */
+    @GrpcStreamMethod()
     handleCoords(messages: Observable<Request>): Observable<Response> {
         const subject = new Subject<Response>();
-
+        const img = fs.readFileSync(join(__dirname, '../../uploads/capstone.jpg'));
         const onNext = (message: Request) => {
-            var imageNumber = Math.floor(this.modelService.handleCoords(message) % 10);
-            var img = fs.readFileSync(join(__dirname, `../../uploads/${imageNumber}.jpg`));
-
             subject.next({
-                data: img
+                data: img 
             });
         };
 
@@ -56,8 +77,10 @@ export class ModelController {
         const subject = new Subject<Response>();
 
         const onNext =(message: Request) => {
+            //when recievimg data from the python we need to remove the [] using replace
+            const bufferArray = this.modelService.runPython(message).replace(/[\[\]']+/g,'').split(",");
             subject.next({
-                data: Buffer.from(this.modelService.runPython(message), 'utf8')
+                data: bufferArray
             });
         };
 
