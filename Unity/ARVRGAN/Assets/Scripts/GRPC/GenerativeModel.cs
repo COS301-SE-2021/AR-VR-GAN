@@ -30,10 +30,10 @@ public class GenerativeModel : MonoBehaviour
 
     public async void FetchImagePython(GameObject plane, GameObject camera)
     {
-        print("Starting python script");
+        //print("Starting python script");
         Vector3 coords = camera.transform.position;
-        double[] arr1 = {coords.x*2.0, coords.y*3.0, coords.z*2};
-        print(coords);
+        double[] arr1 = {(coords.x+5)/10, (coords.y+5)/10, (coords.z+5)/10};
+        //print(coords);
         //double [] arr1 = {1.0, 1.3, 1.2};
 
         //RequestDto arr1 = new RequestDto(Request(dataPoints));
@@ -53,7 +53,7 @@ public class GenerativeModel : MonoBehaviour
                 {
                     var note = call.ResponseStream.Current;
                     //print("stream received");
-                    print(note.Data[0]);
+                   // print(note.Data[0]);
                     //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", note.Data.ToByteArray());
 
                     //String [] byt = note.Data.Split(',');
