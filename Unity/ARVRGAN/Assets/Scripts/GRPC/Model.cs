@@ -26,7 +26,7 @@ namespace Model {
           string.Concat(
             "Cgttb2RlbC5wcm90bxIFbW9kZWwiGgoKUmVxdWVzdER0bxIMCgRkYXRhGAEg",
             "AygBIhsKC1Jlc3BvbnNlRHRvEgwKBGRhdGEYASABKAwiIQoRUmVzcG9uc2VQ",
-            "eXRob25EVE8SDAoEZGF0YRgBIAEoCTKOAQoPTW9kZWxDb250cm9sbGVyEjsK",
+            "eXRob25EVE8SDAoEZGF0YRgBIAEoDDKOAQoPTW9kZWxDb250cm9sbGVyEjsK",
             "DEhhbmRsZUNvb3JkcxIRLm1vZGVsLlJlcXVlc3REdG8aEi5tb2RlbC5SZXNw",
             "b25zZUR0byIAKAEwARI+CglSdW5QeXRob24SES5tb2RlbC5SZXF1ZXN0RHRv",
             "GhgubW9kZWwuUmVzcG9uc2VQeXRob25EVE8iACgBMAFiBnByb3RvMw=="));
@@ -269,9 +269,6 @@ namespace Model {
     /// <summary>Field number for the "data" field.</summary>
     public const int DataFieldNumber = 1;
     private pb::ByteString data_ = pb::ByteString.Empty;
-    /// <summary>
-    ///double data = 1;
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public pb::ByteString Data {
@@ -460,10 +457,10 @@ namespace Model {
 
     /// <summary>Field number for the "data" field.</summary>
     public const int DataFieldNumber = 1;
-    private string data_ = "";
+    private pb::ByteString data_ = pb::ByteString.Empty;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Data {
+    public pb::ByteString Data {
       get { return data_; }
       set {
         data_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
@@ -514,7 +511,7 @@ namespace Model {
     #else
       if (Data.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(Data);
+        output.WriteBytes(Data);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -528,7 +525,7 @@ namespace Model {
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
       if (Data.Length != 0) {
         output.WriteRawTag(10);
-        output.WriteString(Data);
+        output.WriteBytes(Data);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -541,7 +538,7 @@ namespace Model {
     public int CalculateSize() {
       int size = 0;
       if (Data.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Data);
+        size += 1 + pb::CodedOutputStream.ComputeBytesSize(Data);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -574,7 +571,7 @@ namespace Model {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 10: {
-            Data = input.ReadString();
+            Data = input.ReadBytes();
             break;
           }
         }
@@ -593,7 +590,7 @@ namespace Model {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 10: {
-            Data = input.ReadString();
+            Data = input.ReadBytes();
             break;
           }
         }
