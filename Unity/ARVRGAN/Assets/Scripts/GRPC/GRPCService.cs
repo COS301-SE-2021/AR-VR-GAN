@@ -16,17 +16,17 @@ public class GRPCService : MonoBehaviour
 
     private void Start()
     {
-        plane.GetComponent<Renderer>().material.color = Color.white;
-        pythonClient = new GenerativeModel();
-        pythonClient.FetchImagePython();
+        //plane.GetComponent<Renderer>().material.color = Color.white;
+        //pythonClient = new GenerativeModel();
+        //pythonClient.FetchImagePython();
     }
 
     // Start is called before the first frame update
     void LateUpdate()
     {
-        //plane.GetComponent<Renderer>().material.color = Color.cyan;
-        //client = new GRPCClient();
-        //client.HandleCoords(plane, camera);
+        plane.GetComponent<Renderer>().material.color = Color.cyan;
+        client = new GRPCClient();
+        client.HandleCoords(plane, camera);
         //GenerativeModel gm = new GenerativeModel();
         //gm.FetchImagePython();
     } }
