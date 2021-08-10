@@ -65,12 +65,9 @@ public class GRPCClient : MonoBehaviour
 
                 await call.RequestStream.CompleteAsync();
                 await responseReaderTask;
-                //plane.GetComponent<Renderer>().material.color = Color.white;
-                //LoadNewTexture(bytes, mat, plane);
+
                 tex = new Texture2D(2, 2);
                 tex.LoadImage(bytes);
-                //tex.Apply();
-                //tex.EncodeToJPG();
                 plane.GetComponent<Renderer>().material.mainTexture = tex;
                 //print("Finished");
             }
@@ -95,7 +92,7 @@ public class GRPCClient : MonoBehaviour
 
         print("material changed");
     }
-    */
+*/
 
     public RequestDto Request(double[] coords)
     {
