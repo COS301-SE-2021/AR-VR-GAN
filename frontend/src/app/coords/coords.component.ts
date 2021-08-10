@@ -48,7 +48,6 @@ export class CoordsComponent implements OnInit {
     
     //fetching sum of coordinates
     this.http.post<any>('http://localhost:3000/model/testGRPC', { data: data}).subscribe(resp => {
-
       this.response = resp.sum;
     })
 
