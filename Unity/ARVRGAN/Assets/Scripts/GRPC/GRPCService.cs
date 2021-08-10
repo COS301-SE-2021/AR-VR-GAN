@@ -25,8 +25,12 @@ public class GRPCService : MonoBehaviour
     // Start is called before the first frame update
     void LateUpdate()
     {
-        if (camera.transform.position != pastCoords)
+        Vector3 current = camera.transform.position;
+        double sum = (current.x+5)/10 + (current.y+5)/10 + (current.z+5)/10;
+        double pastSum = (pastCoords.x+5)/10 + (pastCoords.y+5)/10 + (pastCoords.z+5)/10;
+        if ((sum > (pastSum + 0.2)) ||  (sum < (pastSum + 0.2)))
         {
+            print("fetching new image");
             pythonClient.FetchImagePython(plane, camera);
         }
 
