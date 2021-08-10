@@ -18,10 +18,12 @@ public class MovementOfPicture : MonoBehaviour
     void FixedUpdate()
     {
         Vector3 pos = target.position + offset;
-        Vector3 smoothPos = Vector3.Lerp(transform.position, pos, smooth);
-        transform.position = smoothPos;
+       // Vector3 smoothPos = Vector3.Lerp(transform.position, pos, smooth);
+        //transform.position = smoothPos;
 
-        Vector3 look = pos + rotationOffset;
+        transform.position = pos;
+
+        //Vector3 look = pos + rotationOffset;
 
         //transform.rotation = 
 
