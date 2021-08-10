@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
 import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -26,6 +28,8 @@ import { LandingComponent } from './landing/landing.component';
     AppRoutingModule,
     MatGridListModule,
     MatToolbarModule,
+    MatFormFieldModule,
+    MatCardModule,
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
       {path: 'landing', component: LandingComponent},
