@@ -53,7 +53,7 @@ public class GenerativeModel : MonoBehaviour
                 {
                     var note = call.ResponseStream.Current;
                     //print("stream received");
-                   // print(note.Data[0]);
+                    print(note.Data[0]);
                     //System.IO.File.WriteAllBytes("./Assets/Scripts/GRPC/image.jpg", note.Data.ToByteArray());
 
                     //String [] byt = note.Data.Split(',');
