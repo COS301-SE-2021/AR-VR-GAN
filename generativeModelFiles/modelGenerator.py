@@ -263,7 +263,7 @@ class ModelGenerator:
                 print(filepath+" VAE Model loaded")
                 return True
 
-    def saveModel(self, filepath: str="") -> bool:
+    def saveModel(self, filepath: str="") -> bytes:
         """Saves the model currently held by the model generator 
 
         If a file path is not specified or the file path already exists then the model generator 
@@ -294,6 +294,8 @@ class ModelGenerator:
                 return True
             else:
                 torch.save(self.model, filepath)
+                f = open(filepath, 'rb')
+                print(f.read())
                 print("Model saved as" + filepath)
                 return True
     
