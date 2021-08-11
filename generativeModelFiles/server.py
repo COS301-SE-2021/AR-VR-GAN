@@ -3,12 +3,12 @@ import concurrent
 from concurrent import futures
 import sys
 import pathlib
-sys.path.append(str(pathlib.Path(__file__).parent.parent)+"\generativeModelFiles")
+# sys.path.append(str(pathlib.Path(__file__).parent.parent)+"\generativeModelFiles")
 
 
 import modelGenerator_pb2
 import modelGenerator_pb2_grpc
-from generativeModelFiles.modelGenerator import ModelGenerator
+from modelGenerator import ModelGenerator
 m_generator = ModelGenerator()
 
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
@@ -26,13 +26,13 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
         response = modelGenerator_pb2.LoadModelResponse()
         response.succesful = True
-        sys.path
-        m_generator.loadModel("../generativeModelFiles/defaultModels/Epochs-50.pt")
-        response.message = "Successful: "+ m_generator.model.retrieve_latent_size()
+        m_generator.loadModel("defaultModels/Epochs-50.pt")
+        response.message = "Successful: "+ str(m_generator.model.retrieve_latent_size())
         # response.message = "Successful: "
         return response
 
 if __name__ == "__main__":
+    # m_generator.loadModel("./generativeModelFiles/defaultModels/Epochs-50.pt")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=20))
     modelGenerator_pb2_grpc.add_ModelGenerationServicer_to_server(ModelGenerationServicer(), server)
     port_number = server.add_insecure_port('[::]:50051') # Change this to secure_port when we are not in development

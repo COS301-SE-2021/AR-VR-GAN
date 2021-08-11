@@ -8,11 +8,11 @@ from torch.nn import functional as F
 from torch.utils.data import sampler
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
-from .VAEModel import VAE
+from VAEModel import VAE
 import os
 from datetime import datetime
 from PIL import Image
-from .modelExceptions import ModelException
+from modelExceptions import ModelException
 
 class ModelGenerator:
     """ This class trains VAE models and generates images from said models
@@ -359,5 +359,6 @@ if __name__ == "__main__":
     # generator.train_model(50)
     # generator.saveModel("savedModels/50iterations.pt")
     generator.generateImage([0.000000, 0.000, 0.00])
+    print("hello")
     # print(generator.test_loader)
     # generator.model.encode()
