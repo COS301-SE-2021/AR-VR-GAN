@@ -13,6 +13,11 @@ import { HeaderComponent } from './header/header.component';
 import { CoordsComponent } from './coords/coords.component';
 import { LoginComponent } from './login/login.component';
 import { LandingComponent } from './landing/landing.component';
+import { LoginFormComponent } from './login-form/login-form.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CookieService } from 'ngx-cookie-service';
+import { RegisterComponent } from './register/register.component';
+import { RegisterFormComponent } from './register-form/register-form.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +26,10 @@ import { LandingComponent } from './landing/landing.component';
     HeaderComponent,
     CoordsComponent,
     LoginComponent,
-    LandingComponent
+    LandingComponent,
+    LoginFormComponent,
+    RegisterComponent,
+    RegisterFormComponent
   ],
   imports: [
     BrowserModule,
@@ -33,10 +41,12 @@ import { LandingComponent } from './landing/landing.component';
     RouterModule.forRoot([
       {path: 'login', component: LoginComponent},
       {path: 'landing', component: LandingComponent},
+      {path: 'register', component: RegisterComponent},
       {path: '', redirectTo: '/login', pathMatch: 'full'},
     ]),
+    BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [CookieService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
