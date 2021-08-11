@@ -78,19 +78,10 @@ export class ModelController {
 
         const onNext =(message: Request) => {
             //when recievimg data from the python we need to remove the [] using replace
-            var sendData: any = fs.readFileSync(join(__dirname, '../../uploads/capstone.jpg'));
-            const bufferArray = this.modelService.runPython(message);
-            if(bufferArray != null && bufferArray.length > 0)
-            {
-                console.log(bufferArray)
-                sendData = bufferArray.replace(/[\[\]']+/g,'').split(",");
-            }
-            else
-            {
-                sendData = fs.readFileSync(join(__dirname, '../../uploads/capstone.jpg'));
-            }
+            const bufferArray = this.modelService.runPython(message).replace(/[\[\]']+/g,'').split(",");
+            
             subject.next({
-                data: sendData
+                data: bufferArray
             });
         };
 
