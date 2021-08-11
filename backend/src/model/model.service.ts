@@ -21,66 +21,66 @@ export class ModelService {
         return sum;
     }
 
-    // /**
-    //  * executes the python script and returns the data returned from the script -- spawn
-    //  * @param request 
-    //  * @returns 
-    //  */
-    // public runPython(request: Request): string {
-
-    //         var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
-    //         var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
-    
-    //         const spawn = require("child_process").spawn;
-    
-    //         var commaSplitList = request.data.toString().split(',');
-    //         var coord1 = parseFloat(commaSplitList[0]);
-    //         var coord2 = parseFloat(commaSplitList[1]);
-    //         var coord3 = parseFloat(commaSplitList[2]);
-    //         var process = null;
-    //         var process = spawn('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath],{ encoding : 'utf8' });
-            
-            
-    //         //on data recieved from the python script
-    //         process.stdout.on('data', async data =>{
-    //               this.num = data.toString().trim()
-    //               return this.num;
-    //         })
-    
-    //         //If an error occurs in the python script
-    //         process.stderr.on('data',async data =>{
-    //             console.log(data.toString())
-    //         })
-    
-    //         process.on('close',async data =>{
-    //             return this.num;
-    //         })
-    
-    //         return this.num;
-    
-    //     }
-
     /**
-     * executes the python script and returns the data returned from the script -- spawnSync
+     * executes the python script and returns the data returned from the script -- spawn
      * @param request 
      * @returns 
      */
-    public runPython(request: Request): any {
+    public runPython(request: Request): string {
 
-        var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
-        var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
+            var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
+            var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
+    
+            const spawn = require("child_process").spawn;
+    
+            var commaSplitList = request.data.toString().split(',');
+            var coord1 = parseFloat(commaSplitList[0]);
+            var coord2 = parseFloat(commaSplitList[1]);
+            var coord3 = parseFloat(commaSplitList[2]);
+            var process = null;
+            var process = spawn('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath],{ encoding : 'utf8' });
+            
+            
+            //on data recieved from the python script
+            process.stdout.on('data', async data =>{
+                  this.num = data.toString().trim()
+                  return this.num;
+            })
+    
+            //If an error occurs in the python script
+            process.stderr.on('data',async data =>{
+                console.log(data.toString())
+            })
+    
+            process.on('close',async data =>{
+                return this.num;
+            })
+    
+            return this.num;
+    
+        }
 
-        const spawnSync = require("child_process").spawnSync;
+    // /**
+    //  * executes the python script and returns the data returned from the script -- spawnSync
+    //  * @param request 
+    //  * @returns 
+    //  */
+    // public runPython(request: Request): any {
 
-        var commaSplitList = request.data.toString().split(',');
-        var coord1 = parseFloat(commaSplitList[0]);
-        var coord2 = parseFloat(commaSplitList[1]);
-        var coord3 = parseFloat(commaSplitList[2]);
+    //     var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
+    //     var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
 
-        var process = spawnSync('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
-        console.log(process.stderr.toString())
-        return process.stdout.toString()
-    }
+    //     const spawnSync = require("child_process").spawnSync;
+
+    //     var commaSplitList = request.data.toString().split(',');
+    //     var coord1 = parseFloat(commaSplitList[0]);
+    //     var coord2 = parseFloat(commaSplitList[1]);
+    //     var coord3 = parseFloat(commaSplitList[2]);
+
+    //     var process = spawnSync('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
+    //     console.log(process.stderr.toString())
+    //     return process.stdout.toString()
+    // }
 
     // /**
     //  * executes the python script and returns the data returned from the script -- execFile
