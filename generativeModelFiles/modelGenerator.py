@@ -1,6 +1,5 @@
 from __future__ import print_function
 import argparse
-import numpy
 import torch
 import torch.utils.data
 from torch import nn, optim
@@ -11,6 +10,7 @@ from torchvision.utils import save_image
 from VAEModel import VAE
 import os
 from datetime import datetime
+import time
 from PIL import Image
 from modelExceptions import ModelException
 
@@ -364,10 +364,18 @@ class ModelGenerator:
 
 if __name__ == "__main__":
     generator = ModelGenerator()
-    # generator.loadModel("defaultModels/Epochs-50.pt")
-    generator.train_model(50)
-    generator.saveModel("savedModels/Epochs-50-Fashion.pt")
+    generator.loadModel("defaultModels/Epochs-50-Fashion.pt")
+    # generator.train_model(50)
+    # generator.saveModel("savedModels/Epochs-50-Fashion.pt")
     generator.generateImage([0.000000, 0.000, 0.00])
+    time.sleep(1)
+    generator.generateImage([0.0055000, 0.000, 0.00])
+    time.sleep(1)
+    generator.generateImage([6.000000, 2.000, 2.00])
+    time.sleep(1)
+    generator.generateImage([0.000000, 0.440, 0.3450])
+    time.sleep(1)
+    generator.generateImage([0.89600, 0.000, 0.00])
     # print("hello")
     # print(generator.test_loader)
     # generator.model.encode()
