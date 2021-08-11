@@ -1,13 +1,14 @@
 
 # Byte-compiled / optimized / DLL files
-generativeModelAPI/generativeModelFiles/results/*
-generativeModelAPI/generativeModelFiles/savedModels/*
-generativeModelAPI/generativeModelFiles/testing/images/*
-generativeModelAPI/generativeModelFiles/testing/savedModels/*
-generativeModelAPI/generativeModelFiles/savedImages/*
-generativeModelAPI/generativeModelFiles/*.txt
-generativeModelAPI/generativeModelFiles/test
-generativeModelAPI/data/*
+generativeModelFiles/results/*
+generativeModelFiles/savedModels/*
+generativeModelFiles/testing/images/*
+generativeModelFiles/testing/savedModels/*
+generativeModelFiles/savedImages/*
+generativeModelFiles/*.txt
+generativeModelFiles/test
+ogprotos/
+data/*
 .DS_Store
 __pycache__/
 data/*

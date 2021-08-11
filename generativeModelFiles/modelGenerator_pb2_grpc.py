@@ -14,7 +14,7 @@ class ModelGenerationStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.GenerateImage = channel.unary_unary(
+        self.GenerateImage = channel.stream_stream(
                 '/ModelGenerator.ModelGeneration/GenerateImage',
                 request_serializer=modelGenerator__pb2.ImageRequest.SerializeToString,
                 response_deserializer=modelGenerator__pb2.ImageResponse.FromString,
@@ -39,7 +39,7 @@ class ModelGenerationStub(object):
 class ModelGenerationServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def GenerateImage(self, request, context):
+    def GenerateImage(self, request_iterator, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -67,7 +67,7 @@ class ModelGenerationServicer(object):
 
 def add_ModelGenerationServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'GenerateImage': grpc.unary_unary_rpc_method_handler(
+            'GenerateImage': grpc.stream_stream_rpc_method_handler(
                     servicer.GenerateImage,
                     request_deserializer=modelGenerator__pb2.ImageRequest.FromString,
                     response_serializer=modelGenerator__pb2.ImageResponse.SerializeToString,
@@ -98,7 +98,7 @@ class ModelGeneration(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def GenerateImage(request,
+    def GenerateImage(request_iterator,
             target,
             options=(),
             channel_credentials=None,
@@ -108,7 +108,7 @@ class ModelGeneration(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/ModelGenerator.ModelGeneration/GenerateImage',
+        return grpc.experimental.stream_stream(request_iterator, target, '/ModelGenerator.ModelGeneration/GenerateImage',
             modelGenerator__pb2.ImageRequest.SerializeToString,
             modelGenerator__pb2.ImageResponse.FromString,
             options, channel_credentials,

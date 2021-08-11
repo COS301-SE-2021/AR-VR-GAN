@@ -232,7 +232,7 @@ class ModelGenerator:
         test_loss /= len(self.test_loader.dataset)
         print('====> Test set loss: {:.4f}'.format(test_loss))
 
-    def loadModel(self, filepath="") -> bool:
+    def loadModel(self, filepath: str="") -> bytes:
         """Loads a previously saved model to be used by the model generator
 
         If a file path is not specified then the model generator will load the default model.
@@ -251,7 +251,10 @@ class ModelGenerator:
         if filepath == "":
             self.model = torch.load("defaultModels/Epochs-50.pt")
             print("Default VAE Model loaded")
-            return True
+            f = open(filepath, 'rb')
+            model_bytes = f.read()
+            return model_bytes
+            # return True
         else:
             if not os.path.isfile(filepath):
                 raise ModelException(f"File {filepath} does not exist")
@@ -261,7 +264,10 @@ class ModelGenerator:
                 self.model = torch.load(filepath)
                 self.set_latent_size(self.model.retrieve_latent_size())
                 print(filepath+" VAE Model loaded")
-                return True
+                f = open(filepath, 'rb')
+                model_bytes = f.read()
+                return model_bytes
+                # return True
 
     def saveModel(self, filepath: str="") -> bytes:
         """Saves the model currently held by the model generator 
@@ -281,7 +287,9 @@ class ModelGenerator:
             modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
             torch.save(self.model, modelPath)
             print("Model saved as savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt")
-            return True
+            f = open(filepath, 'rb')
+            model_bytes = f.read()
+            return model_bytes
         else:
             if not filepath.endswith('.pt'):
                 filepath+=".pt"
@@ -291,13 +299,16 @@ class ModelGenerator:
                 print(filepath, " already exists!")
                 torch.save(self.model, modelPath)
                 print("Model saved as savedModels/VAE-MODEL-"+modelPath)
-                return True
+
+                f = open(("savedModels/VAE-MODEL-"+modelPath), 'rb')
+                model_bytes = f.read()
+                return model_bytes
             else:
                 torch.save(self.model, filepath)
-                f = open(filepath, 'rb')
-                print(f.read())
                 print("Model saved as" + filepath)
-                return True
+                f = open(filepath, 'rb')
+                model_bytes = f.read()
+                return model_bytes
     
     def generateImage(self, vector: list, filepath: str="") -> list:
         """ Generates an image from the model from the vector pass into the function
@@ -363,10 +374,10 @@ class ModelGenerator:
 
 if __name__ == "__main__":
     generator = ModelGenerator()
-    generator.loadModel("savedModels/50iterations.pt")
+    generator.loadModel("defaultModels/Epochs-50.pt")
     # generator.train_model(50)
-    # generator.saveModel("savedModels/50iterations.pt")
-    generator.generateImage([0.000000, 0.000, 0.00])
+    generator.saveModel("savedModels/50iterations.pt")
+    # generator.generateImage([0.000000, 0.000, 0.00])
     print("hello")
     # print(generator.test_loader)
     # generator.model.encode()

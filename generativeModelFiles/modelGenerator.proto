@@ -3,7 +3,7 @@ syntax = "proto3";
 package ModelGenerator;
 
 service ModelGeneration{
-    rpc GenerateImage (ImageRequest) returns (ImageResponse); 
+    rpc GenerateImage (stream ImageRequest) returns (stream ImageResponse); 
     rpc LoadDataset (LoadDatasetRequest) returns (LoadDatasetResponse);
     rpc TrainModel (TrainModelRequest) returns (TrainModelResponse);
     rpc LoadModel (LoadModelRequest) returns (LoadModelResponse);
@@ -28,6 +28,7 @@ message TrainModelRequest{
     int32 latentSize = 3;
     string datasetName = 4;
     bytes dataset = 5;
+    bool beta = 6;
 }
 
 message LoadModelRequest{
