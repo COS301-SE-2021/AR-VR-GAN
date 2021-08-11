@@ -14,6 +14,7 @@ public class GRPCService : MonoBehaviour
     public GameObject plane;
     public GameObject camera;
     public Vector3 pastCoords;
+    private int interval = 100;
 
     private void Start()
     {
@@ -25,16 +26,20 @@ public class GRPCService : MonoBehaviour
     // Start is called before the first frame update
     void LateUpdate()
     {
-        Vector3 current = camera.transform.position;
-        double sum = (current.x+5)/10 + (current.y+5)/10 + (current.z+5)/10;
-        double pastSum = (pastCoords.x+5)/10 + (pastCoords.y+5)/10 + (pastCoords.z+5)/10;
-        if ((sum > (pastSum + 0.2)) ||  (sum < (pastSum + 0.2)))
+        if (Time.frameCount % interval == 0)
         {
-            print("fetching new image");
-            pythonClient.FetchImagePython(plane, camera);
+            Vector3 current = camera.transform.position;
+            //double sum = (current.x+5)/10 + (current.y+5)/10 + (current.z+5)/10;
+            //double pastSum = (pastCoords.x+5)/10 + (pastCoords.y+5)/10 + (pastCoords.z+5)/10;
+            //if ((sum > (pastSum + 0.2)) ||  (sum < (pastSum + 0.2)))
+            //{
+                print("fetching new image");
+                pythonClient.FetchImagePython(plane, camera);
+            //}
+
+            pastCoords = current;
         }
 
-        pastCoords = camera.transform.position;
         //plane.GetComponent<Renderer>().material.color = Color.cyan;
         //client = new GRPCClient();
         //client.HandleCoords(plane, camera);
