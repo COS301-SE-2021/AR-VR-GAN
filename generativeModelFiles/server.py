@@ -12,8 +12,20 @@ from modelGenerator import ModelGenerator
 m_generator = ModelGenerator()
 
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
-    def GenerateImage(self, request, context):
-        pass
+    def GenerateImage(self, request: modelGenerator_pb2.ImageRequest, context):
+        latent_vector = request.vector
+        # print(type(received_vector[0]))
+        # latent_vector = [i for i in range(received_vector)]
+
+        generated_image = m_generator.generateImage(latent_vector)
+        # pass
+        # print(bytes_array)
+        response = modelGenerator_pb2.ImageResponse()
+        response.width = 0 # Can remove
+        response.height = 0 # Can Remove
+        response.image = bytes(generated_image)
+
+        return response
 
     def LoadDataset(self, request, context):
         pass

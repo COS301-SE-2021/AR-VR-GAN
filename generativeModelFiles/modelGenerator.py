@@ -263,7 +263,7 @@ class ModelGenerator:
                 print(filepath+" VAE Model loaded")
                 return True
 
-    def saveModel(self, filepath="") -> bool:
+    def saveModel(self, filepath: str="") -> bool:
         """Saves the model currently held by the model generator 
 
         If a file path is not specified or the file path already exists then the model generator 
@@ -297,7 +297,7 @@ class ModelGenerator:
                 print("Model saved as" + filepath)
                 return True
     
-    def generateImage(self, vector, filepath="") -> str:
+    def generateImage(self, vector: list, filepath: str="") -> list:
         """ Generates an image from the model from the vector pass into the function
 
         Parameters
@@ -326,15 +326,21 @@ class ModelGenerator:
                     raise ModelException("Input vector not the same size as model's vector")
 
                 sample = torch.tensor([vector]).to(self.device)
-                print(sample)
-                print(sample.size())
+                # print(sample)
+                # print(sample.size())
                 sample = self.model.decode(sample).cpu() 
                 save_image(sample.view(1, 1, 28, 28), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
+
                 print("Imaged Saved as "+filepath)
-                return filepath
+                with open(filepath, "rb") as image:
+                    f = image.read()
+                    b = bytearray(f)
+
+                os.remove(filepath)
+                return list(b)
 
     def clearModel(self) -> None:
         """Removes the current model and replaces it with a new untrained model
