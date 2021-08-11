@@ -8,11 +8,6 @@
 
 <input type="submit" class="button" (click)="postCoords(x.value, y.value, z.value)">
 
-
-<p id="response">
-Server Response: {{ response }}
-</p>
-
-<img id="imageReturned" src={{image}}>
+<img id="imageReturned" src={{image}} alt="Returned Image">
 
 <div class="track" (mousemove)="trackCoords($event)"></div>
