@@ -6,17 +6,16 @@ import { ChildProcess } from 'child_process';
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import { microserviceOptions } from './grpc.options';
 import { ModelGeneration } from './grpc.interface';
+import { Observable, ReplaySubject } from 'rxjs';
 
 @Injectable()
 export class ModelService {
 
-    //constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc) {}
-    @Client(microserviceOptions)
-    private client: ClientGrpc;
+    constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc) {}
     private grpcService: ModelGeneration;
 
     onModuleInit() {
-        this.grpcService = this.client.getService<ModelGeneration>('ModelGeneration');
+        this.grpcService = this.client.getService('ModelGeneration');
     }
 
     private num: string
@@ -120,18 +119,17 @@ export class ModelService {
     //     return await getImage();
 
     // }
-
-
-
     
     /**
      * executes the python script and returns the data returned from the script -- spawnSync
      * @param request 
      * @returns 
      */
-     public proxy(request: Request): any {
-        console.log("calling python")
-        return this.grpcService.generateImage(request);
+     public async proxy(request: Request): Promise<any> {
+        const req = new ReplaySubject<Request>();
+        req.next({data : request.data})
+        req.complete()
+        return  this.grpcService.generateImage(req).toPromise();
     }
     
 
