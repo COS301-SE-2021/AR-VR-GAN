@@ -1,10 +1,24 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,Inject } from '@nestjs/common';
 import { Request } from './interfaces/request.interface';
 import { join } from 'path';
 import { ChildProcess } from 'child_process';
 
+import { Client, ClientGrpc } from '@nestjs/microservices';
+import { microserviceOptions } from './grpc.options';
+import { ModelGeneration } from './grpc.interface';
+
 @Injectable()
 export class ModelService {
+
+    //constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc) {}
+    @Client(microserviceOptions)
+    private client: ClientGrpc;
+    private grpcService: ModelGeneration;
+
+    onModuleInit() {
+        this.grpcService = this.client.getService<ModelGeneration>('ModelGeneration');
+    }
+
     private num: string
     /**
      * handles the coordinates that will be sent from the front end
@@ -106,5 +120,19 @@ export class ModelService {
     //     return await getImage();
 
     // }
+
+
+
+    
+    /**
+     * executes the python script and returns the data returned from the script -- spawnSync
+     * @param request 
+     * @returns 
+     */
+     public proxy(request: Request): any {
+        console.log("calling python")
+        return this.grpcService.generateImage(request);
+    }
+    
 
 }
