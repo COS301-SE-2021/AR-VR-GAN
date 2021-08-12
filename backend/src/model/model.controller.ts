@@ -106,9 +106,10 @@ export class ModelController {
         proxy(messages: Observable<Request>): Observable<ResponsePython> {
              const subject = new Subject<Response>();
      
-             const onNext =(message: Request) => {
-                 subject.next({
-                     data: this.modelService.proxy(message)
+            const onNext =async (message: Request) => {
+                var data =await  this.modelService.proxy(message)
+                subject.next({
+                     data: data.image
                  });
              };
      
