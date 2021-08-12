@@ -1,6 +1,5 @@
 from __future__ import print_function
 import argparse
-import io
 import torch
 import torch.utils.data
 from torch import nn, optim
@@ -11,6 +10,7 @@ from torchvision.utils import save_image
 from VAEModel import VAE
 import os
 from datetime import datetime
+import time
 from PIL import Image
 from modelExceptions import ModelException
 
@@ -72,32 +72,31 @@ class ModelGenerator:
         # This section dealt with taking in default arguements in the orginal VAE MNIST Example
         # This section is unecessary for AR-VR-GAN, we just have to replace the arguement values
         # in the appropriate places.
-        # self.parser = argparse.ArgumentParser(description='VAE MNIST Example')
-        # self.parser.add_argument('--batch-size', type=int, default=128, metavar='N',
-        #                     help='input batch size for training (default: 128)')
-        # self.parser.add_argument('--epochs', type=int, default=10, metavar='N',
-        #                     help='number of epochs to train (default: 10)')
-        # self.parser.add_argument('--no-cuda', action='store_true', default=False,
-        #                     help='disables CUDA training')
-        # self.parser.add_argument('--seed', type=int, default=1, metavar='S',
-        #                     help='random seed (default: 1)')
-        # self.parser.add_argument('--log-interval', type=int, default=10, metavar='N',
-        #                     help='how many batches to wait before logging training status')
-        # self.args = self.parser.parse_args()
-        # self.args.cuda = not self.args.no_cuda and torch.cuda.is_available()
+        self.parser = argparse.ArgumentParser(description='VAE MNIST Example')
+        self.parser.add_argument('--batch-size', type=int, default=128, metavar='N',
+                            help='input batch size for training (default: 128)')
+        self.parser.add_argument('--epochs', type=int, default=10, metavar='N',
+                            help='number of epochs to train (default: 10)')
+        self.parser.add_argument('--no-cuda', action='store_true', default=False,
+                            help='disables CUDA training')
+        self.parser.add_argument('--seed', type=int, default=1, metavar='S',
+                            help='random seed (default: 1)')
+        self.parser.add_argument('--log-interval', type=int, default=10, metavar='N',
+                            help='how many batches to wait before logging training status')
+        self.args = self.parser.parse_args()
+        self.args.cuda = not self.args.no_cuda and torch.cuda.is_available()
 
         # Sets the seed for generating random numbers. Returns a torch.Generator object.
-        torch.manual_seed(1)
+        torch.manual_seed(self.args.seed)
 
         # A torch.device is an object representing the device on which a torch.
         # Tensor is or will be allocated. The torch.device contains a device type ('cpu' or 'cuda')
         # and optional device ordinal for the device type. If the device ordinal is not present, 
         # this object will always represent the current device for the device type, 
         # even after torch.cuda.set_device() is called.
-        self.cuda = torch.cuda.is_available()
-        self.device = torch.device("cuda" if self.cuda else "cpu")
+        self.device = torch.device("cuda" if self.args.cuda else "cpu")
 
-        kwargs = {'num_workers': 1, 'pin_memory': True} if self.cuda else {}
+        kwargs = {'num_workers': 1, 'pin_memory': True} if self.args.cuda else {}
 
         # Loads the MNIST dataset 
         # You can change from MNIST to any other torch dataset by changing
@@ -106,13 +105,13 @@ class ModelGenerator:
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         self.train_loader = torch.utils.data.DataLoader(
-            datasets.MNIST('../data', train=True, download=True,
+            datasets.FashionMNIST('../data', train=True, download=True,
                         transform=transforms.ToTensor()),
-            batch_size= 128, shuffle=True, **kwargs)
+            batch_size= self.args.batch_size, shuffle=True, **kwargs)
 
         self.test_loader = torch.utils.data.DataLoader(
-            datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
-            batch_size=128, shuffle=True, **kwargs)
+            datasets.FashionMNIST('../data', train=False, transform=transforms.ToTensor()),
+            batch_size=self.args.batch_size, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
         # self.model = None
@@ -193,14 +192,14 @@ class ModelGenerator:
             loss.backward()
             train_loss += loss.item()
             self.optimizer.step()
-            # if batch_idx % 10 == 0: # Change the 10 to the log_interval (self.args.log_interval)
-                # print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                #     epoch, batch_idx * len(data), len(self.train_loader.dataset),
-                #     100. * batch_idx / len(self.train_loader),
-                #     loss.item() / len(data)))
+            if batch_idx % self.args.log_interval == 0:
+                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    epoch, batch_idx * len(data), len(self.train_loader.dataset),
+                    100. * batch_idx / len(self.train_loader),
+                    loss.item() / len(data)))
 
-        # print('====> Epoch: {} Average loss: {:.4f}'.format(
-        #     epoch, train_loss / len(self.train_loader.dataset)))
+        print('====> Epoch: {} Average loss: {:.4f}'.format(
+            epoch, train_loss / len(self.train_loader.dataset)))
 
     def test(self, epoch, generate = False) -> None:
         """Tests the accuracy of the model with the set of images in test_loader
@@ -215,7 +214,6 @@ class ModelGenerator:
         generate : bool, optional
             To decide whether or not to save an image displaying the comparison between the model and the actual results
         """
-        # Note to self change 128 to batch size
         self.model.eval()
         test_loss = 0
         with torch.no_grad():
@@ -226,15 +224,15 @@ class ModelGenerator:
                 if i == 0:
                     n = min(data.size(0), 8)
                     comparison = torch.cat([data[:n],
-                                        recon_batch.view(128, 1, 28, 28)[:n]])# Batch size instead of 128
+                                        recon_batch.view(self.args.batch_size, 1, 28, 28)[:n]])
                     if generate == True:
                         save_image(comparison.cpu(),
                                 'test/reconstruction_' + str(epoch) + '.png', nrow=n)
 
         test_loss /= len(self.test_loader.dataset)
-        # print('====> Test set loss: {:.4f}'.format(test_loss))
+        print('====> Test set loss: {:.4f}'.format(test_loss))
 
-    def loadModel(self, filepath="") -> bool:
+    def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator
 
         If a file path is not specified then the model generator will load the default model.
@@ -252,8 +250,9 @@ class ModelGenerator:
         """
         if filepath == "":
             self.model = torch.load("defaultModels/Epochs-50.pt")
-            # print("Default VAE Model loaded")
-            return True
+            print("Default VAE Model loaded")
+            return filepath
+            # return True
         else:
             if not os.path.isfile(filepath):
                 raise ModelException(f"File {filepath} does not exist")
@@ -262,10 +261,11 @@ class ModelGenerator:
             else:
                 self.model = torch.load(filepath)
                 self.set_latent_size(self.model.retrieve_latent_size())
-                # print(filepath+" VAE Model loaded")
-                return True
+                print(filepath+" VAE Model loaded")
+                return filepath
+                # return True
 
-    def saveModel(self, filepath="") -> bool:
+    def saveModel(self, filepath: str="") -> str:
         """Saves the model currently held by the model generator 
 
         If a file path is not specified or the file path already exists then the model generator 
@@ -282,24 +282,25 @@ class ModelGenerator:
         if filepath == "":
             modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
             torch.save(self.model, modelPath)
-            # print("Model saved as savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt")
-            return True
+            print("Model saved as savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt")
+            return modelPath 
         else:
             if not filepath.endswith('.pt'):
                 filepath+=".pt"
             
             if os.path.isfile(filepath):
                 modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
-                # print(filepath, " already exists!")
+                print(filepath, " already exists!")
                 torch.save(self.model, modelPath)
-                # print("Model saved as savedModels/VAE-MODEL-"+modelPath)
-                return True
+                print("Model saved as savedModels/VAE-MODEL-"+modelPath)
+
+                return ("savedModels/VAE-MODEL-"+modelPath)
             else:
                 torch.save(self.model, filepath)
-                # print("Model saved as" + filepath)
-                return True
+                print("Model saved as" + filepath)
+                return filepath
     
-    def generateImage(self, vector, filepath="") -> bytes:
+    def generateImage(self, vector: list, filepath: str="") -> list:
         """ Generates an image from the model from the vector pass into the function
 
         Parameters
@@ -315,7 +316,7 @@ class ModelGenerator:
             If the input vector dimensions are not the same as the ones specified in the model
         """
         if filepath == "":
-            filepath = "../generativeModelFiles/savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".jpg"
+            filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".png"
 
         if not filepath.endswith(('.png', '.jpg', '.jpeg')):
             ModelException("File extension must be either be png, jpg, jpeg")
@@ -335,17 +336,13 @@ class ModelGenerator:
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
-                
-                # img_byte_array = io.BytesIO()
-                # new_image.save(img_byte_array, format='JPEG')
-                # img_byte_array.getvalue()
-                # print("Imaged Saved as "+filepath)
+
+                print("Imaged Saved as "+filepath)
                 with open(filepath, "rb") as image:
                     f = image.read()
                     b = bytearray(f)
-                # ls = []
-                # for value in b:
-                #     ls.append(value)
+
+                # os.remove(filepath)
                 return list(b)
 
     def clearModel(self) -> None:
@@ -354,7 +351,7 @@ class ModelGenerator:
         self.model = None
         self.model = VAE(self.latent_size).to(self.device)
 
-    def set_latent_size(self, latent_size) -> None:
+    def set_latent_size(self, latent_size: int) -> None:
         self.latent_size = latent_size
 
     def loadDataset(self) -> None:
@@ -366,26 +363,19 @@ class ModelGenerator:
 
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description='Model Generator Model')
-    parser.add_argument('--latent-size', type=int, default=3, metavar='N',
-                        help='Determines the size latent size of the model to be trained')
-    parser.add_argument('--model', type=str, default="defaultModels/Epochs-50.pt", metavar='N',
-                        help='Choose the pre-saved model')
-    parser.add_argument('--coordinates', default=None, type=float, nargs='+',
-                        help='the latent vector to be used by the model to generate an image')
-    args = parser.parse_args()
-
-
     generator = ModelGenerator()
-    generator.loadModel(args.model)
-    # print(generator.model.retrieve_latent_size())
-    # input()
+    generator.loadModel("defaultModels/Epochs-50-Fashion.pt")
     # generator.train_model(50)
-    # generator.saveModel("savedModels/50iterations.pt")
-    if args.coordinates == None:
-        raise "Cannot generate an image"
-    else:
-        print(generator.generateImage(args.coordinates))
+    # generator.saveModel("savedModels/Epochs-50-Fashion.pt")
+    generator.generateImage([0.000000, 0.000, 0.00])
+    time.sleep(1)
+    generator.generateImage([0.0055000, 0.000, 0.00])
+    time.sleep(1)
+    generator.generateImage([6.000000, 2.000, 2.00])
+    time.sleep(1)
+    generator.generateImage([0.000000, 0.440, 0.3450])
+    time.sleep(1)
+    generator.generateImage([0.89600, 0.000, 0.00])
+    # print("hello")
     # print(generator.test_loader)
     # generator.model.encode()
