@@ -28,8 +28,9 @@ async function bootstrap() {
       protoPath: join(__dirname, '../src/model/model.proto'),
       url: '127.0.0.1:3001', 
     },
-  });   
+  });  
   
+
   await app.startAllMicroservicesAsync();                                
   await app.listen(3000);
 }
