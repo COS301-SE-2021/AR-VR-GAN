@@ -7,13 +7,11 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./coords.component.css']
 })
 export class CoordsComponent implements OnInit {
-  public response: any;
   public image: any;
-  constructor(private http: HttpClient) { 
-  }
 
-  ngOnInit(): void {
-  }
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {}
 
   postCoords(x: string, y: string, z: string) {
     var xN: number = +x;
@@ -22,13 +20,6 @@ export class CoordsComponent implements OnInit {
     var data = [
       xN, yN, zN
     ];
-
-    
-    //fetching sum of coordinates
-    this.http.post<any>('http://localhost:3000/model/testGRPC', { data: data}).subscribe(resp => {
-      this.response = resp.sum;
-    })
-
 
     //fetching an image from the server based on coordinates
     //const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -45,14 +36,6 @@ export class CoordsComponent implements OnInit {
       xN, yN, zN
     ];
 
-    
-    //fetching sum of coordinates
-    this.http.post<any>('http://localhost:3000/model/testGRPC', { data: data}).subscribe(resp => {
-
-      this.response = resp.sum;
-    })
-
-
     //fetching an image from the server based on coordinates
     //const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.http.post('http://localhost:3000/upload/getImageFromCoordinates', { data: data }, { responseType: 'blob'}).subscribe(resp => {
@@ -62,6 +45,7 @@ export class CoordsComponent implements OnInit {
 
   createImageFromBlob(blob: Blob) {
     let reader = new FileReader();
+    
     reader.addEventListener("load", () => {
         this.image = reader.result;
    }, false);
@@ -72,10 +56,6 @@ export class CoordsComponent implements OnInit {
   }
 
   trackCoords(event: MouseEvent){
-    console.log(event.clientX + " " + event.clientY);
-
     this.postNumber(event.clientX, event.clientY);
-
   }
-
 }

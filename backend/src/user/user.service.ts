@@ -192,6 +192,32 @@ export class UserService {
     }
 
     /**
+     * This function returns the user with the given JWTToken.
+     * 
+     * @param jwtToken 
+     * @returns 
+     */
+    async getUserByJWTToken(jwtToken: string): Promise<GetUserByUsernameResponse> {
+        if (jwtToken == null) {
+            return new GetUserByUsernameResponse(false, 'Please provide a valid JWTToken.', null);
+        }
+
+        if (jwtToken.length < 1) {
+            return new GetUserByUsernameResponse(false, 'Please provide a valid JWTToken.', null);
+        }
+
+        const userWithJWTToken = await this.userModel.findOne(
+            { jwtToken : jwtToken }
+        );
+
+        if (userWithJWTToken == null) {
+            return new GetUserByUsernameResponse(false, 'This JWTToken does not exist.', null);
+        }
+
+        return new GetUserByUsernameResponse(true, 'The required user is attatched.', userWithJWTToken);
+    }
+
+    /**
      * Remove a user with a given username provided that the user requesting the action is an admin user.
      * 
      * @param jwtToken 

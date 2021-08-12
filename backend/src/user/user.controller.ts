@@ -8,6 +8,7 @@ import { GetAllUsersDto, GetAllUsersResponse } from './dto/get-all-users.dto';
 import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
 import { GetUserByUsernameResponse } from './dto/get-user-by-username.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
+import { GetUserByJWTTokenDto } from './dto/get-user-by-jwtToken.dto';
 
 @Controller('user')
 export class UserController {
@@ -71,5 +72,10 @@ export class UserController {
     @Post('/updateUserWithUsername')
     updateUserWithUsername(@Body() updateUserByUsername: UpdateUserByUsernameDto): Promise<UserResponse> {
         return this.userService.updateUserWithUsername(updateUserByUsername);
+    }
+
+    @Post('/getUserByJWTToken')
+    getUserByJWTToken(@Body() getUserByJWTTokenDto: GetUserByJWTTokenDto): Promise<GetUserByUsernameResponse> {
+        return this.userService.getUserByJWTToken(getUserByJWTTokenDto.jwtToken);
     }
 }
