@@ -8,6 +8,8 @@ import { Observable,Subject } from 'rxjs';
 import { join } from 'path';
 import * as fs from 'fs';
 
+
+
 @Controller('model')
 export class ModelController {
     constructor(private modelService: ModelService) {}
@@ -96,12 +98,28 @@ export class ModelController {
     }
 
     /**
-     * handles the post requests to call the pytho scripts
-     * @param request 
+     * handles the streaming of coordinates to a python script using grpc
+     * @param messages 
      * @returns 
      */
-    // @Post('testPython')
-    // testPython(@Body() request: Request): ResponsePython {
-    //     return  this.runPython(request);
-    // }
+        @GrpcStreamMethod('ModelController', 'Proxy')
+        proxy(messages: Observable<Request>): Observable<ResponsePython> {
+             const subject = new Subject<Response>();
+     
+             const onNext =(message: Request) => {
+                 subject.next({
+                     data: this.modelService.proxy(message)
+                 });
+             };
+     
+             const onComplete = () => subject.complete();
+     
+             messages.subscribe({
+                 next: onNext,
+                 complete: onComplete,
+             });
+     
+             return subject.asObservable();
+         }
+
 }
