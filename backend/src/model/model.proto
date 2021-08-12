@@ -5,6 +5,7 @@ package model;
 service ModelController {
     rpc HandleCoords(stream RequestDto) returns (stream ResponseDto) {}
     rpc RunPython(stream RequestDto) returns (stream ResponsePythonDTO) {}
+    rpc Proxy(stream RequestDto) returns (stream ResponsePythonDTO){}
 }
 
 message RequestDto {
