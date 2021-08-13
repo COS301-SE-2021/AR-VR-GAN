@@ -342,7 +342,7 @@ class ModelGenerator:
                     f = image.read()
                     b = bytearray(f)
 
-                # os.remove(filepath)
+                os.remove(filepath)
                 return list(b)
 
     def clearModel(self) -> None:
