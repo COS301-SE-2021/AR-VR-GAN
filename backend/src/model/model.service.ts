@@ -97,6 +97,8 @@ export class ModelService {
     //  * @param request 
     //  * @returns 
     //  */
+
+    /*
     public async runPython(request: Request): Promise<string> {
 
         var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
@@ -115,7 +117,7 @@ export class ModelService {
         }
         return await getImage();
 
-    }
+    }*/
 
     /**
      * acts as a client to the python grpc server to retrieve the image byte array
