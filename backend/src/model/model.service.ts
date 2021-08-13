@@ -97,25 +97,25 @@ export class ModelService {
     //  * @param request 
     //  * @returns 
     //  */
-    // public async runPython(request: Request): Promise<string> {
+    public async runPython(request: Request): Promise<string> {
 
-    //     var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
-    //     var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
+        var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
+        var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
 
-    //     var commaSplitList = request.data.toString().split(',');
-    //     var coord1 = parseFloat(commaSplitList[0]);
-    //     var coord2 = parseFloat(commaSplitList[1]);
-    //     var coord3 = parseFloat(commaSplitList[2]);
+        var commaSplitList = request.data.toString().split(',');
+        var coord1 = parseFloat(commaSplitList[0]);
+        var coord2 = parseFloat(commaSplitList[1]);
+        var coord3 = parseFloat(commaSplitList[2]);
 
-    //     const util = require('util');
-    //     const execFile = util.promisify(require('child_process').execFile);
-    //     async function getImage(){
-    //         const { stdout } = await execFile('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
-    //         return stdout;
-    //     }
-    //     return await getImage();
+        const util = require('util');
+        const execFile = util.promisify(require('child_process').execFile);
+        async function getImage(){
+            const { stdout } = await execFile('python',["-W ignore",myPythonScriptPath,"--coordinates",coord1,coord2,coord3,"--model",myPythonModelPath]);
+            return stdout;
+        }
+        return await getImage();
 
-    // }
+    }
 
     /**
      * acts as a client to the python grpc server to retrieve the image byte array
