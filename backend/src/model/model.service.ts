@@ -1,13 +1,9 @@
 import { Injectable,Inject } from '@nestjs/common';
 import { Request } from './interfaces/request.interface';
 import { join } from 'path';
-import { ChildProcess } from 'child_process';
-
-import { Client, ClientGrpc } from '@nestjs/microservices';
-import { microserviceOptions } from './grpc.options';
+import { ClientGrpc } from '@nestjs/microservices';
 import { ModelGeneration,RequestProxy } from './grpc.interface';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
-import { toArray } from 'rxjs/operators';
+import { ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class ModelService {
@@ -122,15 +118,15 @@ export class ModelService {
     // }
 
     /**
-     * executes the python script and returns the data returned from the script -- spawnSync
-     * @param request 
-     * @returns 
+     * acts as a client to the python grpc server to retrieve the image byte array
+     * @param request the coordinates from the user to be send to the model
+     * @returns image byte array
      */
          public proxy(request: Request): Promise<any> {
-            const ids$ = new ReplaySubject<RequestProxy>();
-            ids$.next({ vector: request.data });
-            ids$.complete();
-            const stream =this.grpcService.generateImage(ids$.asObservable());
+            const subject = new ReplaySubject<RequestProxy>();
+            subject.next({ vector: request.data });
+            subject.complete();
+            const stream =this.grpcService.generateImage(subject.asObservable());
             return stream.toPromise();
         }
     
