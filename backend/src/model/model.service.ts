@@ -5,8 +5,9 @@ import { ChildProcess } from 'child_process';
 
 import { Client, ClientGrpc } from '@nestjs/microservices';
 import { microserviceOptions } from './grpc.options';
-import { ModelGeneration } from './grpc.interface';
-import { Observable, ReplaySubject } from 'rxjs';
+import { ModelGeneration,RequestProxy } from './grpc.interface';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { toArray } from 'rxjs/operators';
 
 @Injectable()
 export class ModelService {
@@ -15,7 +16,7 @@ export class ModelService {
     private grpcService: ModelGeneration;
 
     onModuleInit() {
-        this.grpcService = this.client.getService('ModelGeneration');
+        this.grpcService = this.client.getService<ModelGeneration>('ModelGeneration');
     }
 
     private num: string
@@ -120,17 +121,30 @@ export class ModelService {
 
     // }
     
+    // /**
+    //  * executes the python script and returns the data returned from the script -- spawnSync
+    //  * @param request 
+    //  * @returns 
+    //  */
+    //  public async proxy(request: Request): Promise<any> {
+    //     const req = new ReplaySubject<Request>();
+    //     req.next({data : request.data})
+    //     req.complete()
+    //     return  this.grpcService.generateImage(req).toPromise();
+    // }
+
     /**
      * executes the python script and returns the data returned from the script -- spawnSync
      * @param request 
      * @returns 
      */
-     public async proxy(request: Request): Promise<any> {
-        const req = new ReplaySubject<Request>();
-        req.next({data : request.data})
-        req.complete()
-        return  this.grpcService.generateImage(req).toPromise();
-    }
+         public async proxy(request: Request): Promise<any> {
+            const ids$ = new ReplaySubject<RequestProxy>();
+            ids$.next({ vector: request.data });
+            ids$.complete();
+            const stream =await this.grpcService.generateImage(ids$.asObservable());
+            return stream.toPromise();
+        }
     
 
 }
