@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs';
 
 export interface ModelGeneration {
-  generateImage(Request: Observable<RequestDto>): Observable<any>;
+  generateImage(Request: Observable<RequestProxy>): Observable<any>;
 }
 
-interface RequestDto {
-  data: number[];
+export interface RequestProxy {
+  vector: number[];
 }
