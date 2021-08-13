@@ -120,29 +120,17 @@ export class ModelService {
     //     return await getImage();
 
     // }
-    
-    // /**
-    //  * executes the python script and returns the data returned from the script -- spawnSync
-    //  * @param request 
-    //  * @returns 
-    //  */
-    //  public async proxy(request: Request): Promise<any> {
-    //     const req = new ReplaySubject<Request>();
-    //     req.next({data : request.data})
-    //     req.complete()
-    //     return  this.grpcService.generateImage(req).toPromise();
-    // }
 
     /**
      * executes the python script and returns the data returned from the script -- spawnSync
      * @param request 
      * @returns 
      */
-         public async proxy(request: Request): Promise<any> {
+         public proxy(request: Request): Promise<any> {
             const ids$ = new ReplaySubject<RequestProxy>();
             ids$.next({ vector: request.data });
             ids$.complete();
-            const stream =await this.grpcService.generateImage(ids$.asObservable());
+            const stream =this.grpcService.generateImage(ids$.asObservable());
             return stream.toPromise();
         }
     

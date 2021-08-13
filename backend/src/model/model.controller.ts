@@ -107,7 +107,7 @@ export class ModelController {
              const subject = new Subject<Response>();
      
             const onNext =async (message: Request) => {
-                var data =await  this.modelService.proxy(message)
+                var data =await this.modelService.proxy(message)
                 subject.next({
                      data: data.image
                  });
