@@ -44,11 +44,11 @@ export class UploadController {
      @Post('getImageFromCoordinates')
      async getImageFromCoordinates(@Res() res: Response, @Body() requestBody: RequestBody) {
         var result = await this.modelService.proxy(requestBody);
-        fs.writeFileSync('./src/model/temp.png', result.image);
+        fs.writeFileSync('./src/upload/temp.png', result.image);
         let filename = 'temp.png';
 
         const options = {
-            root: './src/model',
+            root: './src/upload',
             dotfiles: 'deny',
             headers: {
             'x-timestamp': Date.now(),
