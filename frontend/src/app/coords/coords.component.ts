@@ -10,10 +10,12 @@ export class CoordsComponent implements OnInit {
   public image: any;
   private xMove: number;
   private yMove: number;
+  private busy: boolean;
 
   constructor(private http: HttpClient) {
     this.xMove = 0;
     this.yMove = 0;
+    this.busy = false;
   }
 
   ngOnInit(): void {}
@@ -27,8 +29,11 @@ export class CoordsComponent implements OnInit {
       xN, yN, zN
     ];
 
+    this.busy = true;
+
     this.http.post('http://localhost:3000/upload/getImageFromCoordinates', { data: data }, { responseType: 'blob'}).subscribe(resp => {
       this.createImageFromBlob(resp);
+      this.busy = false;
     })
   }
 
@@ -52,9 +57,11 @@ export class CoordsComponent implements OnInit {
     this.yMove += Math.abs(event.movementY);
 
     if (this.xMove + this.yMove > 20) {
-      this.postCoords(x.toString(), y.toString(), '0');
-      this.xMove = 0;
-      this.yMove = 0;
+      if (!this.busy) {
+        this.postCoords(x.toString(), y.toString(), '0');
+        this.xMove = 0;
+        this.yMove = 0;
+      }
     }
   }
 }
