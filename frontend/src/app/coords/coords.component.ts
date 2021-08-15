@@ -8,8 +8,13 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CoordsComponent implements OnInit {
   public image: any;
+  private xMove: number;
+  private yMove: number;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.xMove = 0;
+    this.yMove = 0;
+  }
 
   ngOnInit(): void {}
 
@@ -17,27 +22,11 @@ export class CoordsComponent implements OnInit {
     var xN: number = +x;
     var yN: number = +y;
     var zN: number = +z;
+    
     var data = [
       xN, yN, zN
     ];
 
-    //fetching an image from the server based on coordinates
-    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.post('http://localhost:3000/upload/getImageFromCoordinates', { data: data }, { responseType: 'blob'}).subscribe(resp => {
-      this.createImageFromBlob(resp);
-    })
-  }
-
-  postNumber(x: number, y: number) {
-    var xN: number = +x;
-    var yN: number = +y;
-    var zN: number = +0;
-    var data = [
-      xN, yN, zN
-    ];
-
-    //fetching an image from the server based on coordinates
-    //const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.http.post('http://localhost:3000/upload/getImageFromCoordinates', { data: data }, { responseType: 'blob'}).subscribe(resp => {
       this.createImageFromBlob(resp);
     })
@@ -55,7 +44,17 @@ export class CoordsComponent implements OnInit {
    }
   }
 
-  trackCoords(event: MouseEvent){
-    this.postNumber(event.clientX, event.clientY);
+  trackCoords(event: MouseEvent) {
+    var x = (event.offsetX - 150) / 150;
+    var y = (event.offsetY - 150) / 150;
+
+    this.xMove += Math.abs(event.movementX);
+    this.yMove += Math.abs(event.movementY);
+
+    if (this.xMove + this.yMove > 20) {
+      this.postCoords(x.toString(), y.toString(), '0');
+      this.xMove = 0;
+      this.yMove = 0;
+    }
   }
 }
