@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { model, Model } from 'mongoose';
 import { MockModelService } from './mocks/model.mock';
 import { ModelService } from './model.service';
 
