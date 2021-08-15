@@ -337,9 +337,12 @@ class ModelGenerator:
     def to_tensorflow(self, filepath: str, newName: str = "") -> None:
         trained_model = self.model
         path = os.path.abspath(".")
-        onnx_dir = path+"\\defaultModels\\tensorflow\onnx\\"
-        tfjs_dir = path+"\\defaultModels\\tensorflow\\tensorflowjs\\"
-        print(onnx_dir)
+
+        onnx_dir  = ""
+        tfjs_dir = ""
+        # onnx_dir = path+"\\defaultModels\\tensorflow\onnx\\"
+        # tfjs_dir = path+"\\defaultModels\\tensorflow\\tensorflowjs\\"
+        #print(onnx_dir)
         # input()
 
         # trained_model.load_state_dict(torch.load(filepath))
@@ -351,11 +354,12 @@ class ModelGenerator:
         if newName == "":
             timestamp = datetime.now().strftime("%d%m%Y%H%M%S")
             newName = "defaultModels/tensorflow/onnx/"+timestamp
+            newNameTensor = "defaultModels/tensorflow/tensorflowjs/"+timestamp
 
-        os.makedirs(onnx_dir+"/"+timestamp+newName+"/")
-        os.makedirs(tfjs_dir+"/"+timestamp+newName+"/")
-        onnx_dir = onnx_dir + timestamp + newName + ".onnx"
-        tfjs_dir = tfjs_dir + timestamp + newName
+        # os.makedirs(onnx_dir+"/"+timestamp+newName+"/")
+        # os.makedirs(tfjs_dir+"/"+timestamp+newName+"/")
+        onnx_dir = newName + ".onnx"
+        tfjs_dir = newNameTensor
 
         torch.onnx.export(trained_model, dummy_input, onnx_dir)
 
