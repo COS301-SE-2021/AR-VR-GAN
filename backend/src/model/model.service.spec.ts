@@ -30,4 +30,8 @@ describe('ModelService', () => {
 
     expect(MockModelService.handleCoords(dto)).toEqual(sum);
   });
+
+  it('should run python', () => {
+    //expect().toEqual;
+  });
 });
