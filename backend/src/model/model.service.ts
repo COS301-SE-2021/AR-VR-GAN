@@ -4,6 +4,7 @@ import { join } from 'path';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ModelGeneration,RequestProxy } from './grpc.interface';
 import { ReplaySubject} from 'rxjs';
+import * as tf from "@tensorflow/tfjs"
 
 @Injectable()
 export class ModelService {
@@ -117,18 +118,49 @@ export class ModelService {
 
     // }
 
+    // /**
+    //  * acts as a client to the python grpc server to retrieve the image byte array
+    //  * @param request the coordinates from the user to be send to the model
+    //  * @returns image byte array
+    //  */
+    //     public proxy(request: Request): Promise<any> {
+    //     const subject = new ReplaySubject<RequestProxy>();
+    //     subject.next({ vector: request.data });
+    //     subject.complete();
+    //     const stream =this.grpcService.generateImage(subject.asObservable());
+    //     return stream.toPromise();
+    // }
+
+
     /**
      * acts as a client to the python grpc server to retrieve the image byte array
      * @param request the coordinates from the user to be send to the model
      * @returns image byte array
      */
-         public proxy(request: Request): Promise<any> {
-            const subject = new ReplaySubject<RequestProxy>();
-            subject.next({ vector: request.data });
-            subject.complete();
-            const stream =this.grpcService.generateImage(subject.asObservable());
-            return stream.toPromise();
-        }
+        public async proxy(request: Request): Promise<any> {
+            console.log("here")
+            var path = join(__dirname, '../../../generativeModelFiles/defaultModels/tensorflow/tensorflowjs/15082021121920/model.json');
+            path = "file://" + path;
+            require('@tensorflow/tfjs-node');
+
+            (async () => {
+                try
+                {
+                    const model = await tf.loadLayersModel(path);
+                }
+                catch(error)
+                {
+                    console.error(error);
+                }
+            })();
+            // console.log("here1")
+            // const t = tf.tensor([1.0, 1.0, 5.0]);
+            // console.log("here2")
+            // const o = tf.layers.activation({activation: 'relu'}).apply(t);
+            // console.log("here3")
+            // console.log(o)
+        return path
+    }
     
 
 }
