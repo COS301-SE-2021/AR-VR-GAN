@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { model, Model } from 'mongoose';
+import { MockModelService } from './mocks/model.mock';
 import { ModelService } from './model.service';
 
 describe('ModelService', () => {
@@ -6,17 +8,20 @@ describe('ModelService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ModelService],
+      providers: [ModelService, {
+        provide: ModelService,
+        useValue: {MockModelService}
+      }],
     }).compile();
 
     service = module.get<ModelService>(ModelService);
   });
 
-  it('Should be defined', () => {
+  it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('Should sum up the data', () => {
+  it('should sum up the data', () => {
     const dto = { data : [1,2,3] }
     let sum = 0;
 
