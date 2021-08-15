@@ -3,6 +3,7 @@
 /node_modules
 /src/config
 /uploads
+/src/upload/temp.png
 
 # Logs
 logs
