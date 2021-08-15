@@ -12,11 +12,11 @@ describe('ModelService', () => {
     service = module.get<ModelService>(ModelService);
   });
 
-  it('should be defined', () => {
+  it('Should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  it('should sum up the data', () => {
+  it('Should sum up the data', () => {
     const dto = { data : [1,2,3] }
     let sum = 0;
 
