@@ -1,3 +1,4 @@
+import os
 from modelExceptions import ModelException
 from VAEModel import VAE
 from modelGenerator import ModelGenerator
@@ -24,9 +25,11 @@ class TestModelGenerator(unittest.TestCase):
         self.assertEqual("defaultModels/Epochs-50.pt",self.generator.loadModel("defaultModels/Epochs-100.pt"))
 
     def test_save_model(self):
-        self.assertTrue(self.generator.saveModel())
-        self.assertTrue(self.generator.saveModel("testing/savedModels/testModel.pt"))
-        self.assertTrue(self.generator.saveModel("testing/savedModels/testModel.pt"))
+        pathTo = self.generator.saveModel()
+        self.assertTrue(os.path.exists(pathTo))
+        self.assertEqual("testing/savedModels/testModel.pt", self.generator.saveModel("testing/savedModels/testModel.pt"))
+        pathTo = self.generator.saveModel("testing/savedModels/testModel.pt")
+        self.assertTrue(os.path.exists(pathTo))
 
     def test_image_generation(self):
         self.generator.loadModel("defaultModels/Epochs-100.pt")
