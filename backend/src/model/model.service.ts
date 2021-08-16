@@ -124,7 +124,7 @@ export class ModelService {
      * @param request the coordinates from the user to be send to the model
      * @returns image byte array
      */
-         public proxy(request: Request): Promise<any> {
+        public proxy(request: Request): Promise<any> {
             const subject = new ReplaySubject<RequestProxy>();
             subject.next({ vector: request.data });
             subject.complete();
