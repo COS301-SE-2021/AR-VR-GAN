@@ -20,7 +20,8 @@ class TestModelGenerator(unittest.TestCase):
             self.generator.loadModel("VAEModel.py")
         self.assertEqual(exceptionTwo.exception.message, "File needs to be a pytorch file")
         
-        self.assertTrue(self.generator.loadModel("defaultModels/Epochs-100.pt"))
+        self.assertEqual("defaultModels/Epochs-50.pt" ,self.generator.loadModel())
+        self.assertEqual("defaultModels/Epochs-50.pt",self.generator.loadModel("defaultModels/Epochs-100.pt"))
 
     def test_save_model(self):
         self.assertTrue(self.generator.saveModel())

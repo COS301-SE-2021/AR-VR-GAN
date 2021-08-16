@@ -105,12 +105,12 @@ class ModelGenerator:
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         self.train_loader = torch.utils.data.DataLoader(
-            datasets.FashionMNIST('../data', train=True, download=True,
+            datasets.MNIST('../data', train=True, download=True,
                         transform=transforms.ToTensor()),
             batch_size= self.args.batch_size, shuffle=True, **kwargs)
 
         self.test_loader = torch.utils.data.DataLoader(
-            datasets.FashionMNIST('../data', train=False, transform=transforms.ToTensor()),
+            datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
             batch_size=self.args.batch_size, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
@@ -249,6 +249,7 @@ class ModelGenerator:
             if the file path is not a pytorch file.
         """
         if filepath == "":
+            filepath = "defaultModels/Epochs-50.pt"
             self.model = torch.load("defaultModels/Epochs-50.pt")
             print("Default VAE Model loaded")
             return filepath
@@ -364,18 +365,18 @@ class ModelGenerator:
 
 if __name__ == "__main__":
     generator = ModelGenerator()
-    generator.loadModel("defaultModels/Epochs-50-Fashion.pt")
-    # generator.train_model(50)
-    # generator.saveModel("savedModels/Epochs-50-Fashion.pt")
-    generator.generateImage([0.000000, 0.000, 0.00])
-    time.sleep(1)
-    generator.generateImage([0.0055000, 0.000, 0.00])
-    time.sleep(1)
-    generator.generateImage([6.000000, 2.000, 2.00])
-    time.sleep(1)
-    generator.generateImage([0.000000, 0.440, 0.3450])
-    time.sleep(1)
-    generator.generateImage([0.89600, 0.000, 0.00])
+    # generator.loadModel("defaultModels/Epochs-50-Fashion.pt")
+    generator.train_model(100)
+    generator.saveModel("savedModels/Epochs-100.pt")
+    # generator.generateImage([0.000000, 0.000, 0.00])
+    # time.sleep(1)
+    # generator.generateImage([0.0055000, 0.000, 0.00])
+    # time.sleep(1)
+    # generator.generateImage([6.000000, 2.000, 2.00])
+    # time.sleep(1)
+    # generator.generateImage([0.000000, 0.440, 0.3450])
+    # time.sleep(1)
+    # generator.generateImage([0.89600, 0.000, 0.00])
     # print("hello")
     # print(generator.test_loader)
     # generator.model.encode()
