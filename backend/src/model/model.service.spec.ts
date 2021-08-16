@@ -32,6 +32,6 @@ describe('ModelService', () => {
   });
 
   it('should run python', () => {
-    expect(service.runPython).toBeCalled;
+    expect(service.runPython).toBe;
   });
 });
