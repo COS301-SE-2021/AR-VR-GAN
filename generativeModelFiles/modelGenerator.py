@@ -293,12 +293,12 @@ class ModelGenerator:
                 modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
                 print(filepath, " already exists!")
                 torch.save(self.model, modelPath)
-                print("Model saved as savedModels/VAE-MODEL-"+modelPath)
+                print("Model saved as "+modelPath)
 
-                return ("savedModels/VAE-MODEL-"+modelPath)
+                return (modelPath)
             else:
                 torch.save(self.model, filepath)
-                print("Model saved as" + filepath)
+                print("Model saved as " + filepath)
                 return filepath
     
     def generateImage(self, vector: list, filepath: str="") -> list:
@@ -330,8 +330,6 @@ class ModelGenerator:
                     raise ModelException("Input vector not the same size as model's vector")
 
                 sample = torch.tensor([vector]).to(self.device)
-                # print(sample)
-                # print(sample.size())
                 sample = self.model.decode(sample).cpu() 
                 save_image(sample.view(1, 1, 28, 28), filepath)
                 image = Image.open(filepath)
@@ -343,7 +341,7 @@ class ModelGenerator:
                     f = image.read()
                     b = bytearray(f)
 
-                # os.remove(filepath)
+                os.remove(filepath)
                 return list(b)
 
     def clearModel(self) -> None:
