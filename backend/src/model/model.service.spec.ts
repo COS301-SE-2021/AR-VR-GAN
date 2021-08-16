@@ -32,6 +32,6 @@ describe('ModelService', () => {
   });
 
   it('should run python', () => {
-    //expect().toEqual;
+    expect(service.runPython).toBeCalled;
   });
 });
