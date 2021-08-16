@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CoordsComponent } from './coords.component';
@@ -8,7 +9,8 @@ describe('CoordsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CoordsComponent ]
+      declarations: [ CoordsComponent ],
+      imports: [ HttpClientModule ]
     })
     .compileComponents();
   });
