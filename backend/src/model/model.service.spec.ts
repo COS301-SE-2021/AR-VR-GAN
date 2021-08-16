@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { MockModelService } from './mocks/model.mock';
 import { ModelService } from './model.service';
 
 describe('ModelService', () => {
@@ -6,7 +7,10 @@ describe('ModelService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ModelService],
+      providers: [ModelService, {
+        provide: ModelService,
+        useValue: {MockModelService}
+      }],
     }).compile();
 
     service = module.get<ModelService>(ModelService);
@@ -16,7 +20,7 @@ describe('ModelService', () => {
     expect(service).toBeDefined();
   });
 
-  it('should sum up the data', () => {
+  it('should sum up the data', async() => {
     const dto = { data : [1,2,3] }
     let sum = 0;
 
@@ -24,6 +28,10 @@ describe('ModelService', () => {
         sum += dto.data[i]
     }
 
-    expect(service.handleCoords(dto)).toEqual(sum);
+    expect(MockModelService.handleCoords(dto)).toEqual(sum);
+  });
+
+  it('should run python', () => {
+    //expect().toEqual;
   });
 });
