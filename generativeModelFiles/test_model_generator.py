@@ -1,6 +1,5 @@
 import os, shutil
 from modelExceptions import ModelException
-from VAEModel import VAE
 from modelGenerator import ModelGenerator
 import unittest
 

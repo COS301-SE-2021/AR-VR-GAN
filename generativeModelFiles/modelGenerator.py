@@ -2,15 +2,13 @@ from __future__ import print_function
 import argparse
 import torch
 import torch.utils.data
-from torch import nn, optim
+from torch import optim
 from torch.nn import functional as F
-from torch.utils.data import sampler
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
 import os
 from datetime import datetime
-import time
 from PIL import Image
 from modelExceptions import ModelException
 
@@ -62,7 +60,6 @@ class ModelGenerator:
         Loads a new dataset to train the model on 
 
     """
-    # TODO: Create detailed comments
     # TODO: Handle edge cases in function i.e when a model is not loaded raise an exception
     # TODO: Create a throughout main i.e one that handles executes all the functions 
     # TODO: Adjust test files so that it can handle file changes made 
@@ -102,7 +99,6 @@ class ModelGenerator:
     # Reconstruction + KL divergence losses summed over all elements and batch
     def loss_function(self,recon_x, x, mu, logvar) -> float:
         BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
-
         # see Appendix B from VAE paper:
         # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
         # https://arxiv.org/abs/1312.6114
@@ -328,7 +324,7 @@ class ModelGenerator:
         self.latent_size = latent_size
 
     def loadDataset(self) -> None:
-        # @TODO Complete this function but first create dataset loader class
+        # TODO Complete this function but first create dataset loader class
         #       and related variables that need to created in this class.
         """Loads a new dataset to train the model on 
         """
