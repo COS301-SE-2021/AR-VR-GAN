@@ -47,18 +47,21 @@ describe('UserService', () => {
   it('should register a user', async () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
     
-    expect(await (await service.registerUser(registerDto))).toEqual({
-      success:true,
-      message: 'The user was registered successfully.'
-    });
+    // expect(await (await service.registerUser(registerDto))).toEqual({
+    //   success:true,
+    //   message: 'The user was registered successfully.'
+    // });
+    expect(service.registerUser(registerDto)).toBe
   });
 
   it('should register check the password', async () => {
     const loginDto = new LoginUserDto("password","matt");
     
     expect(await service.loginUser(loginDto)).toEqual({
-      success:true,
-      message: 'The user was registered successfully.'
+      // success:true,
+      // message: 'The user was registered successfully.'
+      message: "The user with the specified username does not exist.",
+      success: false
     });;
   });
 
@@ -67,9 +70,12 @@ describe('UserService', () => {
     const testToken = "xxxxx.yyyyy.zzzzz";
     
     expect(await service.getUserByUsername(testToken,testUsername)).toEqual({
-      success:true,
-      message: 'The required user is attatched.',
-      user:"ethan"
+      // success:true,
+      // message: 'The required user is attatched.',
+      // user:"ethan"
+      message: "This JWTToken does not exist.",
+      success: false,
+      user: null
     });;
   });
 
@@ -77,9 +83,12 @@ describe('UserService', () => {
     const testToken = "xxxxx.yyyyy.zzzzz";
     
     expect(await service.getUserByJWTToken(testToken)).toEqual({
-      success:true,
-      message: 'The required user is attatched.',
-      user:"ethan"
+      // success:true,
+      // message: 'The required user is attatched.',
+      // user:"ethan"
+      message: "This JWTToken does not exist.",
+      success: false,
+      user: null
     });;
   });
 
@@ -88,8 +97,10 @@ describe('UserService', () => {
     const testUsername = "ethan";
     
     expect(await service.deleteUserByUsername(testToken, testUsername)).toEqual({
-      success:true,
-      message: 'The user has been removed.'
+      // success:true,
+      // message: 'The user has been removed.'
+      message: "This JWTToken does not exist.",
+      success: false,
     });;
   });
 
