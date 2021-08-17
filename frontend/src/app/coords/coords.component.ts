@@ -16,6 +16,7 @@ export class CoordsComponent implements OnInit {
     this.xMove = 0;
     this.yMove = 0;
     this.busy = false;
+    this.postCoords('0', '0', '0');
   }
 
   ngOnInit(): void {}
