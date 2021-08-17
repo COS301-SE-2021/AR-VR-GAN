@@ -4,12 +4,19 @@ import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 
 import {ModelController} from '../src/model/model.controller';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import * as ProtoLoader from '@grpc/proto-loader';
 import * as GRPC from '@grpc/grpc-js';
 import { ModelService } from '../src/model/model.service';
 import { Response } from '../src/model/interfaces/response.interface'
+import { fail } from 'assert';
+//import { expect } from 'chai';
+import { readFileSync } from 'fs';
+import { UploadController } from '../src/upload/upload.controller';
+import { UploadService } from '../src/upload/upload.service';
+import { UploadModule } from '../src/upload/upload.module';
+import { Observable } from 'rxjs';
 
 // describe('AppController (e2e)', () => {
 //   let app: INestApplication;
@@ -38,8 +45,8 @@ describe('GRPC transport', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      controllers: [ModelController],
-      providers: [ModelService],
+      controllers: [ModelController,UploadController],
+      providers: [ModelService,UploadService],
       imports: [
         ClientsModule.register([
           {
@@ -84,13 +91,21 @@ describe('GRPC transport', () => {
     );
   });
 
+  it('should be defined', () => {    
+    expect(app).toBeDefined();
+  })
+
   it('GRPC Sending and receiving Stream from RX handler', async () => {
     const dto = {data:[1,2,3]}
     const callHandler = client.handleCoords(dto);
 
+    var sum = 0;
+    for (let i = 0; i < dto.data.length; i++) {
+      sum += dto.data[i]
+    }
+
     callHandler.on('data', (msg: Response) => {
-      console.log(msg)
-      expect(msg).toEqual({ data: 6 });
+      expect(msg.data).toEqual(sum);
       callHandler.cancel();
     });
 
@@ -102,11 +117,59 @@ describe('GRPC transport', () => {
       }
     });
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve,reject) => {
       callHandler.write(dto);
-      setTimeout(() => resolve, 1000);
+      setTimeout(() => resolve(callHandler), 1000);
     });
   });
+  afterEach(async () => {
+    await app.close();
+  });
+
+});
+
+describe('E2E FileTest', () => {
+  let app: INestApplication;
+  let client: ClientProxy;
+
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      controllers: [UploadController],
+      providers: [UploadService],
+      imports: [
+        UploadModule,
+        ClientsModule.register([
+          { name: 'UploadService', 
+            transport: Transport.TCP,
+            options:{
+              port: 3000 }
+          }
+        ]),
+      ],
+    }).compile();
+
+    app = moduleRef.createNestApplication();
+
+    app.connectMicroservice({
+      transport: Transport.TCP,
+    });
+
+    await app.startAllMicroservicesAsync();
+    await app.init();
+
+    app.enableCors();
+
+    client = app.get('UploadService');
+    await client.connect();
+  });
+
+  it('server runs for TCP connection', () => {    
+    expect(app).toBeDefined();
+  })
+
+  it('TCP connection success', () => {    
+    expect(client).toBeDefined();
+  })
 
   afterEach(async () => {
     await app.close();
