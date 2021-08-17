@@ -83,4 +83,14 @@ describe('UserService', () => {
     });;
   });
 
+  it('should delete a user bu username', async () => {
+    const testToken = "xxxxx.yyyyy.zzzzz";
+    const testUsername = "ethan";
+    
+    expect(await service.deleteUserByUsername(testToken, testUsername)).toEqual({
+      success:true,
+      message: 'The user has been removed.'
+    });;
+  });
+
 });
