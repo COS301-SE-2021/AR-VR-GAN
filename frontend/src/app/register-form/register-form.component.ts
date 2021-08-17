@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
@@ -9,13 +10,13 @@ import { Component, OnInit } from '@angular/core';
 export class RegisterFormComponent implements OnInit {
   public message: string | undefined;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   login(): void {
-    window.location.replace('http://localhost:4200/login');
+    this.router.navigate(['/login']);
   }
 
   register(username: string, email: string, password: string): void {
@@ -42,7 +43,7 @@ export class RegisterFormComponent implements OnInit {
         this.message = resp.message;
       
         if (resp.success) {
-          window.location.replace('http://localhost:4200/login');
+          this.router.navigate(['/login']);
         }
       });
     }
