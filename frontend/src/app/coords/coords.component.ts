@@ -65,12 +65,14 @@ export class CoordsComponent implements OnInit {
     this.xMove += Math.abs(event.movementX);
     this.yMove += Math.abs(event.movementY);
 
-    if (this.xMove + this.yMove > 20) {
-      if (!this.busy) {
-        this.postCoords(x, y, 0);
-        this.xMove = 0;
-        this.yMove = 0;
-      }
+    if ((this.xMove + this.yMove > 20) && (!this.busy)) {
+      this.postCoords(x, y, 0);
+      this.xMove = 0;
+      this.yMove = 0;
+
+      this.x = +x.toFixed(2);
+      this.y = +y.toFixed(2);
+      this.z = 0;
     }
   }
 }
