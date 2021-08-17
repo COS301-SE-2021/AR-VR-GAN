@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ModelController } from './model.controller';
 import { MockModelService } from './mocks/model.mock';
+import { Request } from './interfaces/request.interface';
 import { ModelService } from './model.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 
 describe('ModelController', () => {
   let controller: ModelController;
@@ -32,25 +33,12 @@ describe('ModelController', () => {
   // });
 
   it('should be proxied', () => {
-    const mockFn = jest.fn(controller.proxy);
-    const subject = new Subject<Response>();
-    // Observable<Request> messages = null;
-     
-            const onNext =async (message: Request) => {
-                var data =await MockModelService.proxy(message)
-                // subject.next({
-                //      data: data.image
-                //  });
-             };
-     
-             const onComplete = () => subject.complete();
-     
-            //  messages.subscribe({
-            //      next: onNext,
-            //      complete: onComplete,
-            //  });
-     
-    expect(controller.proxy).toBe;
+    const subject = new ReplaySubject<Request>();
+    subject.next({ data: [1,2,3] });
+    subject.complete();
+    controller.proxy(subject).subscribe(
+      res => res.data.toEqual(6)
+    );
   });
 
 });
