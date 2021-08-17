@@ -7,26 +7,31 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./coords.component.css']
 })
 export class CoordsComponent implements OnInit {
-  public image: any;
   private xMove: number;
   private yMove: number;
   private busy: boolean;
+  public image: any;
+  public x: number;
+  public y: number;
+  public z: number;
 
   constructor(private http: HttpClient) {
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+
     this.xMove = 0;
     this.yMove = 0;
     this.busy = false;
+
+    this.postCoords(this.x, this.y, this.z);
   }
 
   ngOnInit(): void {}
 
-  postCoords(x: string, y: string, z: string) {
-    var xN: number = +x;
-    var yN: number = +y;
-    var zN: number = +z;
-    
+  postCoords(x: number, y: number, z: number) {
     var data = [
-      xN, yN, zN
+      x, y, z
     ];
 
     this.busy = true;
@@ -53,15 +58,21 @@ export class CoordsComponent implements OnInit {
     var x = (event.offsetX - 150) / 150;
     var y = (event.offsetY - 150) / 150;
 
+    this.x = +x.toFixed(2);
+    this.y = +y.toFixed(2);
+    this.z = 0;
+
     this.xMove += Math.abs(event.movementX);
     this.yMove += Math.abs(event.movementY);
 
-    if (this.xMove + this.yMove > 20) {
-      if (!this.busy) {
-        this.postCoords(x.toString(), y.toString(), '0');
-        this.xMove = 0;
-        this.yMove = 0;
-      }
+    if ((this.xMove + this.yMove > 20) && (!this.busy)) {
+      this.postCoords(x, y, 0);
+      this.xMove = 0;
+      this.yMove = 0;
+
+      this.x = +x.toFixed(2);
+      this.y = +y.toFixed(2);
+      this.z = 0;
     }
   }
 }
