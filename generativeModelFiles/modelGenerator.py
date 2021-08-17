@@ -62,41 +62,23 @@ class ModelGenerator:
         Loads a new dataset to train the model on 
 
     """
-    # TODO: Remove unessecarry code
     # TODO: Create detailed comments
-    # TODO: Handel edge cases in function i.e when a model is not loaded raise an exception
+    # TODO: Handle edge cases in function i.e when a model is not loaded raise an exception
     # TODO: Create a throughout main i.e one that handles executes all the functions 
     # TODO: Adjust test files so that it can handle file changes made 
     def __init__(self) -> None:
-
-        # This section dealt with taking in default arguements in the orginal VAE MNIST Example
-        # This section is unecessary for AR-VR-GAN, we just have to replace the arguement values
-        # in the appropriate places.
-        self.parser = argparse.ArgumentParser(description='VAE MNIST Example')
-        self.parser.add_argument('--batch-size', type=int, default=128, metavar='N',
-                            help='input batch size for training (default: 128)')
-        self.parser.add_argument('--epochs', type=int, default=10, metavar='N',
-                            help='number of epochs to train (default: 10)')
-        self.parser.add_argument('--no-cuda', action='store_true', default=False,
-                            help='disables CUDA training')
-        self.parser.add_argument('--seed', type=int, default=1, metavar='S',
-                            help='random seed (default: 1)')
-        self.parser.add_argument('--log-interval', type=int, default=10, metavar='N',
-                            help='how many batches to wait before logging training status')
-        self.args = self.parser.parse_args()
-        self.args.cuda = not self.args.no_cuda and torch.cuda.is_available()
-
         # Sets the seed for generating random numbers. Returns a torch.Generator object.
-        torch.manual_seed(self.args.seed)
+        torch.manual_seed(1)
 
         # A torch.device is an object representing the device on which a torch.
         # Tensor is or will be allocated. The torch.device contains a device type ('cpu' or 'cuda')
         # and optional device ordinal for the device type. If the device ordinal is not present, 
         # this object will always represent the current device for the device type, 
         # even after torch.cuda.set_device() is called.
-        self.device = torch.device("cuda" if self.args.cuda else "cpu")
+        self.cuda = torch.cuda.is_available()
+        self.device = torch.device("cuda" if self.cuda else "cpu")
 
-        kwargs = {'num_workers': 1, 'pin_memory': True} if self.args.cuda else {}
+        kwargs = {'num_workers': 1, 'pin_memory': True} if self.cuda else {}
 
         # Loads the MNIST dataset 
         # You can change from MNIST to any other torch dataset by changing
@@ -105,16 +87,15 @@ class ModelGenerator:
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         self.train_loader = torch.utils.data.DataLoader(
-            datasets.FashionMNIST('../data', train=True, download=True,
+            datasets.MNIST('../data', train=True, download=True,
                         transform=transforms.ToTensor()),
-            batch_size= self.args.batch_size, shuffle=True, **kwargs)
+            batch_size= 128, shuffle=True, **kwargs)
 
         self.test_loader = torch.utils.data.DataLoader(
-            datasets.FashionMNIST('../data', train=False, transform=transforms.ToTensor()),
-            batch_size=self.args.batch_size, shuffle=True, **kwargs)
+            datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
+            batch_size=128, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
-        # self.model = None
         self.latent_size = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
@@ -148,12 +129,10 @@ class ModelGenerator:
 
     def train(self, epoch) -> None:
         """Trains the model on the set of images in train_loader
-
         Parameters
         ----------
         epoch : int
             The iteration the training is currently executing
-
         """
         self.model.train()
         train_loss = 0
@@ -167,16 +146,9 @@ class ModelGenerator:
         # From Medium https://medium.com/@o.kroeger/tensorflow-mnist-and-your-own-handwritten-digits-4d1cd32bbab4: 
         # All images are size normalized to fit in a 20x20 pixel box and there are centered in a 28x28 image using the center of mass.
         for batch_idx, (data, _) in enumerate(self.train_loader):
-            # print(f"Batch IDX TYPE: {type(batch_idx)}")
-            # print(f"Batch IDX: {batch_idx}")
-            # print(f"DATA TYPE: {type(data)}")
             # To view tensor in text file (Note returns a LARGE array of float values
             # which supposed to represent each pixel in an image )
             # numpy.savetxt('my_file.txt', data.numpy().reshape(4,-1))
-            # print(f"DATA: {data.size()}")
-            # print(f"Underscore TYPE: {type(_)}")
-            # print(f"Underscore: {_.size()}")
-
 
             # Converts `data` to a tensor with a specified dtype
             data = data.to(self.device)
@@ -192,21 +164,20 @@ class ModelGenerator:
             loss.backward()
             train_loss += loss.item()
             self.optimizer.step()
-            if batch_idx % self.args.log_interval == 0:
-                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, batch_idx * len(data), len(self.train_loader.dataset),
-                    100. * batch_idx / len(self.train_loader),
-                    loss.item() / len(data)))
+            # Displays training data
+            # if batch_idx % 10 == 0: # Change the 10 to the log_interval (self.args.log_interval)
+                # print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                #     epoch, batch_idx * len(data), len(self.train_loader.dataset),
+                #     100. * batch_idx / len(self.train_loader),
+                #     loss.item() / len(data)))
 
-        print('====> Epoch: {} Average loss: {:.4f}'.format(
-            epoch, train_loss / len(self.train_loader.dataset)))
+        # print('====> Epoch: {} Average loss: {:.4f}'.format(
+        #     epoch, train_loss / len(self.train_loader.dataset)))
 
     def test(self, epoch, generate = False) -> None:
         """Tests the accuracy of the model with the set of images in test_loader
-
         If generate is set to True then the function will produce a comparison image 
         comparing the test data compared the image by the model
-
         Parameters
         ----------
         epoch : int
@@ -214,6 +185,7 @@ class ModelGenerator:
         generate : bool, optional
             To decide whether or not to save an image displaying the comparison between the model and the actual results
         """
+        # Note to self change 128 to batch size and 28 to the pixels
         self.model.eval()
         test_loss = 0
         with torch.no_grad():
@@ -224,13 +196,13 @@ class ModelGenerator:
                 if i == 0:
                     n = min(data.size(0), 8)
                     comparison = torch.cat([data[:n],
-                                        recon_batch.view(self.args.batch_size, 1, 28, 28)[:n]])
+                                        recon_batch.view(128, 1, 28, 28)[:n]])# Batch size instead of 128
                     if generate == True:
                         save_image(comparison.cpu(),
                                 'test/reconstruction_' + str(epoch) + '.png', nrow=n)
 
         test_loss /= len(self.test_loader.dataset)
-        print('====> Test set loss: {:.4f}'.format(test_loss))
+        # print('====> Test set loss: {:.4f}'.format(test_loss))
 
     def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator
@@ -363,19 +335,17 @@ class ModelGenerator:
 
 
 if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser(description='Model Generator Model')
+    parser.add_argument('--latent-size', type=int, default=3, metavar='N',
+                        help='Determines the size latent size of the model to be trained')
+    parser.add_argument('--model', type=str, default="defaultModels/Epochs-50.pt", metavar='N',
+                        help='Choose the pre-saved model')
+    parser.add_argument('--coordinates', default=None, type=float, nargs='+',
+                        help='the latent vector to be used by the model to generate an image')
+    args = parser.parse_args()
+
     generator = ModelGenerator()
-    generator.loadModel("defaultModels/Epochs-50-Fashion.pt")
-    # generator.train_model(50)
-    # generator.saveModel("savedModels/Epochs-50-Fashion.pt")
-    generator.generateImage([0.000000, 0.000, 0.00])
-    time.sleep(1)
-    generator.generateImage([0.0055000, 0.000, 0.00])
-    time.sleep(1)
-    generator.generateImage([6.000000, 2.000, 2.00])
-    time.sleep(1)
-    generator.generateImage([0.000000, 0.440, 0.3450])
-    time.sleep(1)
-    generator.generateImage([0.89600, 0.000, 0.00])
-    # print("hello")
-    # print(generator.test_loader)
-    # generator.model.encode()
+    generator.loadModel(args.model)
+
+    # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
