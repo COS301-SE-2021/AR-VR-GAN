@@ -25,7 +25,6 @@ export class ModelService {
         for (let i = 0; i < request.data.length; i++) {
             sum += request.data[i]
         }
-        console.log(sum)
         return sum;
     }
 
