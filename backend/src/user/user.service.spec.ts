@@ -6,6 +6,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import config from '../config/keys';
+import { LoginUserDto } from './dto/login-user.dto';
 
 describe('UserService', () => {
   let service: UserService;
@@ -50,6 +51,15 @@ describe('UserService', () => {
       success:true,
       message: 'The user was registered successfully.'
     });
+  });
+
+  it('should register check the password', async () => {
+    const loginDto = new LoginUserDto("password","matt");
+    
+    expect(await service.loginUser(loginDto)).toEqual({
+      success:true,
+      message: 'The user was registered successfully.'
+    });;
   });
 
 });
