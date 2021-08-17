@@ -221,6 +221,7 @@ class ModelGenerator:
             if the file path is not a pytorch file.
         """
         if filepath == "":
+            filepath = "defaultModels/Epochs-50.pt"
             self.model = torch.load("defaultModels/Epochs-50.pt")
             print("Default VAE Model loaded")
             return filepath
@@ -264,9 +265,9 @@ class ModelGenerator:
                 modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
                 print(filepath, " already exists!")
                 torch.save(self.model, modelPath)
-                print("Model saved as savedModels/VAE-MODEL-"+modelPath)
+                print("Model saved as "+modelPath)
 
-                return ("savedModels/VAE-MODEL-"+modelPath)
+                return modelPath
             else:
                 torch.save(self.model, filepath)
                 print("Model saved as" + filepath)
