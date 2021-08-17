@@ -1,4 +1,4 @@
-import { Controller, Post, UseInterceptors, UploadedFile, Res, Body } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Res, Body, Get } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
@@ -25,6 +25,7 @@ export class UploadController {
         })
     )
     async uploadedFile(@UploadedFile() file: Express.Multer.File) {
+        console.log("here")
         const response = {
             original_filename: file.originalname,
             new_filename: file.filename,
@@ -54,4 +55,5 @@ export class UploadController {
     
         res.sendFile(filename, options)
     }
+
 }
