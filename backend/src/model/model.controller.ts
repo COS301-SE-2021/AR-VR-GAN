@@ -14,38 +14,13 @@ import * as fs from 'fs';
 export class ModelController {
     constructor(private modelService: ModelService) {}
 
-    // @GrpcStreamMethod()
-    // handleCoords(messages: Observable<Request>): Observable<Response> {
-    //     const subject = new Subject<Response>();
-
-    //     const onNext = (message: Request) => {
-    //         subject.next({
-    //             data: this.modelService.handleCoords(message)
-    //         });
-    //     };
-
-    //     const onComplete = () => subject.complete();
-
-    //     messages.subscribe({
-    //         next: onNext,
-    //         complete: onComplete,
-    //     });
-
-    //     return subject.asObservable();
-    // }
-
-    /**
-     * streaming the image back to the client
-     * @param messages 
-     * @returns 
-     */
     @GrpcStreamMethod()
     handleCoords(messages: Observable<Request>): Observable<Response> {
         const subject = new Subject<Response>();
-        const img = fs.readFileSync(join(__dirname, '../../uploads/capstone.jpg'));
+
         const onNext = (message: Request) => {
             subject.next({
-                data: img 
+                data: this.modelService.handleCoords(message)
             });
         };
 
@@ -58,6 +33,31 @@ export class ModelController {
 
         return subject.asObservable();
     }
+
+    // /**
+    //  * streaming the image back to the client
+    //  * @param messages 
+    //  * @returns 
+    //  */
+    // @GrpcStreamMethod()
+    // handleCoords(messages: Observable<Request>): Observable<Response> {
+    //     const subject = new Subject<Response>();
+    //     const img = fs.readFileSync(join(__dirname, '../../uploads/capstone.jpg'));
+    //     const onNext = (message: Request) => {
+    //         subject.next({
+    //             data: img 
+    //         });
+    //     };
+
+    //     const onComplete = () => subject.complete();
+
+    //     messages.subscribe({
+    //         next: onNext,
+    //         complete: onComplete,
+    //     });
+
+    //     return subject.asObservable();
+    // }
 
     /**
      * handles the grpc request to run the python script be calling the service
