@@ -7,7 +7,6 @@ generativeModelFiles/testing/images/*
 generativeModelFiles/testing/savedModels/*
 generativeModelFiles/savedImages/*.png
 generativeModelFiles/savedImages/*.jpg
-generativeModelFiles/*.txt
 generativeModelFiles/test
 ogprotos/
 data/*
