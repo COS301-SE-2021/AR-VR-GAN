@@ -18,6 +18,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { RegisterComponent } from './register/register.component';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
@@ -33,6 +34,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     RegisterFormComponent
   ],
   imports: [
+    FormsModule,
     BrowserModule,
     AppRoutingModule,
     MatGridListModule,
