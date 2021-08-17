@@ -51,8 +51,16 @@ export class CoordsComponent implements OnInit {
   }
 
   trackCoords(event: MouseEvent) {
+    const xInput = document.getElementById('x');
+    const yInput = document.getElementById('y');
+
     var x = (event.offsetX - 150) / 150;
     var y = (event.offsetY - 150) / 150;
+
+    if ((xInput != null) && (yInput != null)) {
+      xInput.setAttribute('value', x.toFixed(2).toString());
+      yInput.setAttribute('value', y.toFixed(2).toString());
+    }
 
     this.xMove += Math.abs(event.movementX);
     this.yMove += Math.abs(event.movementY);
