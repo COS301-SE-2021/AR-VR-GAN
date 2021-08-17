@@ -73,7 +73,7 @@ async def serve():
     # server.wait_for_termination()
 
 if __name__ == "__main__":
-    # m_generator.loadModel("./generativeModelFiles/defaultModels/Epochs-50.pt")
+    m_generator.loadModel("./defaultModels/Epochs-50.pt")
     # server = grpc.server(futures.ThreadPoolExecutor(max_workers=20))
     # modelGenerator_pb2_grpc.add_ModelGenerationServicer_to_server(ModelGenerationServicer(), server)
     # port_number = server.add_insecure_port('[::]:50051') # Change this to secure_port when we are not in development

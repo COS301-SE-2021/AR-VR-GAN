@@ -62,41 +62,25 @@ class ModelGenerator:
         Loads a new dataset to train the model on 
 
     """
-    # TODO: Remove unessecarry code
+
+    
     # TODO: Create detailed comments
-    # TODO: Handel edge cases in function i.e when a model is not loaded raise an exception
+    # TODO: Handle edge cases in function i.e when a model is not loaded raise an exception
     # TODO: Create a throughout main i.e one that handles executes all the functions 
     # TODO: Adjust test files so that it can handle file changes made 
     def __init__(self) -> None:
-
-        # This section dealt with taking in default arguements in the orginal VAE MNIST Example
-        # This section is unecessary for AR-VR-GAN, we just have to replace the arguement values
-        # in the appropriate places.
-        self.parser = argparse.ArgumentParser(description='VAE MNIST Example')
-        self.parser.add_argument('--batch-size', type=int, default=128, metavar='N',
-                            help='input batch size for training (default: 128)')
-        self.parser.add_argument('--epochs', type=int, default=10, metavar='N',
-                            help='number of epochs to train (default: 10)')
-        self.parser.add_argument('--no-cuda', action='store_true', default=False,
-                            help='disables CUDA training')
-        self.parser.add_argument('--seed', type=int, default=1, metavar='S',
-                            help='random seed (default: 1)')
-        self.parser.add_argument('--log-interval', type=int, default=10, metavar='N',
-                            help='how many batches to wait before logging training status')
-        self.args = self.parser.parse_args()
-        self.args.cuda = not self.args.no_cuda and torch.cuda.is_available()
-
         # Sets the seed for generating random numbers. Returns a torch.Generator object.
-        torch.manual_seed(self.args.seed)
+        torch.manual_seed(1)
 
         # A torch.device is an object representing the device on which a torch.
         # Tensor is or will be allocated. The torch.device contains a device type ('cpu' or 'cuda')
         # and optional device ordinal for the device type. If the device ordinal is not present, 
         # this object will always represent the current device for the device type, 
         # even after torch.cuda.set_device() is called.
-        self.device = torch.device("cuda" if self.args.cuda else "cpu")
+        self.cuda = torch.cuda.is_available()
+        self.device = torch.device("cuda" if self.cuda else "cpu")
 
-        kwargs = {'num_workers': 1, 'pin_memory': True} if self.args.cuda else {}
+        kwargs = {'num_workers': 1, 'pin_memory': True} if self.cuda else {}
 
         # Loads the MNIST dataset 
         # You can change from MNIST to any other torch dataset by changing
@@ -107,14 +91,13 @@ class ModelGenerator:
         self.train_loader = torch.utils.data.DataLoader(
             datasets.MNIST('../data', train=True, download=True,
                         transform=transforms.ToTensor()),
-            batch_size= self.args.batch_size, shuffle=True, **kwargs)
+            batch_size= 128, shuffle=True, **kwargs)
 
         self.test_loader = torch.utils.data.DataLoader(
             datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
-            batch_size=self.args.batch_size, shuffle=True, **kwargs)
+            batch_size=128, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
-        # self.model = None
         self.latent_size = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
@@ -363,9 +346,9 @@ class ModelGenerator:
 
 if __name__ == "__main__":
     generator = ModelGenerator()
-    # generator.loadModel("defaultModels/Epochs-50-Fashion.pt")
-    generator.train_model(100)
-    generator.saveModel("savedModels/Epochs-100.pt")
+    generator.loadModel("defaultModels/Epochs-50-Fashion.pt")
+    # generator.train_model(100)
+    # generator.saveModel("savedModels/Epochs-100.pt")
     # generator.generateImage([0.000000, 0.000, 0.00])
     # time.sleep(1)
     # generator.generateImage([0.0055000, 0.000, 0.00])
