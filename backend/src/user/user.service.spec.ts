@@ -62,4 +62,16 @@ describe('UserService', () => {
     });;
   });
 
+  it('should get a user by username', async () => {
+    const testUsername = "ethan";
+    const testToken = "xxxxx.yyyyy.zzzzz";
+    
+    expect(await service.getUserByUsername(testToken,testUsername)).toEqual({
+      success:true,
+      message: 'The required user is attatched.',
+      user:"ethan"
+    });;
+  });
+
+
 });
