@@ -13,7 +13,8 @@ export class ModelController {
         transport: Transport.GRPC,
         options: {
           package: 'model',
-          protoPath: join(__dirname, '../model/model.proto'),
+          protoPath: join(__dirname, '../../src/model/model.proto'),
+          //protoPath: join(__dirname, '../model/model.proto'),
         },
       })
       client: ClientGrpc;
