@@ -1,7 +1,6 @@
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
 import { join } from 'path';
-import { MockModelService } from './mocks/model.mock';
 import { ModelService } from './model.service';
 import { Request } from './interfaces/request.interface';
 
@@ -42,10 +41,10 @@ describe('ModelService', () => {
         sum += dto.data[i]
     }
 
-    expect(MockModelService.handleCoords(dto)).toEqual(sum);
+    expect(service.handleCoords(dto)).toEqual(sum);
   });
 
-  it('should run python', () => {
+  it('should run python the python script', () => {
     const dto = {data: [1.1,1.1,1.1]}
     expect(service.runPython(dto)).toBeDefined();
   });
