@@ -73,5 +73,14 @@ describe('UserService', () => {
     });;
   });
 
+  it('should get a user by token', async () => {
+    const testToken = "xxxxx.yyyyy.zzzzz";
+    
+    expect(await service.getUserByJWTToken(testToken)).toEqual({
+      success:true,
+      message: 'The required user is attatched.',
+      user:"ethan"
+    });;
+  });
 
 });
