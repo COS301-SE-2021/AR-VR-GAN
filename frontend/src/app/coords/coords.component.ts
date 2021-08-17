@@ -30,12 +30,8 @@ export class CoordsComponent implements OnInit {
   ngOnInit(): void {}
 
   postCoords(x: number, y: number, z: number) {
-    var xN: number = +x;
-    var yN: number = +y;
-    var zN: number = +z;
-    
     var data = [
-      xN, yN, zN
+      x, y, z
     ];
 
     this.busy = true;
