@@ -47,27 +47,14 @@ describe('UserService', () => {
   //   });
   // });
 
-
-
-
-
-
-
-  it('should register a user', async () => {
-    const registerDto = new RegisterUserDto("username4","test123@test.com","password4");
+  // it('should register a user', async () => {
+  //   const registerDto = new RegisterUserDto("username4","test123@test.com","password4");
     
-    expect(await (await service.registerUser(registerDto))).toEqual({
-       success:true,
-       message: 'The user was registered successfully.'
-     });
-  });
-
-
-
-
-
-
-
+  //   expect(await (await service.registerUser(registerDto))).toEqual({
+  //      success:true,
+  //      message: 'The user was registered successfully.'
+  //    });
+  // });
 
   it('should register check the password', async () => {
     const loginDto = new LoginUserDto("password","matt");
@@ -79,15 +66,6 @@ describe('UserService', () => {
       success: false
     });;
   });
-
-
-
-
-
-
-
-
-
 
   it('should get a user by username', async () => {
     const testUsername = "ethan";
@@ -103,12 +81,6 @@ describe('UserService', () => {
     });;
   });
 
-
-
-
-
-
-  
   it('should get a user by token', async () => {
     const testToken = "xxxxx.yyyyy.zzzzz";
     
@@ -122,7 +94,7 @@ describe('UserService', () => {
     });;
   });
 
-  it('should delete a user bu username', async () => {
+  it('should delete a user by username', async () => {
     const testToken = "xxxxx.yyyyy.zzzzz";
     const testUsername = "ethan";
     
