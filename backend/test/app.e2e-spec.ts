@@ -17,26 +17,7 @@ import { UploadController } from '../src/upload/upload.controller';
 import { UploadService } from '../src/upload/upload.service';
 import { UploadModule } from '../src/upload/upload.module';
 import { Observable } from 'rxjs';
-
-// describe('AppController (e2e)', () => {
-//   let app: INestApplication;
-
-//   beforeEach(async () => {
-//     const moduleFixture: TestingModule = await Test.createTestingModule({
-//       imports: [AppModule],
-//     }).compile();
-
-//     app = moduleFixture.createNestApplication();
-//     await app.init();
-//   });
-
-//   it('/ (GET)', () => {
-//     return request(app.getHttpServer())
-//       .get('/')
-//       .expect(200)
-//       .expect('Hello World!');
-//   });
-// });
+import { NestFactory } from '@nestjs/core';
 
 describe('GRPC transport', () => {
   let server;
@@ -78,6 +59,7 @@ describe('GRPC transport', () => {
     // Start gRPC microservice
     await app.startAllMicroservices();
     await app.init();
+
     // Load proto-buffers for test gRPC dispatch
     const proto = ProtoLoader.loadSync(
       join(__dirname, '../src/model/model.proto'),
@@ -157,7 +139,10 @@ describe('E2E FileTest', () => {
     await app.startAllMicroservicesAsync();
     await app.init();
 
-    app.enableCors();
+    app.enableCors({
+      allowedHeaders: '*',
+      origin: '*'
+    })
 
     client = app.get('UploadService');
     await client.connect();
@@ -172,17 +157,12 @@ describe('E2E FileTest', () => {
   })
 
   // it('should allow for file uploads', async () => {
+  //   const path =join(__dirname, '../src/model/model.proto');
   //   return request(app.getHttpServer())
-  //     .post('upload/file')
-  //     .attach('file', './package.json')
+  //     .post('file')
+  //     .attach('file', path)
   //     .field('name', 'test')
   //     .expect(201)
-  //     .expect({
-  //       body: {
-  //         name: 'test',
-  //       },
-  //       file: readFileSync('./package.json').toString(),
-  //     });
   // });
 
   afterEach(async () => {
