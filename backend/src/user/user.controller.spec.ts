@@ -53,6 +53,17 @@ describe('UserController', () => {
     })
   });
 
+  it('should detect an incorrect login', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
+    let loginDto =  new LoginUserDto("test12","test123")
+    expect(controller.loginUser(loginDto)).toEqual({
+      success: false,
+      message: "login fail!"
+    })
+  });
+
 
   
 
@@ -73,10 +84,13 @@ describe('UserController', () => {
 
 
   it('Get all users', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
     let allUserDto = new GetAllUsersDto("jwtToken")
     expect(controller.getAllUsers(allUserDto)).toEqual({
       success: true,
-      message: "all users list",
+      message: "The list of all users is attatched.",
       users: "jwtToken"
     })
   });
