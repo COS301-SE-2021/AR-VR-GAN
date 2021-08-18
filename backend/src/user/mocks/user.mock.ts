@@ -143,7 +143,7 @@ export default class MockUserClass {
         }
       }
     }
-    let res = new GetUserByUsernameResponse(false, "getUserByUsernameDto.username", null);
+    let res = new GetUserByUsernameResponse(false, "could not find user", null);
     return res;
   }
 
