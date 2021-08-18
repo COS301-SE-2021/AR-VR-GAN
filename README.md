@@ -14,15 +14,17 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 | ![Ethan Coryndon-Baker](https://media-exp1.licdn.com/dms/image/D4D35AQFD_Ep44064Sw/profile-framedphoto-shrink_200_200/0/1624796965940?e=1628856000&v=beta&t=VA10LAvusPS2-SsvSvZ3mg1Tzaf8Kcmkh6GoX9ZOX_k "Ethan Coryndon-Baker") <br/> Ethan Coryndon-Baker <br/> u19200065 | [GitHub](https://github.com/ecoryndonbakeruni) <br/> [Profile Page](https://ecoryndonbakeruni.github.io/) <br/> [LinkedIn](https://www.linkedin.com/in/ethan-coryndon-baker-9360081b3/) <br/> | Waterpolo <br/> Backend <br/> Web Design <br/> Java |
 | ![Kabelo Leiee](https://media-exp1.licdn.com/dms/image/C5603AQHByIrhb-M3fA/profile-displayphoto-shrink_200_200/0/1622332350316?e=1634169600&v=beta&t=0EUS4omgDzvN6Z0UmTFTIOFZwxUrMFt-lERl-lrZqsA "Kabelo Leiee") <br/> Kabelo Leiee <br/> u19247070 | [GitHub](https://github.com/kabelo-tuks) <br/> [Profile Page](http://kabelo-tuks.github.io/) <br/> [LinkedIn](https://www.linkedin.com/in/kabelo-leiee-ba7168205/) <br/> | Gym <br/> Web Development <br/> Networks <br/> Artificial Intelligence <br/>C++ <br/> JavaScript <br/>  |
 
-## Demo 1
+## Demo Videos
 
-* 📺 [Demo Video](https://youtu.be/mmZrfHTx3tM)
-* 📖 [Overleaf Document](https://www.overleaf.com/read/mxksffppsvgj)
+* 📺 [Demo 1](https://youtu.be/mmZrfHTx3tM)
+* 📺 [Demo 2](https://youtu.be/jyjrdwUin70)
+* 📺 [Demo 3]()
 
-## Demo 2
+## Documentation
 
-* 📺 [Demo Video](https://youtu.be/jyjrdwUin70)
-* 📖 [Overleaf Document](https://www.overleaf.com/read/vxwfzhmhmwsg)
+* 📖 [Software Requirements and Design Specifications](https://drive.google.com/file/d/1-J23MT3PBMJatBx8qQZzrxtTfC4qQL-N/view?usp=sharing)
+* 📖 [Architectural Requirements Document](https://drive.google.com/file/d/1-4eTHYDorLSD8ghN-f3LR6xcdwqixQWV/view?usp=sharing)
+* 📖 [User Manual](https://drive.google.com/file/d/1-6fSYeDynZ-xo0RNO5tF68zJHmW6vbHc/view?usp=sharing)
 
 ## Project Management Tools
 
