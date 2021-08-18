@@ -89,7 +89,7 @@ describe('test grpc on model controller', () => {
 
     callHandler.on('error', (err: any) => {
       if (String(err).toLowerCase().indexOf('cancelled') === -1) {
-        fail('error : ' + err);
+        fail('error: ' + err);
       }
     });
 
@@ -113,6 +113,32 @@ describe('test grpc on model controller', () => {
       // is expected
       if (String(err).toLowerCase().indexOf('cancelled') === -1) {
         fail('gRPC Stream error happened, error: ' + err);
+      }
+    });
+
+    return new Promise((resolve,reject) => {
+      callHandler.write(dto);
+      setTimeout(() => resolve(callHandler), 1000);
+    });
+  });
+
+  it('should reach the proxy through grpc streaming', async () => {
+    const dto = {data:[1,2,3]}
+    const callHandler = client.proxy(dto);
+
+    var sum = 0;
+    for (let i = 0; i < dto.data.length; i++) {
+      sum += dto.data[i]
+    }
+
+    callHandler.on('data', (msg: Response) => {
+      expect(msg).toBeDefined();
+      callHandler.cancel();
+    });
+
+    callHandler.on('error', (err: any) => {
+      if (String(err).toLowerCase().indexOf('cancelled') === -1) {
+        fail('error : ' + err);
       }
     });
 
