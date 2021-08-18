@@ -171,6 +171,20 @@ describe('E2E FileTest', () => {
     expect(client).toBeDefined();
   })
 
+  // it('should allow for file uploads', async () => {
+  //   return request(app.getHttpServer())
+  //     .post('upload/file')
+  //     .attach('file', './package.json')
+  //     .field('name', 'test')
+  //     .expect(201)
+  //     .expect({
+  //       body: {
+  //         name: 'test',
+  //       },
+  //       file: readFileSync('./package.json').toString(),
+  //     });
+  // });
+
   afterEach(async () => {
     await app.close();
   });
