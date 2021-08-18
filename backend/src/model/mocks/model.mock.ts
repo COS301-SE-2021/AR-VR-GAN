@@ -1,3 +1,6 @@
+import { ReplaySubject } from "rxjs";
+import { RequestProxy } from "../grpc.interface";
+
 export const MockModelService= {
 
     handleCoords: jest.fn((dto) => {
@@ -7,5 +10,13 @@ export const MockModelService= {
             sum += dto.data[i]
         }
         return sum;
+    }),
+
+    proxy: jest.fn((request) => {
+        const subject = new ReplaySubject<RequestProxy>();
+        subject.next({ vector: request.data });
+        subject.complete();
+        const stream = MockModelService.grpcService.generateImage(subject.asObservable());
+        return stream.toPromise();
     })
   }
