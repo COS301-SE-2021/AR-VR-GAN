@@ -1,8 +1,5 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { Test} from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
-
 import {ModelController} from '../src/model/model.controller';
 import { ClientProxy, ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
@@ -11,13 +8,9 @@ import * as GRPC from '@grpc/grpc-js';
 import { ModelService } from '../src/model/model.service';
 import { Response } from '../src/model/interfaces/response.interface'
 import { fail } from 'assert';
-//import { expect } from 'chai';
-import { readFileSync } from 'fs';
 import { UploadController } from '../src/upload/upload.controller';
 import { UploadService } from '../src/upload/upload.service';
 import { UploadModule } from '../src/upload/upload.module';
-import { Observable } from 'rxjs';
-import { NestFactory } from '@nestjs/core';
 
 describe('GRPC transport', () => {
   let server;
@@ -77,7 +70,7 @@ describe('GRPC transport', () => {
     expect(app).toBeDefined();
   })
 
-  it('GRPC Sending and receiving Stream from RX handler', async () => {
+  it('GRPC streaming the coordinates', async () => {
     const dto = {data:[1,2,3]}
     const callHandler = client.handleCoords(dto);
 
@@ -104,6 +97,30 @@ describe('GRPC transport', () => {
       setTimeout(() => resolve(callHandler), 1000);
     });
   });
+
+  it('GRPC streaming the coordinates to run python script', async () => {
+    const dto = {data:[1,2,3]}
+    const callHandler = client.runPython(dto);
+
+    callHandler.on('data', (msg: Response) => {
+      expect(msg.data).toBeDefined();
+      callHandler.cancel();
+    });
+
+    callHandler.on('error', (err: any) => {
+      // We want to fail only on real errors while Cancellation error
+      // is expected
+      if (String(err).toLowerCase().indexOf('cancelled') === -1) {
+        fail('gRPC Stream error happened, error: ' + err);
+      }
+    });
+
+    return new Promise((resolve,reject) => {
+      callHandler.write(dto);
+      setTimeout(() => resolve(callHandler), 1000);
+    });
+  });
+
   afterEach(async () => {
     await app.close();
   });
@@ -156,14 +173,6 @@ describe('E2E FileTest', () => {
     expect(client).toBeDefined();
   })
 
-  // it('should allow for file uploads', async () => {
-  //   const path =join(__dirname, '../src/model/model.proto');
-  //   return request(app.getHttpServer())
-  //     .post('file')
-  //     .attach('file', path)
-  //     .field('name', 'test')
-  //     .expect(201)
-  // });
 
   afterEach(async () => {
     await app.close();
