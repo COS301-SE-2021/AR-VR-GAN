@@ -1,5 +1,5 @@
 import { RegisterUserDto } from '../dto/register-user.dto';
-import { GetUserByUsernameResponse } from '../dto/get-user-by-username.dto';
+import { GetUserByUsernameDto, GetUserByUsernameResponse } from '../dto/get-user-by-username.dto';
 import { UserResponse } from '../dto/user-response.dto';
 import { GetAllUsersDto, GetAllUsersResponse } from '../dto/get-all-users.dto';
 import { userDTO } from './userInterface.mock';
@@ -98,36 +98,36 @@ export default class MockUserClass {
     return res;
   }
 
+ 
+
+
+  public getUserByUsername(getUserByUsernameDto){
+    let user = new GetUserByUsernameDto(getUserByUsernameDto.jwtToken,getUserByUsernameDto.username);
+    for (var ik=0 ; ik < this.users.length ; ik++)
+    {
+      
+      if (this.users[ik] != null)
+      {
+        if(this.users[ik].username == user.username)
+        {
+          
+          let res = new GetUserByUsernameResponse(true, user.username, getUserByUsernameDto);
+          return res;
+        }
+      }
+    }
+    let res = new GetUserByUsernameResponse(false, "getUserByUsernameDto.username", getUserByUsernameDto);
+    return res;
+  }
 
 
 
 
+ public getAllUsers(getAllUsersdto){
+    let user = new GetAllUsersDto(getAllUsersdto.jwtToken);
+    let res = new GetAllUsersResponse(true, 'The list of all users is attatched.', getAllUsersdto);
+    return res;
 
+  }
 
-
-
-
-
-
-
-
-
-  // static registerUser(Registerdto){
-  //   const MockedUsers = [
-  //   {username: "username1", password: "password1"},
-  //   {username: "username2", password: "password2"},
-  //   {username: "username3", password: "password3"},
-  //   ];
-
-  //   if (Registerdto.username == null) {
-  //     return new UserResponse(false, 'Please send a username, password and email address.');
-  //   }
-
-  //   if (Registerdto.username.in(MockedUsers)) {
-  //     return new UserResponse(false, 'Please enter a unqiue username');
-  //   }
-
-  //   MockedUsers.push({username: Registerdto.username, password: Registerdto.password});
-  //   return MockedUsers[MockedUsers.length-1]
-  // }
 }
