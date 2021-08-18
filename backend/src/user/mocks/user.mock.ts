@@ -1,11 +1,12 @@
 import { RegisterUserDto } from '../dto/register-user.dto';
-import { GetUserByUsernameDto, GetUserByUsernameResponse } from '../dto/get-user-by-username.dto';
+import { GetUserByUsernameDto } from '../dto/get-user-by-username.dto';
 import { UserResponse } from '../dto/user-response.dto';
 import { GetAllUsersDto, GetAllUsersResponse } from '../dto/get-all-users.dto';
 import { userDTO } from './userInterface.mock';
 import { UsersModule } from '../user.module';
 import { LoginUserDto } from '../dto/login-user.dto';
 import { UpdateUserByUsernameDto } from '../dto/update-user-by-username.dto';
+import { GetUserByUsernameResponse } from '../dto/get-user-by-usernameResp.dto';
 
 export const MockUserService = {
     registerUser: jest.fn((dto) => {
@@ -91,34 +92,33 @@ export default class MockUserClass {
           let res = new UserResponse(true, 'updated succesfully!');
           return res;
         }
+
       }
     }
-
     let res = new UserResponse(false, 'updated failed!');
     return res;
+
   }
 
  
-
-
-  public getUserByUsername(getUserByUsernameDto){
-    let user = new GetUserByUsernameDto(getUserByUsernameDto.jwtToken,getUserByUsernameDto.username);
-    for (var ik=0 ; ik < this.users.length ; ik++)
-    {
-      
-      if (this.users[ik] != null)
-      {
-        if(this.users[ik].username == user.username)
-        {
+  // public getUserByUsername(getUserByUsernameD){
+  //   let name = getUserByUsernameD.username
+  //   let user = new GetUserByUsernameDto(getUserByUsernameD.jwtToken,name);
+  //   for (var ik=0 ; ik < this.users.length ; ik++)
+  //   {
+  //     if (this.users[ik] != null)
+  //     {
+  //       if(this.users[ik].username == user.username)
+  //       {
           
-          let res = new GetUserByUsernameResponse(true, user.username, getUserByUsernameDto);
-          return res;
-        }
-      }
-    }
-    let res = new GetUserByUsernameResponse(false, "getUserByUsernameDto.username", getUserByUsernameDto);
-    return res;
-  }
+  //         let res = new GetUserByUsernameResponse(true, user.username, getUserByUsernameD);
+  //         return res;
+  //       }
+  //     }
+  //   }
+  //   let res = new GetUserByUsernameResponse(false, "getUserByUsernameDto.username", getUserByUsernameD);
+  //   return res;
+  // }
 
 
 
