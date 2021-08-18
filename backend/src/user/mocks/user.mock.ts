@@ -62,16 +62,29 @@ export default class MockUserClass {
 
   public registerUser(Registerdto){
     let user = new userDTO(Registerdto.username,Registerdto.password,Registerdto.email);
-    if((user.username!="") && (user.password!="") && (user.email!="")){
-      this.users.push(user);
-      let res = new UserResponse(true, 'The user was registered successfully.');
-      return res;
+    if((user.username!="")){
+      if(user.password!=""){
+        if(user.email!=""){
+          this.users.push(user);
+          let res = new UserResponse(true, 'The user was registered successfully.');
+          return res;
+        }
+        else{
+          let res = new UserResponse(false, 'No email entered');
+          return res;
+        }
+      }
+      else{
+        let res = new UserResponse(false, 'No password entered');
+        return res;
+      }
     }
     else{
-      let res = new UserResponse(false, 'No username/password/email');
+      let res = new UserResponse(false, 'No username entered');
       return res;
     }
   }
+  
 
   public loginUser(loginDto){
     let user = new LoginUserDto(loginDto.username,loginDto.password);
