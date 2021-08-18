@@ -39,14 +39,34 @@ describe('UserController', () => {
   });
 
 
-  it('should fail to register a user', () => {
+  it('register-false : no username', () => {
     const registerDto = new RegisterUserDto("","test123@test.com","test123");
 
     expect(controller.registerUser(registerDto)).toEqual({
       success:false,
-      message: 'No username/password/email'
+      message: 'No username entered'
     });
   });
+
+  it('register-false : no email', () => {
+    const registerDto = new RegisterUserDto("test123","","test123");
+
+    expect(controller.registerUser(registerDto)).toEqual({
+      success:false,
+      message: 'No email entered'
+    });
+  });
+
+  it('register-false : no password', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","");
+
+    expect(controller.registerUser(registerDto)).toEqual({
+      success:false,
+      message: 'No password entered'
+    });
+  });
+
+
 
 
 
