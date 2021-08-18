@@ -99,6 +99,29 @@ describe('test grpc on model controller', () => {
     });
   });
 
+  it('GRPC streaming the coordinates to run python script', async () => {
+    const dto = {data:[1,2,3]}
+    const callHandler = client.runPython(dto);
+
+    callHandler.on('data', (msg: Response) => {
+      expect(msg.data).toBeDefined();
+      callHandler.cancel();
+    });
+
+    callHandler.on('error', (err: any) => {
+      // We want to fail only on real errors while Cancellation error
+      // is expected
+      if (String(err).toLowerCase().indexOf('cancelled') === -1) {
+        fail('gRPC Stream error happened, error: ' + err);
+      }
+    });
+
+    return new Promise((resolve,reject) => {
+      callHandler.write(dto);
+      setTimeout(() => resolve(callHandler), 1000);
+    });
+  });
+
   afterEach(async () => {
     await app.close();
   });
