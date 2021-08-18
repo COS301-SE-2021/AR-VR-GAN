@@ -152,14 +152,34 @@ describe('UserController', () => {
     })
   });
 
+  it('Should not be able to find the user,User isnt registered', () => {
+    let dto = new GetUserByUsernameDto("jwtToken","test123");
+    expect(controller.getUserByUsername(dto)).toEqual({
+      success: false,
+      message: "could not find user",
+      user: null
+    })
+  });
+
   it('delete a user by a username', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
     controller.registerUser(registerDto)
-    
+
     let deleteDto =  new GetUserByUsernameDto("jwtToken","test123")
     expect(controller.deleteUserByUsername(deleteDto)).toEqual({
       success: true,
       message: "The user has been removed."
+    })
+  });
+
+  it('Should not be able to delete the user', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+    
+    let deleteDto =  new GetUserByUsernameDto("jwtToken","test")
+    expect(controller.deleteUserByUsername(deleteDto)).toEqual({
+      success: false,
+      message: "There is no user with the given username."
     })
   });
 
