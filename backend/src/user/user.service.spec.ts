@@ -3,8 +3,6 @@ import { UserService } from './user.service';
 import { MockUserModel } from './mocks/userRepository.mock'
 import { UserSchema } from './schemas/user.schema'
 import { getModelToken } from '@nestjs/mongoose';
-import MockUserService from './mocks/user.mock';
-import MockUserClass from './mocks/user.mock';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import config from '../config/keys';
@@ -37,98 +35,41 @@ describe('UserService', () => {
   });
 
 
-  // it('should register a user', async () => {
-  //   const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
-
-  //   expect(await service.registerUser(dto)).toEqual({
-  //     username: dto.username,
-  //     email: dto.email,
-  //     password: dto.password
-  //   });
-  // });
-
-
-
-
-
-
-
-  it('should register a user', async () => {
-    const registerDto = new RegisterUserDto("username4","test123@test.com","password4");
-    
-    expect(await (await service.registerUser(registerDto))).toEqual({
-       success:true,
-       message: 'The user was registered successfully.'
-     });
-  });
-
-
-
-
-
-
-
-
-  it('should register check the password', async () => {
+  it('login-false : user not found', async () => {
     const loginDto = new LoginUserDto("password","matt");
     
     expect(await service.loginUser(loginDto)).toEqual({
-      // success:true,
-      // message: 'The user was registered successfully.'
       message: "The user with the specified username does not exist.",
       success: false
     });;
   });
 
-
-
-
-
-
-
-
-
-
-  it('should get a user by username', async () => {
+  it('getUserByUsername-false : jwtToken not found', async () => {
     const testUsername = "ethan";
     const testToken = "xxxxx.yyyyy.zzzzz";
     
     expect(await service.getUserByUsername(testToken,testUsername)).toEqual({
-      // success:true,
-      // message: 'The required user is attatched.',
-      // user:"ethan"
       message: "This JWTToken does not exist.",
       success: false,
       user: null
     });;
   });
 
-
-
-
-
-
-  
-  it('should get a user by token', async () => {
+  it('getUserByJWTToken-false : jwtToken not found', async () => {
     const testToken = "xxxxx.yyyyy.zzzzz";
     
     expect(await service.getUserByJWTToken(testToken)).toEqual({
-      // success:true,
-      // message: 'The required user is attatched.',
-      // user:"ethan"
       message: "This JWTToken does not exist.",
       success: false,
       user: null
     });;
   });
 
-  it('should delete a user bu username', async () => {
+  it('deleteUserbyUsername-false : jwtToken not found', async () => {
     const testToken = "xxxxx.yyyyy.zzzzz";
     const testUsername = "ethan";
     
     expect(await service.deleteUserByUsername(testToken, testUsername)).toEqual({
-      // success:true,
-      // message: 'The user has been removed.'
       message: "This JWTToken does not exist.",
       success: false,
     });;
