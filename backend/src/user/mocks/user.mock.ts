@@ -101,24 +101,23 @@ export default class MockUserClass {
   }
 
  
-  // public getUserByUsername(getUserByUsernameD){
-  //   let name = getUserByUsernameD.username
-  //   let user = new GetUserByUsernameDto(getUserByUsernameD.jwtToken,name);
-  //   for (var ik=0 ; ik < this.users.length ; ik++)
-  //   {
-  //     if (this.users[ik] != null)
-  //     {
-  //       if(this.users[ik].username == user.username)
-  //       {
+  public getUserByUsername(jwtToken,username){
+    let user = new GetUserByUsernameDto(jwtToken,username);
+    for (var ik=0 ; ik < this.users.length ; ik++)
+    {
+      if (this.users[ik] != null)
+      {
+        if(this.users[ik].username == user.username)
+        {
           
-  //         let res = new GetUserByUsernameResponse(true, user.username, getUserByUsernameD);
-  //         return res;
-  //       }
-  //     }
-  //   }
-  //   let res = new GetUserByUsernameResponse(false, "getUserByUsernameDto.username", getUserByUsernameD);
-  //   return res;
-  // }
+          let res = new GetUserByUsernameResponse(true, user.username, null);
+          return res;
+        }
+      }
+    }
+    let res = new GetUserByUsernameResponse(false, "getUserByUsernameDto.username", null);
+    return res;
+  }
 
 
 
