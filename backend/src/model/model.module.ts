@@ -21,5 +21,6 @@ import { join } from 'path';
   ],
   controllers: [ModelController],
   providers: [ModelService],
+  exports: [ModelService]
 })
 export class ModelModule {}

@@ -74,25 +74,25 @@ export class ModelController {
      * @param messages 
      * @returns 
      */
-        @GrpcStreamMethod('ModelController', 'Proxy')
-        proxy(messages: Observable<Request>): Observable<ResponsePython> {
-             const subject = new Subject<Response>();
-     
-            const onNext =async (message: Request) => {
-                var data =await this.modelService.proxy(message)
-                subject.next({
-                     data: data.image
-                 });
-             };
-     
-             const onComplete = () => subject.complete();
-     
-             messages.subscribe({
-                 next: onNext,
-                 complete: onComplete,
-             });
-     
-             return subject.asObservable();
-         }
+    @GrpcStreamMethod('ModelController', 'Proxy')
+    proxy(messages: Observable<Request>): Observable<ResponsePython> {
+        const subject = new Subject<Response>();
+    
+        const onNext =async (message: Request) => {
+            var data =await this.modelService.proxy(message)
+            subject.next({
+                data: data.image
+            });
+        };
+    
+        const onComplete = () => subject.complete();
+
+        messages.subscribe({
+            next: onNext,
+            complete: onComplete,
+        });
+
+        return subject.asObservable();
+    }
 
 }
