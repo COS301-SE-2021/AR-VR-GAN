@@ -25,6 +25,7 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 * 📖 [Software Requirements and Design Specifications](https://drive.google.com/file/d/1-J23MT3PBMJatBx8qQZzrxtTfC4qQL-N/view?usp=sharing)
 * 📖 [Architectural Requirements Document](https://drive.google.com/file/d/1-4eTHYDorLSD8ghN-f3LR6xcdwqixQWV/view?usp=sharing)
 * 📖 [User Manual](https://drive.google.com/file/d/1-6fSYeDynZ-xo0RNO5tF68zJHmW6vbHc/view?usp=sharing)
+* 📖 [Coding Standards Document](https://drive.google.com/file/d/1-OIiicuXN1hwqxxklAdR0ZCBKBZRerSt/view?usp=sharing)
 
 ## Project Management Tools
 
