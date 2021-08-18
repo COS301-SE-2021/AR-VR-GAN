@@ -3,6 +3,8 @@ import { UserService } from './user.service';
 import { MockUserModel } from './mocks/userRepository.mock'
 import { UserSchema } from './schemas/user.schema'
 import { getModelToken } from '@nestjs/mongoose';
+import MockUserService from './mocks/user.mock';
+import MockUserClass from './mocks/user.mock';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import config from '../config/keys';
@@ -34,6 +36,7 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
+
   // it('should register a user', async () => {
   //   const dto = {username: 'jason', email: 'jman89412@gmail.com', password: 'test123'}
 
@@ -44,15 +47,27 @@ describe('UserService', () => {
   //   });
   // });
 
+
+
+
+
+
+
   it('should register a user', async () => {
-    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    const registerDto = new RegisterUserDto("username4","test123@test.com","password4");
     
-    // expect(await (await service.registerUser(registerDto))).toEqual({
-    //   success:true,
-    //   message: 'The user was registered successfully.'
-    // });
-    expect(service.registerUser(registerDto)).toBe
+    expect(await (await service.registerUser(registerDto))).toEqual({
+       success:true,
+       message: 'The user was registered successfully.'
+     });
   });
+
+
+
+
+
+
+
 
   it('should register check the password', async () => {
     const loginDto = new LoginUserDto("password","matt");
@@ -64,6 +79,15 @@ describe('UserService', () => {
       success: false
     });;
   });
+
+
+
+
+
+
+
+
+
 
   it('should get a user by username', async () => {
     const testUsername = "ethan";
@@ -79,6 +103,12 @@ describe('UserService', () => {
     });;
   });
 
+
+
+
+
+
+  
   it('should get a user by token', async () => {
     const testToken = "xxxxx.yyyyy.zzzzz";
     
