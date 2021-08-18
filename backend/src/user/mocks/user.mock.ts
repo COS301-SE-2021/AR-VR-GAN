@@ -154,4 +154,22 @@ export default class MockUserClass {
 
   }
 
+  public deleteUserByUsername(jwtToken,username){
+    let user = new GetUserByUsernameDto(jwtToken,username);
+    for (var ik=0 ; ik < this.users.length ; ik++)
+    {
+      if (this.users[ik] != null)
+      {
+        if(this.users[ik].username == user.username)
+        {
+          this.users[ik] = null;
+          let res = new UserResponse(true, 'The user has been removed.');
+          return res;
+        }
+      }
+    }
+    let res = new UserResponse(false, 'There is no user with the given username.');
+    return res;
+  }
+
 }
