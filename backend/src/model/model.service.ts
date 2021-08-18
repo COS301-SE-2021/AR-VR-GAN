@@ -4,7 +4,7 @@ import { join } from 'path';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ModelGeneration,RequestProxy } from './grpc.interface';
 import { ReplaySubject} from 'rxjs';
-import * as tf from "@tensorflow/tfjs"
+//import * as tf from "@tensorflow/tfjs"
 
 @Injectable()
 export class ModelService {
