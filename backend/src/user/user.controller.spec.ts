@@ -39,6 +39,17 @@ describe('UserController', () => {
   });
 
 
+  it('should fail to register a user', () => {
+    const registerDto = new RegisterUserDto("","test123@test.com","test123");
+
+    expect(controller.registerUser(registerDto)).toEqual({
+      success:false,
+      message: 'No username/password/email'
+    });
+  });
+
+
+
 
 
 
@@ -76,6 +87,20 @@ describe('UserController', () => {
     expect(controller.updateUserWithUsername(updateDto)).toEqual({
       success: true,
       message: "updated succesfully!"
+    })
+  });
+
+
+
+  it('should fail to update user', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
+    let updateDto = new UpdateUserByUsernameDto("jwtToken","test12","newUser","newPass","newEmail");
+
+    expect(controller.updateUserWithUsername(updateDto)).toEqual({
+      success: false,
+      message: "updated failed! user not found"
     })
   });
 
