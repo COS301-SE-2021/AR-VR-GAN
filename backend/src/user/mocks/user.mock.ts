@@ -103,15 +103,14 @@ export default class MockUserClass {
 
   public getUserByUsername(getUserByUsernameDto){
     let user = new GetUserByUsernameDto(getUserByUsernameDto.jwtToken,getUserByUsernameDto.username);
+    console.log(getUserByUsernameDto.username);
     for (var ik=0 ; ik < this.users.length ; ik++)
     {
-      
       if (this.users[ik] != null)
       {
         if(this.users[ik].username == user.username)
         {
-          
-          let res = new GetUserByUsernameResponse(true, user.username, getUserByUsernameDto);
+          let res = new GetUserByUsernameResponse(true, getUserByUsernameDto.username, getUserByUsernameDto);
           return res;
         }
       }
@@ -119,9 +118,6 @@ export default class MockUserClass {
     let res = new GetUserByUsernameResponse(false, "getUserByUsernameDto.username", getUserByUsernameDto);
     return res;
   }
-
-
-
 
  public getAllUsers(getAllUsersdto){
     let user = new GetAllUsersDto(getAllUsersdto.jwtToken);
