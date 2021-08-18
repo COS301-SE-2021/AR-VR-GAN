@@ -72,16 +72,30 @@ export default class MockUserClass {
         }
         else
         {
-          let res = new UserResponse(false, 'login succesful!');
+          let res = new UserResponse(false, 'login fail!');
           return res;
         }
       }
     }
   }
 
-  public updateUser(updateDto){
+  public updateUserWithUsername(updateDto){
     let user = new UpdateUserByUsernameDto(updateDto.jwtToken,updateDto.currentUsername,updateDto.newUsername,updateDto.newPassword,updateDto.newEmail);
+    for (var ik=0 ; ik < this.users.length ; ik++)
+    {
+      if (this.users[ik] != null)
+      {
+        if(this.users[ik].username == user.currentUsername)
+        {
+          this.users[ik] = new userDTO(updateDto.newUsername,updateDto.newPassword,updateDto.newEmail);
+          let res = new UserResponse(true, 'updated succesfully!');
+          return res;
+        }
+      }
+    }
 
+    let res = new UserResponse(false, 'updated failed!');
+    return res;
   }
 
 
