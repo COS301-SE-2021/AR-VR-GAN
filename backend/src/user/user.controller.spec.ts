@@ -85,7 +85,7 @@ describe('UserController', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
     controller.registerUser(registerDto)
 
-    const dto = new GetUserByUsernameDto("jwtToken","test123");
+    let dto = new GetUserByUsernameDto("jwtToken","test123");
     expect(controller.getUserByUsername(dto)).toEqual({
       success: true,
       message: dto.username,
