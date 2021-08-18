@@ -1,16 +1,29 @@
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MockModelService } from './mocks/model.mock';
+import { join } from 'path';
 import { ModelService } from './model.service';
+import { Request } from './interfaces/request.interface';
 
 describe('ModelService', () => {
   let service: ModelService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [ModelService, {
-        provide: ModelService,
-        useValue: {MockModelService}
-      }],
+      imports: [
+        ClientsModule.register([
+          {
+            name: 'MODEL_PACKAGE',
+            transport: Transport.GRPC,
+            options: {
+              package: 'ModelGenerator',
+              protoPath: join(__dirname, '../../../generativeModelFiles/modelGenerator.proto'),
+              url: "127.0.0.1:50051"
+              
+            },
+          },
+        ]),
+      ],
+      providers: [ModelService],
     }).compile();
 
     service = module.get<ModelService>(ModelService);
@@ -28,10 +41,11 @@ describe('ModelService', () => {
         sum += dto.data[i]
     }
 
-    expect(MockModelService.handleCoords(dto)).toEqual(sum);
+    expect(service.handleCoords(dto)).toEqual(sum);
   });
 
-  it('should run python', () => {
-    expect(service.runPython).toBe;
+  it('should run python the python script', () => {
+    const dto = {data: [1.1,1.1,1.1]}
+    expect(service.runPython(dto)).toBeDefined();
   });
 });

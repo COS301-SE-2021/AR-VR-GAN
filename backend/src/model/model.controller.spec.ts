@@ -21,24 +21,4 @@ describe('ModelController', () => {
     expect(controller).toBeDefined();
   });
 
-  // it('should sum up the data', () => {
-  //   const dto = { data : [1,2,3] }
-  //   let sum = 0;
-
-  //   for (let i = 0; i < dto.data.length; i++) {
-  //       sum += dto.data[i]
-  //   }
-
-  //   expect(controller.handleCoords(dto)).toEqual({sum : sum});
-  // });
-
-  it('should be proxied', () => {
-    const subject = new ReplaySubject<Request>();
-    subject.next({ data: [1,2,3] });
-    subject.complete();
-    controller.proxy(subject).subscribe(
-      res => res.data.toEqual(6)
-    );
-  });
-
 });
