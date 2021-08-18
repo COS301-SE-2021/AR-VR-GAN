@@ -2,7 +2,7 @@
 
 ## About
 
-AR/VR-GAN is a visualization tool allowing a user to explore the feature space of a Disentangled Deep Convolutional Variational Autoencoder in real time through an AR/VR Device.
+AR/VR-GAN is a visualization tool allowing a user to explore the feature space of a Variational Autoencoder in real time through a VR Device.
 
 ## Team Members
 
