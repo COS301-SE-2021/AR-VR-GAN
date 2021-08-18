@@ -2,6 +2,10 @@ import { RegisterUserDto } from '../dto/register-user.dto';
 import { GetUserByUsernameResponse } from '../dto/get-user-by-username.dto';
 import { UserResponse } from '../dto/user-response.dto';
 import { GetAllUsersDto, GetAllUsersResponse } from '../dto/get-all-users.dto';
+import { userDTO } from './userInterface.mock';
+import { UsersModule } from '../user.module';
+import { LoginUserDto } from '../dto/login-user.dto';
+import { UpdateUserByUsernameDto } from '../dto/update-user-by-username.dto';
 
 export const MockUserService = {
     registerUser: jest.fn((dto) => {
@@ -11,6 +15,14 @@ export const MockUserService = {
     }),
 
     loginUser:jest.fn((username,password) => {
+      const MockUsers = [
+        {username: "username1", password: "password1"},
+        {username: "username2", password: "password2"},
+        {username: "username3", password: "password3"},
+      ]
+
+      
+      
       let resp = new UserResponse(true,"login succesful!")
       return resp
     }),
@@ -35,3 +47,73 @@ export const MockUserService = {
       return resp
     }),
   }
+
+export default class MockUserClass {
+ //private users:Array<userDTO>;
+ private users:userDTO[] = new Array(10)
+
+  public registerUser(Registerdto){
+    let user = new userDTO(Registerdto.username,Registerdto.password,Registerdto.email);
+    this.users.push(user);
+    let res = new UserResponse(true, 'The user was registered successfully.');
+    return res;
+  }
+
+  public loginUser(loginDto){
+    let user = new LoginUserDto(loginDto.username,loginDto.password);
+    for (var ik=0 ; ik < this.users.length ; ik++)
+    {
+      if (this.users[ik] != null)
+      {
+        if(this.users[ik].username == user.username && this.users[ik].password == user.password)
+        {
+            let res = new UserResponse(true, 'login succesful!');
+            return res;
+        }
+        else
+        {
+          let res = new UserResponse(false, 'login succesful!');
+          return res;
+        }
+      }
+    }
+  }
+
+  public updateUser(updateDto){
+    let user = new UpdateUserByUsernameDto(updateDto.jwtToken,updateDto.currentUsername,updateDto.newUsername,updateDto.newPassword,updateDto.newEmail);
+
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // static registerUser(Registerdto){
+  //   const MockedUsers = [
+  //   {username: "username1", password: "password1"},
+  //   {username: "username2", password: "password2"},
+  //   {username: "username3", password: "password3"},
+  //   ];
+
+  //   if (Registerdto.username == null) {
+  //     return new UserResponse(false, 'Please send a username, password and email address.');
+  //   }
+
+  //   if (Registerdto.username.in(MockedUsers)) {
+  //     return new UserResponse(false, 'Please enter a unqiue username');
+  //   }
+
+  //   MockedUsers.push({username: Registerdto.username, password: Registerdto.password});
+  //   return MockedUsers[MockedUsers.length-1]
+  // }
+}
