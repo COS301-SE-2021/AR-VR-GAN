@@ -57,13 +57,20 @@ describe('UserController', () => {
   
 
   it('should update a user', () => {
-    const updateDto = new UpdateUserByUsernameDto("jwtToken","test123","newUser","newPass","newEmail");
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
+    let updateDto = new UpdateUserByUsernameDto("jwtToken","test123","newUser","newPass","newEmail");
 
     expect(controller.updateUserWithUsername(updateDto)).toEqual({
       success: true,
       message: "updated succesfully!"
     })
   });
+
+
+
+
 
   it('Get all users', () => {
     let allUserDto = new GetAllUsersDto("jwtToken")
