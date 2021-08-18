@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import { MockUserService } from './mocks/user.mock'
+import MockUserClass, { MockUserService } from './mocks/user.mock'
 import { RegisterUserDto } from './dto/register-user.dto';
 import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
@@ -16,7 +16,7 @@ describe('UserController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UserController],
       providers: [UserService]
-    }).overrideProvider(UserService).useValue(MockUserService).compile();
+    }).overrideProvider(UserService).useClass(MockUserClass).compile();
 
     controller = module.get<UserController>(UserController);
   });
@@ -25,17 +25,27 @@ describe('UserController', () => {
     expect(controller).toBeDefined();
   });
 
+
+
+
+
   it('should register a user', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
 
     expect(controller.registerUser(registerDto)).toEqual({
-      username: registerDto.username,
-      email: registerDto.email,
-      password: registerDto.password
+      success:true,
+      message: 'The user was registered successfully.'
     });
   });
 
+
+
+
+
   it('login a user', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
     let loginDto =  new LoginUserDto("test123","test123")
     expect(controller.loginUser(loginDto)).toEqual({
       success: true,
@@ -43,14 +53,24 @@ describe('UserController', () => {
     })
   });
 
+
+  
+
   it('should update a user', () => {
-    const updateDto = new UpdateUserByUsernameDto("jwtToken","test123","newUser","newPass","newEmail");
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
+    let updateDto = new UpdateUserByUsernameDto("jwtToken","test123","newUser","newPass","newEmail");
 
     expect(controller.updateUserWithUsername(updateDto)).toEqual({
       success: true,
       message: "updated succesfully!"
     })
   });
+
+
+
+
 
   it('Get all users', () => {
     let allUserDto = new GetAllUsersDto("jwtToken")
@@ -65,7 +85,7 @@ describe('UserController', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
     controller.registerUser(registerDto)
 
-    const dto = new GetUserByUsernameDto("jwtToken","test123");
+    let dto = new GetUserByUsernameDto("jwtToken","test123");
     expect(controller.getUserByUsername(dto)).toEqual({
       success: true,
       message: dto.username,
