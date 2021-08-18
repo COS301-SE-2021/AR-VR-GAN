@@ -89,7 +89,7 @@ describe('UserController', () => {
     expect(controller.getUserByUsername(dto)).toEqual({
       success: true,
       message: dto.username,
-      user: dto.jwtToken
+      user: null
     })
   });
 
