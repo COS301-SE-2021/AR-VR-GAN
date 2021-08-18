@@ -1,26 +1,16 @@
 from __future__ import print_function
 import argparse
-import io
-from numpy import testing
-from onnx_tf.backend_rep import TensorflowRep
 import torch
 import torch.utils.data
-
-from torch import nn, optim
+from torch import optim
 from torch.nn import functional as F
-from torch.utils.data import sampler
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
-import tensorflowjs
 import os
 from datetime import datetime
 from PIL import Image
 from modelExceptions import ModelException
-
-from torch.autograd import Variable
-import onnx
-from onnx_tf.backend import prepare
 
 class ModelGenerator:
     """ This class trains VAE models and generates images from said models
@@ -70,7 +60,6 @@ class ModelGenerator:
         Loads a new dataset to train the model on 
 
     """
-    # TODO: Create detailed comments
     # TODO: Handle edge cases in function i.e when a model is not loaded raise an exception
     # TODO: Create a throughout main i.e one that handles executes all the functions 
     # TODO: Adjust test files so that it can handle file changes made 
@@ -110,7 +99,6 @@ class ModelGenerator:
     # Reconstruction + KL divergence losses summed over all elements and batch
     def loss_function(self,recon_x, x, mu, logvar) -> float:
         BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
-
         # see Appendix B from VAE paper:
         # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
         # https://arxiv.org/abs/1312.6114
@@ -137,12 +125,10 @@ class ModelGenerator:
 
     def train(self, epoch) -> None:
         """Trains the model on the set of images in train_loader
-
         Parameters
         ----------
         epoch : int
             The iteration the training is currently executing
-
         """
         self.model.train()
         train_loss = 0
@@ -186,10 +172,8 @@ class ModelGenerator:
 
     def test(self, epoch, generate = False) -> None:
         """Tests the accuracy of the model with the set of images in test_loader
-
         If generate is set to True then the function will produce a comparison image 
         comparing the test data compared the image by the model
-
         Parameters
         ----------
         epoch : int
@@ -216,7 +200,7 @@ class ModelGenerator:
         test_loss /= len(self.test_loader.dataset)
         # print('====> Test set loss: {:.4f}'.format(test_loss))
 
-    def loadModel(self, filepath="") -> bool:
+    def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator
 
         If a file path is not specified then the model generator will load the default model.
@@ -233,9 +217,11 @@ class ModelGenerator:
             if the file path is not a pytorch file.
         """
         if filepath == "":
-            self.model = torch.load("defaultModels/pytorch/Epochs-50.pt")
-            # print("Default VAE Model loaded")
-            return True
+            filepath = "defaultModels/Epochs-50.pt"
+            self.model = torch.load("defaultModels/Epochs-50.pt")
+            print("Default VAE Model loaded")
+            return filepath
+            # return True
         else:
             if not os.path.isfile(filepath):
                 raise ModelException(f"File {filepath} does not exist")
@@ -244,10 +230,11 @@ class ModelGenerator:
             else:
                 self.model = torch.load(filepath)
                 self.set_latent_size(self.model.retrieve_latent_size())
-                # print(filepath+" VAE Model loaded")
-                return True
+                print(filepath+" VAE Model loaded")
+                return filepath
+                # return True
 
-    def saveModel(self, filepath="") -> bool:
+    def saveModel(self, filepath: str="") -> str:
         """Saves the model currently held by the model generator 
 
         If a file path is not specified or the file path already exists then the model generator 
@@ -264,24 +251,25 @@ class ModelGenerator:
         if filepath == "":
             modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
             torch.save(self.model, modelPath)
-            # print("Model saved as savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt")
-            return True
+            print("Model saved as savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt")
+            return modelPath 
         else:
             if not filepath.endswith('.pt'):
                 filepath+=".pt"
             
             if os.path.isfile(filepath):
                 modelPath = "savedModels/VAE-MODEL-"+datetime.now().strftime("%d%m%Y%H%M%S")+".pt"
-                # print(filepath, " already exists!")
+                print(filepath, " already exists!")
                 torch.save(self.model, modelPath)
-                # print("Model saved as savedModels/VAE-MODEL-"+modelPath)
-                return True
+                print("Model saved as "+modelPath)
+
+                return modelPath
             else:
                 torch.save(self.model, filepath)
-                # print("Model saved as" + filepath)
-                return True
+                print("Model saved as" + filepath)
+                return filepath
     
-    def generateImage(self, vector, filepath="") -> bytes:
+    def generateImage(self, vector: list, filepath: str="") -> list:
         """ Generates an image from the model from the vector pass into the function
 
         Parameters
@@ -297,7 +285,7 @@ class ModelGenerator:
             If the input vector dimensions are not the same as the ones specified in the model
         """
         if filepath == "":
-            filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".jpg"
+            filepath = "savedImages/"+datetime.now().strftime("%d%m%Y%H%M%S")+".png"
 
         if not filepath.endswith(('.png', '.jpg', '.jpeg')):
             ModelException("File extension must be either be png, jpg, jpeg")
@@ -313,17 +301,18 @@ class ModelGenerator:
                 # print(sample)
                 # print(sample.size())
                 sample = self.model.decode(sample).cpu() 
-                # print(sample)
                 save_image(sample.view(1, 1, 28, 28), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
-                
-                img_byte_array = io.BytesIO()
-                new_image.save(img_byte_array, format='JPG')
-                img_byte_array.getvalue()
-                # print("Imaged Saved as "+filepath)
-                return img_byte_array
+
+                print("Imaged Saved as "+filepath)
+                with open(filepath, "rb") as image:
+                    f = image.read()
+                    b = bytearray(f)
+
+                os.remove(filepath)
+                return list(b)
 
     def clearModel(self) -> None:
         """Removes the current model and replaces it with a new untrained model
@@ -331,48 +320,11 @@ class ModelGenerator:
         self.model = None
         self.model = VAE(self.latent_size).to(self.device)
 
-    def set_latent_size(self, latent_size) -> None:
+    def set_latent_size(self, latent_size: int) -> None:
         self.latent_size = latent_size
 
-    def to_tensorflow(self, filepath: str, newName: str = "") -> None:
-        trained_model = self.model
-        path = os.path.abspath(".")
-
-        onnx_dir  = ""
-        tfjs_dir = ""
-        # onnx_dir = path+"\\defaultModels\\tensorflow\onnx\\"
-        # tfjs_dir = path+"\\defaultModels\\tensorflow\\tensorflowjs\\"
-        #print(onnx_dir)
-        # input()
-
-        # trained_model.load_state_dict(torch.load(filepath))
-        dummy_input = Variable(torch.randn(1, 1, 28, 28))
-        # Have a conditional statement to check whether newName is empty 
-        # if it is empty get the pytorch file name and remove extension
-
-        timestamp = ""
-        if newName == "":
-            timestamp = datetime.now().strftime("%d%m%Y%H%M%S")
-            newName = "defaultModels/tensorflow/onnx/"+timestamp
-            newNameTensor = "defaultModels/tensorflow/tensorflowjs/"+timestamp
-
-        # os.makedirs(onnx_dir+"/"+timestamp+newName+"/")
-        # os.makedirs(tfjs_dir+"/"+timestamp+newName+"/")
-        onnx_dir = newName + ".onnx"
-        tfjs_dir = newNameTensor
-
-        torch.onnx.export(trained_model, dummy_input, onnx_dir)
-
-        onnx_model = onnx.load(onnx_dir)
-        tf_rep = prepare(onnx_model)
-
-        tf_rep.export_graph(tfjs_dir)
-        tensorflowjs.converters.convert_tf_saved_model(tfjs_dir, tfjs_dir, skip_op_check=True)
-        return None
-
-
     def loadDataset(self) -> None:
-        # @TODO Complete this function but first create dataset loader class
+        # TODO Complete this function but first create dataset loader class
         #       and related variables that need to created in this class.
         """Loads a new dataset to train the model on 
         """
@@ -384,24 +336,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Model Generator Model')
     parser.add_argument('--latent-size', type=int, default=3, metavar='N',
                         help='Determines the size latent size of the model to be trained')
-    parser.add_argument('--model', type=str, default="defaultModels/pytorch/Epochs-50.pt", metavar='N',
+    parser.add_argument('--model', type=str, default="defaultModels/Epochs-50.pt", metavar='N',
                         help='Choose the pre-saved model')
     parser.add_argument('--coordinates', default=None, type=float, nargs='+',
                         help='the latent vector to be used by the model to generate an image')
     args = parser.parse_args()
 
-
     generator = ModelGenerator()
     generator.loadModel(args.model)
 
-    generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
-    # print(generator.model.retrieve_latent_size())
-    # input()
-    # generator.train_model(50)
-    # generator.saveModel("savedModels/50iterations.pt")
-    # if args.coordinates == None:
-    #     raise "Cannot generate an image"
-    # else:
-    #     print(generator.generateImage(args.coordinates).getvalue())
-    # print(generator.test_loader)
-    # generator.model.encode()
+    # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")

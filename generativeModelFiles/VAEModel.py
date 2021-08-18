@@ -1,9 +1,8 @@
 from __future__ import print_function
 import torch
 from torch.functional import Tensor
-from torch.types import Number
 import torch.utils.data
-from torch import nn, optim
+from torch import nn
 from torch.nn import functional as F
 
 class VAE(nn.Module):

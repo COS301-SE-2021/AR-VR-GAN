@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
@@ -10,12 +11,12 @@ import { CookieService } from 'ngx-cookie-service';
 export class LoginFormComponent implements OnInit {
   public message: string | undefined;
 
-  constructor(private http: HttpClient, private cookieService: CookieService) {}
+  constructor(private http: HttpClient, private cookieService: CookieService, private router: Router) {}
 
   ngOnInit(): void {}
 
   register(): void {
-    window.location.replace('http://localhost:4200/register');
+    this.router.navigate(['/register']);
   }
 
   loginUser(username: string, password: string): void {
@@ -27,7 +28,7 @@ export class LoginFormComponent implements OnInit {
         this.message = 'The user was logged in successfully.';
         this.cookieService.set('username', username);
         this.cookieService.set('jwtToken', resp.message);
-        window.location.replace('http://localhost:4200/landing');
+        this.router.navigate(['/landing']);
       } else {
         this.message = resp.message;
       }
