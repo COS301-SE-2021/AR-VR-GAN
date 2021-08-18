@@ -43,13 +43,13 @@ describe('UserService', () => {
   //   });
   // });
 
-  it('should register a user', async () => {
-    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+  // it('should register a user', async () => {
+  //   const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
     
-    expect(await (await service.registerUser(registerDto))).toEqual({
-      success:true,
-      message: 'The user was registered successfully.'
-    });
-  });
+  //   expect(await (await service.registerUser(registerDto))).toEqual({
+  //     success:true,
+  //     message: 'The user was registered successfully.'
+  //   });
+  // });
 
 });
