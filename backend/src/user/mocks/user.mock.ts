@@ -48,15 +48,29 @@ export const MockUserService = {
     }),
   }
 
+
+
+
+
+
+
+
+
 export default class MockUserClass {
  //private users:Array<userDTO>;
  private users:userDTO[] = new Array(10)
 
   public registerUser(Registerdto){
     let user = new userDTO(Registerdto.username,Registerdto.password,Registerdto.email);
-    this.users.push(user);
-    let res = new UserResponse(true, 'The user was registered successfully.');
-    return res;
+    if((user.username!="") && (user.password!="") && (user.email!="")){
+      this.users.push(user);
+      let res = new UserResponse(true, 'The user was registered successfully.');
+      return res;
+    }
+    else{
+      let res = new UserResponse(false, 'No username/password/email');
+      return res;
+    }
   }
 
   public loginUser(loginDto){
@@ -94,7 +108,7 @@ export default class MockUserClass {
       }
     }
 
-    let res = new UserResponse(false, 'updated failed!');
+    let res = new UserResponse(false, 'updated failed! user not found');
     return res;
   }
 
