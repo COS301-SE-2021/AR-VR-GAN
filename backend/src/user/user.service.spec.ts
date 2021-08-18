@@ -54,7 +54,7 @@ describe('UserService', () => {
     expect(service.registerUser(registerDto)).toBe
   });
 
-  it('should register check the password', async () => {
+  it('should check the password', async () => {
     const loginDto = new LoginUserDto("password","matt");
     
     expect(await service.loginUser(loginDto)).toEqual({
