@@ -39,6 +39,37 @@ describe('UserController', () => {
   });
 
 
+  it('register-false : no username', () => {
+    const registerDto = new RegisterUserDto("","test123@test.com","test123");
+
+    expect(controller.registerUser(registerDto)).toEqual({
+      success:false,
+      message: 'No username entered'
+    });
+  });
+
+  it('register-false : no email', () => {
+    const registerDto = new RegisterUserDto("test123","","test123");
+
+    expect(controller.registerUser(registerDto)).toEqual({
+      success:false,
+      message: 'No email entered'
+    });
+  });
+
+  it('register-false : no password', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","");
+
+    expect(controller.registerUser(registerDto)).toEqual({
+      success:false,
+      message: 'No password entered'
+    });
+  });
+
+
+
+
+
 
 
 
@@ -50,6 +81,17 @@ describe('UserController', () => {
     expect(controller.loginUser(loginDto)).toEqual({
       success: true,
       message: "login succesful!"
+    })
+  });
+
+  it('should detect an incorrect login', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
+    let loginDto =  new LoginUserDto("test12","test123")
+    expect(controller.loginUser(loginDto)).toEqual({
+      success: false,
+      message: "login fail!"
     })
   });
 
@@ -70,13 +112,30 @@ describe('UserController', () => {
 
 
 
+  it('should fail to update user', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
+    let updateDto = new UpdateUserByUsernameDto("jwtToken","test12","newUser","newPass","newEmail");
+
+    expect(controller.updateUserWithUsername(updateDto)).toEqual({
+      success: false,
+      message: "updated failed! user not found"
+    })
+  });
+
+
+
 
 
   it('Get all users', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+
     let allUserDto = new GetAllUsersDto("jwtToken")
     expect(controller.getAllUsers(allUserDto)).toEqual({
       success: true,
-      message: "all users list",
+      message: "The list of all users is attatched.",
       users: "jwtToken"
     })
   });

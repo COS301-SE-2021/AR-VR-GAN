@@ -49,16 +49,43 @@ export const MockUserService = {
     }),
   }
 
+
+
+
+
+
+
+
+
 export default class MockUserClass {
  //private users:Array<userDTO>;
  private users:userDTO[] = new Array(10)
 
   public registerUser(Registerdto){
     let user = new userDTO(Registerdto.username,Registerdto.password,Registerdto.email);
-    this.users.push(user);
-    let res = new UserResponse(true, 'The user was registered successfully.');
-    return res;
+    if((user.username!="")){
+      if(user.password!=""){
+        if(user.email!=""){
+          this.users.push(user);
+          let res = new UserResponse(true, 'The user was registered successfully.');
+          return res;
+        }
+        else{
+          let res = new UserResponse(false, 'No email entered');
+          return res;
+        }
+      }
+      else{
+        let res = new UserResponse(false, 'No password entered');
+        return res;
+      }
+    }
+    else{
+      let res = new UserResponse(false, 'No username entered');
+      return res;
+    }
   }
+  
 
   public loginUser(loginDto){
     let user = new LoginUserDto(loginDto.username,loginDto.password);
@@ -95,7 +122,8 @@ export default class MockUserClass {
 
       }
     }
-    let res = new UserResponse(false, 'updated failed!');
+
+    let res = new UserResponse(false, 'updated failed! user not found');
     return res;
 
   }
@@ -118,9 +146,6 @@ export default class MockUserClass {
     let res = new GetUserByUsernameResponse(false, "getUserByUsernameDto.username", null);
     return res;
   }
-
-
-
 
  public getAllUsers(getAllUsersdto){
     let user = new GetAllUsersDto(getAllUsersdto.jwtToken);
