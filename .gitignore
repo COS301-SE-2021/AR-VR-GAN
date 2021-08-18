@@ -9,8 +9,8 @@ generativeModelFiles/savedImages/*.png
 generativeModelFiles/savedImages/*.jpg
 generativeModelFiles/*.txt
 generativeModelFiles/test
-ogprotos/
-data/*
+generativeModelFiles/defaultModels/tensorflow/onnx/*
+generativeModelFiles/defaultModels/tensorflow/tensorflowjs/*
 .DS_Store
 __pycache__/
 data/*

@@ -4,6 +4,7 @@ import { join } from 'path';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ModelGeneration,RequestProxy } from './grpc.interface';
 import { ReplaySubject} from 'rxjs';
+import * as tf from "@tensorflow/tfjs"
 
 @Injectable()
 export class ModelService {
@@ -118,6 +119,20 @@ export class ModelService {
         return await getImage();
 
     }*/
+
+    // /**
+    //  * acts as a client to the python grpc server to retrieve the image byte array
+    //  * @param request the coordinates from the user to be send to the model
+    //  * @returns image byte array
+    //  */
+    //     public proxy(request: Request): Promise<any> {
+    //     const subject = new ReplaySubject<RequestProxy>();
+    //     subject.next({ vector: request.data });
+    //     subject.complete();
+    //     const stream =this.grpcService.generateImage(subject.asObservable());
+    //     return stream.toPromise();
+    // }
+
 
     /**
      * acts as a client to the python grpc server to retrieve the image byte array
