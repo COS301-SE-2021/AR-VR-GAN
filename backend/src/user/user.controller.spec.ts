@@ -153,10 +153,13 @@ describe('UserController', () => {
   });
 
   it('delete a user by a username', () => {
+    const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
+    controller.registerUser(registerDto)
+    
     let deleteDto =  new GetUserByUsernameDto("jwtToken","test123")
     expect(controller.deleteUserByUsername(deleteDto)).toEqual({
       success: true,
-      message: "deleted succesfully!"
+      message: "The user has been removed."
     })
   });
 
