@@ -4,7 +4,7 @@ import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { UploadService } from './upload.service';
 import { RequestBody } from './interfaces/coordinates.interface';
-import { ModelService } from '../../src/model/model.service';
+import { ModelService } from '../model/model.service';
 import * as fs from 'fs';
 
 @Controller('upload')

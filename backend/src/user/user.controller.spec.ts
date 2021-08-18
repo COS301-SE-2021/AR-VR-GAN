@@ -27,8 +27,6 @@ describe('UserController', () => {
 
 
 
-
-
   it('should register a user', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
 
