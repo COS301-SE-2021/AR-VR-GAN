@@ -8,14 +8,15 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+    
+defaults:
+  run:
+    working-directory: backend
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-    
-    env:
-      working-directory: ./backend
 
     strategy:
       matrix:
@@ -30,8 +31,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Dependencies Install
-      working-directory: ./backend
       run: npm ci
     - name: Run Tests
       run: npm test
-      working-directory: backend
