@@ -1,17 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserService } from './user.service';
 import { MockUserModel } from './mocks/userRepository.mock'
-import { UserSchema } from './schemas/user.schema'
 import { getModelToken } from '@nestjs/mongoose';
-import { RegisterUserDto } from './dto/register-user.dto';
-import { JwtModule, JwtService } from '@nestjs/jwt';
-import config from '../config/keys';
+import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
 
 describe('UserService', () => {
   let service: UserService;
-
-
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -33,7 +28,6 @@ describe('UserService', () => {
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
-
 
   it('login-false : user not found', async () => {
     const loginDto = new LoginUserDto("password","matt");
