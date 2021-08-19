@@ -1,10 +1,10 @@
-import { Controller, Post, UseInterceptors, UploadedFile, Res, Body, Header } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Res, Body, Get } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { UploadService } from './upload.service';
 import { RequestBody } from './interfaces/coordinates.interface';
-import { ModelService } from 'src/model/model.service';
+import { ModelService } from '../model/model.service';
 import * as fs from 'fs';
 
 @Controller('upload')
@@ -58,4 +58,5 @@ export class UploadController {
     
         res.sendFile(filename, options);
     }
+
 }

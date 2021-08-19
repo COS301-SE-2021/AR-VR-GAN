@@ -1,12 +1,11 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { UserService } from './user.service';
-import { User } from './interfaces/user.interface';
 import { UserResponse } from './dto/user-response.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { GetAllUsersDto, GetAllUsersResponse } from './dto/get-all-users.dto';
 import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
-import { GetUserByUsernameResponse } from './dto/get-user-by-username.dto';
+import { GetUserByUsernameResponse } from './dto/get-user-by-usernameResp.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 import { GetUserByJWTTokenDto } from './dto/get-user-by-jwtToken.dto';
 
