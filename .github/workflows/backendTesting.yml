@@ -24,7 +24,7 @@ jobs:
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v2
       with:
-        path: ./backend
+        cache-dependency-path: ./backend
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Dependencies Install
