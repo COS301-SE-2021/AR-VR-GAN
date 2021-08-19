@@ -27,6 +27,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-			working-directory: ./AR-VR-GAN/backend
+    working-directory: ./AR-VR-GAN/backend
     - run: npm test
-			working-directory: ./AR-VR-GAN/backend
+    working-directory: ./AR-VR-GAN/backend
