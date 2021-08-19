@@ -27,7 +27,6 @@ export class UploadController {
         })
     )
     async uploadedFile(@UploadedFile() file: Express.Multer.File) {
-        console.log("here")
         const response = {
             original_filename: file.originalname,
             new_filename: file.filename,
