@@ -6,7 +6,7 @@ import { UserResponse } from './dto/user-response.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 import { GetAllUsersDto, GetAllUsersResponse } from './dto/get-all-users.dto';
 import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
-import { GetUserByUsernameResponse } from './dto/get-user-by-username.dto';
+import { GetUserByUsernameResponse } from './dto/get-user-by-usernameResp.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 import { GetUserByJWTTokenDto } from './dto/get-user-by-jwtToken.dto';
 
