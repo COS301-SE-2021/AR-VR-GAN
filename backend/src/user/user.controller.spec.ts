@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
-import MockUserClass, { MockUserService } from './mocks/user.mock'
+import MockUserClass from './mocks/user.mock'
 import { RegisterUserDto } from './dto/register-user.dto';
 import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
-import { GetAllUsersDto, GetAllUsersResponse } from './dto/get-all-users.dto';
+import { GetAllUsersDto} from './dto/get-all-users.dto';
 import { LoginUserDto } from './dto/login-user.dto';
 
 
@@ -25,8 +25,6 @@ describe('UserController', () => {
     expect(controller).toBeDefined();
   });
 
-
-
   it('should register a user', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
 
@@ -35,7 +33,6 @@ describe('UserController', () => {
       message: 'The user was registered successfully.'
     });
   });
-
 
   it('register-false : no username', () => {
     const registerDto = new RegisterUserDto("","test123@test.com","test123");
@@ -64,13 +61,6 @@ describe('UserController', () => {
     });
   });
 
-
-
-
-
-
-
-
   it('login a user', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
     controller.registerUser(registerDto)
@@ -93,9 +83,6 @@ describe('UserController', () => {
     })
   });
 
-
-  
-
   it('should update a user', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
     controller.registerUser(registerDto)
@@ -108,8 +95,6 @@ describe('UserController', () => {
     })
   });
 
-
-
   it('should fail to update user', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
     controller.registerUser(registerDto)
@@ -121,10 +106,6 @@ describe('UserController', () => {
       message: "updated failed! user not found"
     })
   });
-
-
-
-
 
   it('Get all users', () => {
     const registerDto = new RegisterUserDto("test123","test123@test.com","test123");
