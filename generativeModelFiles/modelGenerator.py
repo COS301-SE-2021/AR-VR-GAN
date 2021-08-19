@@ -306,7 +306,7 @@ class ModelGenerator:
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
 
-                print("Imaged Saved as "+filepath)
+                #print("Imaged Saved as "+filepath)
                 with open(filepath, "rb") as image:
                     f = image.read()
                     b = bytearray(f)
