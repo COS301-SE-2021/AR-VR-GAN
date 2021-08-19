@@ -11,7 +11,6 @@ import { fail } from 'assert';
 import { UploadController } from '../src/upload/upload.controller';
 import { UploadService } from '../src/upload/upload.service';
 import { UploadModule } from '../src/upload/upload.module';
-import { ModelModule } from '../src/model/model.module';
 
 describe('GRPC transport', () => {
   let server;
@@ -128,55 +127,68 @@ describe('GRPC transport', () => {
 
 });
 
-// describe('E2E FileTest', () => {
-//   let app: INestApplication;
-//   let client: ClientProxy;
+describe('E2E FileTest', () => {
+  let app: INestApplication;
+  let client: ClientProxy;
 
-//   beforeAll(async () => {
-//     const moduleRef = await Test.createTestingModule({
-//       controllers: [UploadController],
-//       providers: [UploadService],
-//       imports: [
-//         UploadModule,
-//         ClientsModule.register([
-//           { name: 'UploadService', 
-//             transport: Transport.TCP,
-//             options:{
-//               port: 3000 }
-//           }
-//         ]),
-//       ],
-//     }).compile();
+  beforeAll(async () => {
+    const moduleRef = await Test.createTestingModule({
+      controllers: [UploadController],
+      providers: [UploadService,ModelService],
+      imports: [
+        UploadModule,
+        ClientsModule.register([
+          { name: 'UploadService', 
+            transport: Transport.TCP,
+            options:{
+              port: 3000 }
+          }
+        ]),
+        ClientsModule.register([
+          {
+            name: 'MODEL_PACKAGE',
+            transport: Transport.GRPC,
+            options: {
+              package: 'ModelGenerator',
+              protoPath: join(__dirname, '../../generativeModelFiles/modelGenerator.proto'),
+              url: "127.0.0.1:50051"
+              
+            },
+          },
+        ]),
+      ],
+    }).compile();
 
-//     app = moduleRef.createNestApplication();
+    app = moduleRef.createNestApplication();
 
-//     app.connectMicroservice({
-//       transport: Transport.TCP,
-//     });
+    app.connectMicroservice({
+      transport: Transport.TCP,
+    });
 
-//     await app.startAllMicroservicesAsync();
-//     await app.init();
-
-//     app.enableCors({
-//       allowedHeaders: '*',
-//       origin: '*'
-//     })
-
-//     client = app.get('UploadService');
-//     await client.connect();
-//   });
-
-//   it('server runs for TCP connection', () => {    
-//     expect(app).toBeDefined();
-//   })
-
-//   it('TCP connection success', () => {    
-//     expect(client).toBeDefined();
-//   })
+    app.enableCors({
+      allowedHeaders: '*',
+      origin: '*'
+    })
 
 
-//   afterEach(async () => {
-//     await app.close();
-//   });
+    await app.startAllMicroservicesAsync();
+    await app.init();
 
-// });
+
+    client = app.get('UploadService');
+    await client.connect();
+  });
+
+  it('server runs for TCP connection', () => {    
+    expect(app).toBeDefined();
+  })
+
+  it('TCP connection success', () => {    
+    expect(client).toBeDefined();
+  })
+
+  afterEach(async () => {
+    await app.close();
+  });
+
+});
