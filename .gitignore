@@ -5,7 +5,11 @@ generativeModelFiles/results/*
 generativeModelFiles/savedModels/*
 generativeModelFiles/testing/images/*
 generativeModelFiles/testing/savedModels/*
-generativeModelFiles/savedImages/*
+generativeModelFiles/savedImages/*.png
+generativeModelFiles/savedImages/*.jpg
+generativeModelFiles/test
+ogprotos/
+data/*
 .DS_Store
 __pycache__/
 data/*

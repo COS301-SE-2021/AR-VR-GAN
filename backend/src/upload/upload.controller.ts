@@ -1,14 +1,21 @@
-import { Controller, Post, UseInterceptors, UploadedFile, Res, Body } from '@nestjs/common';
+import { Controller, Post, UseInterceptors, UploadedFile, Res, Body, Header } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { UploadService } from './upload.service';
 import { RequestBody } from './interfaces/coordinates.interface';
+import { ModelService } from 'src/model/model.service';
+import * as fs from 'fs';
 
 @Controller('upload')
 export class UploadController {
-    constructor(private readonly uploadService: UploadService) {}
+    constructor(private readonly uploadService: UploadService, private readonly modelService: ModelService) {}
 
+    /**
+     * handles the post request to upload a file to the server
+     * @param file file to be saved
+     * @returns 
+     */
     @Post('file')
     @UseInterceptors(
         FileInterceptor('file', {
@@ -28,20 +35,27 @@ export class UploadController {
         return response;
     }
 
-    @Post('getImageFromCoordinates')
-    getImageFromCoordinates(@Res() res: Response, @Body() requestBody: RequestBody) {
-        let sum = Math.floor(this.uploadService.handleCoords(requestBody)) % 10;
-        let filename = sum.toString() + '.jpg';
+    /**
+     * handles the post request to retrieve an image from given coordinates
+     * 
+     * @param res 
+     * @param requestBody 
+     */
+     @Post('getImageFromCoordinates')
+     async getImageFromCoordinates(@Res() res: Response, @Body() requestBody: RequestBody) {
+        var result = await this.modelService.proxy(requestBody);
+        fs.writeFileSync('./src/upload/temp.png', result.image);
+        let filename = 'temp.png';
 
         const options = {
-            root: './uploads',
+            root: './src/upload',
             dotfiles: 'deny',
             headers: {
-              'x-timestamp': Date.now(),
-              'x-sent': true
+            'x-timestamp': Date.now(),
+            'x-sent': true
             }
         }
     
-        res.sendFile(filename, options)
+        res.sendFile(filename, options);
     }
 }

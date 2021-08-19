@@ -1,0 +1,5 @@
+<input type="text" id="username" placeholder="Username" #username><br/>
+<input type="password" id="password" placeholder="Password" #password><br/>
+<button (click)="loginUser(username.value, password.value)">Login</button>
+<button (click)="register()">Register</button>
+<p id="message">{{message}}</p>

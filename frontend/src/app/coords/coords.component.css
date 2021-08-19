@@ -52,17 +52,37 @@
 }
 
 #imageReturned {
-    width: 300px;
-    position: absolute;
+    bottom: 50px;
     right: 100px;
-    bottom: 30px;
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background-color: black;
+    border: 5px solid white;
 }
 
 .track {
     bottom: 50px;
     left: 100px;
-    position: fixed;
+    position: absolute;
     width: 300px;
     height: 300px;
     background-color: black;
+    border: 5px solid white;
+}
+
+input[type=number] {
+    /* width: 50%; */
+    padding: 12px 20px;
+    margin: 8px 0;
+    /* box-sizing: border-box; */
+    border: none;
+    border-bottom: 2px solid black;
+    background-color: rgba(0, 0, 0, 0);
+    font-size: 16px;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-bottom: 2px solid #4CAF50; /* Green */
 }

@@ -1,3 +1,3 @@
 export interface Response {
-    sum: number;
+    data: any;
 }
