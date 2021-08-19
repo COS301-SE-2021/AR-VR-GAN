@@ -28,6 +28,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Dependencies Install
-      run: npm ci
+      run: |
+        cd backend
+        npm ci
     - name: Run Tests
       run: npm test
