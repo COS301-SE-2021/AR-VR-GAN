@@ -14,6 +14,10 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 | ![Ethan Coryndon-Baker](https://media-exp1.licdn.com/dms/image/D4D35AQFD_Ep44064Sw/profile-framedphoto-shrink_200_200/0/1624796965940?e=1629529200&v=beta&t=Busc5H2VH-6ggQdEvYnb5MR5ToHhP5zhmttP2zwKQkM "Ethan Coryndon-Baker") <br/> Ethan Coryndon-Baker <br/> u19200065 | [GitHub](https://github.com/ecoryndonbakeruni) <br/> [Profile Page](https://ecoryndonbakeruni.github.io/) <br/> [LinkedIn](https://www.linkedin.com/in/ethan-coryndon-baker-9360081b3/) <br/> | Waterpolo <br/> Backend <br/> Web Design <br/> Java |
 | ![Kabelo Leiee](https://media-exp1.licdn.com/dms/image/C5603AQHByIrhb-M3fA/profile-displayphoto-shrink_200_200/0/1622332350316?e=1634169600&v=beta&t=0EUS4omgDzvN6Z0UmTFTIOFZwxUrMFt-lERl-lrZqsA "Kabelo Leiee") <br/> Kabelo Leiee <br/> u19247070 | [GitHub](https://github.com/kabelo-tuks) <br/> [Profile Page](http://kabelo-tuks.github.io/) <br/> [LinkedIn](https://www.linkedin.com/in/kabelo-leiee-ba7168205/) <br/> | Gym <br/> Web Development <br/> Networks <br/> Artificial Intelligence <br/>C++ <br/> JavaScript <br/>  |
 
+## Project Management Tools
+
+* 📖 [GitHub](https://github.com/COS301-SE-2021/AR-VR-GAN/projects/1)
+
 ## Demo Videos
 
 * 📺 [Demo 1](https://youtu.be/mmZrfHTx3tM)
@@ -22,12 +26,24 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 
 ## Documentation
 
-* 📖 [Software Requirements and Design Specifications](https://drive.google.com/file/d/1-J23MT3PBMJatBx8qQZzrxtTfC4qQL-N/view?usp=sharing)
+#### Software Requirements and Design Specifications
+
+* 📖 [Software Requirements and Design Specifications (Demo 1)](https://drive.google.com/file/d/10S97oUGjTBAccwdw4-YJi9sKw5L_StH4/view?usp=sharing)
+* 📖 [Software Requirements and Design Specifications (Demo 2)](https://drive.google.com/file/d/10I88Aq-UUbU9Zeo2COIbSa-b-ExoO3KZ/view?usp=sharing)
+* 📖 [Software Requirements and Design Specifications (Demo 3)](https://drive.google.com/file/d/1-J23MT3PBMJatBx8qQZzrxtTfC4qQL-N/view?usp=sharing)
+
+#### Architectural Requirements Document
+
 * 📖 [Architectural Requirements Document](https://drive.google.com/file/d/1-4eTHYDorLSD8ghN-f3LR6xcdwqixQWV/view?usp=sharing)
+
+#### User Manual
+
 * 📖 [User Manual](https://drive.google.com/file/d/1-6fSYeDynZ-xo0RNO5tF68zJHmW6vbHc/view?usp=sharing)
+
+#### Coding Standards Document
+
 * 📖 [Coding Standards Document](https://drive.google.com/file/d/1-OIiicuXN1hwqxxklAdR0ZCBKBZRerSt/view?usp=sharing)
+
+#### Technical Installation Manual
+
 * 📖 [Technical Installation Manual](https://drive.google.com/file/d/1-UY_1n9qR1q-CLy_AlHlAD1YcvxAoc04/view?usp=sharing)
-
-## Project Management Tools
-
-* 📖 [GitHub](https://github.com/COS301-SE-2021/AR-VR-GAN/projects/1)
