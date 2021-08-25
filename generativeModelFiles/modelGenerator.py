@@ -7,6 +7,7 @@ from torch.nn import functional as F
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
+from DisentangledVAE import BetaVAE
 import os
 from datetime import datetime
 from PIL import Image
@@ -83,29 +84,41 @@ class ModelGenerator:
         # Go to https://pytorch.org/vision/stable/datasets.html for more information
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
+        im_transform = transforms.Compose([
+            transforms.Resize(28),
+            transforms.ToTensor(),
+        ])
+        # self.train_loader = torch.utils.data.DataLoader(
+        #     datasets.MNIST('../data', train=True, download=True,
+        #                 transform=transforms.ToTensor()),
+        #     batch_size= 128, shuffle=True, **kwargs)
+
         self.train_loader = torch.utils.data.DataLoader(
             datasets.MNIST('../data', train=True, download=True,
-                        transform=transforms.ToTensor()),
+                        transform=im_transform),
             batch_size= 128, shuffle=True, **kwargs)
 
+        # self.test_loader = torch.utils.data.DataLoader(
+        #     datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
+        #     batch_size=128, shuffle=True, **kwargs)
         self.test_loader = torch.utils.data.DataLoader(
-            datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
+            datasets.MNIST('../data', train=False, transform=im_transform),
             batch_size=128, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
         self.latent_size = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
-    # Reconstruction + KL divergence losses summed over all elements and batch
-    def loss_function(self,recon_x, x, mu, logvar) -> float:
-        BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
-        # see Appendix B from VAE paper:
-        # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
-        # https://arxiv.org/abs/1312.6114
-        # 0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
-        KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+    # # Reconstruction + KL divergence losses summed over all elements and batch
+    # def loss_function(self,recon_x, x, mu, logvar) -> float:
+    #     BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
+    #     # see Appendix B from VAE paper:
+    #     # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
+    #     # https://arxiv.org/abs/1312.6114
+    #     # 0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
+    #     KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
 
-        return BCE + KLD
+    #     return BCE + KLD
 
     def train_model(self, epochs) -> None:
         """ Trains and test the model over a set of iterations(epochs)
@@ -156,16 +169,17 @@ class ModelGenerator:
             # The shape is torch.Size([128, 784]) implying that there are 128 images and
             # the dimensions have been reduced to a single array since sqrt(784) and 
             # earlier it is stated that the dimensions of an mnist image is 28x28.
-            loss = self.loss_function(recon_batch, data, mu, logvar)
+            loss = self.model.loss_function(recon_batch, data, mu, logvar)
+            print("loss:",loss)
             loss.backward()
             train_loss += loss.item()
             self.optimizer.step()
             # Displays training data
-            # if batch_idx % 10 == 0: # Change the 10 to the log_interval (self.args.log_interval)
-                # print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                #     epoch, batch_idx * len(data), len(self.train_loader.dataset),
-                #     100. * batch_idx / len(self.train_loader),
-                #     loss.item() / len(data)))
+            if batch_idx % 10 == 0: # Change the 10 to the log_interval (self.args.log_interval)
+                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    epoch, batch_idx * len(data), len(self.train_loader.dataset),
+                    100. * batch_idx / len(self.train_loader),
+                    loss.item() / len(data)))
 
         # print('====> Epoch: {} Average loss: {:.4f}'.format(
         #     epoch, train_loss / len(self.train_loader.dataset)))
@@ -188,7 +202,7 @@ class ModelGenerator:
             for i, (data, _) in enumerate(self.test_loader):
                 data = data.to(self.device)
                 recon_batch, mu, logvar = self.model(data)
-                test_loss += self.loss_function(recon_batch, data, mu, logvar).item()
+                test_loss += self.model.loss_function(recon_batch, data, mu, logvar).item()
                 if i == 0:
                     n = min(data.size(0), 8)
                     comparison = torch.cat([data[:n],
@@ -266,7 +280,7 @@ class ModelGenerator:
                 return modelPath
             else:
                 torch.save(self.model, filepath)
-                print("Model saved as" + filepath)
+                print("Model saved as " + filepath)
                 return filepath
     
     def generateImage(self, vector: list, filepath: str="") -> list:
@@ -302,6 +316,7 @@ class ModelGenerator:
                 # print(sample.size())
                 sample = self.model.decode(sample).cpu() 
                 save_image(sample.view(1, 1, 28, 28), filepath)
+                # save_image(sample.view(1, 3, 64, 64), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
@@ -311,7 +326,7 @@ class ModelGenerator:
                     f = image.read()
                     b = bytearray(f)
 
-                os.remove(filepath)
+                # os.remove(filepath)
                 return list(b)
 
     def clearModel(self) -> None:
@@ -343,6 +358,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
-    generator.loadModel(args.model)
+    # generator.train_model(50)
+    generator.loadModel("BetaVAE-Epochs-50.pt")
+    generator.generateImage([0.0, 0.0, 0.0])
+    # generator.loadModel(args.model)
 
     # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")

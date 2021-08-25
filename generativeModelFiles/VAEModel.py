@@ -28,7 +28,12 @@ class VAE(nn.Module):
         return self.latent_size
 
     def encode(self, x) -> tuple:
+        # print(x.size())
+        # input()
         h1 = F.relu(self.fc1(x))
+        # print(h1.size())
+        # input()
+
         return self.fc21(h1), self.fc22(h1)
 
     def reparameterize(self, mu, logvar) -> float:
@@ -47,3 +52,15 @@ class VAE(nn.Module):
         mu, logvar = self.encode(x.view(-1, 784))
         z = self.reparameterize(mu, logvar)
         return self.decode(z), mu, logvar
+
+    # Reconstruction + KL divergence losses summed over all elements and batch
+    def loss_function(self,recon_x, x, mu, logvar) -> float:
+        BETA = 5
+        BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
+        # see Appendix B from VAE paper:
+        # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
+        # https://arxiv.org/abs/1312.6114
+        # 0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
+        KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+
+        return BCE + BETA*KLD
