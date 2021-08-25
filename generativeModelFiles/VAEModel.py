@@ -54,8 +54,8 @@ class VAE(nn.Module):
         return self.decode(z), mu, logvar
 
     # Reconstruction + KL divergence losses summed over all elements and batch
-    def loss_function(self,recon_x, x, mu, logvar) -> float:
-        BETA = 5
+    def loss_function(self,recon_x, x, mu, logvar, beta = 1) -> float:
+        BETA = beta
         BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
         # see Appendix B from VAE paper:
         # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014

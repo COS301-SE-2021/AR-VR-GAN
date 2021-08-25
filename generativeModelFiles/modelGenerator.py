@@ -9,7 +9,7 @@ from torchvision.utils import save_image
 from VAEModel import VAE
 from DisentangledVAE import BetaVAE
 import os
-from datetime import datetime
+from datetime import datetime, time
 from PIL import Image
 from modelExceptions import ModelException
 
@@ -120,7 +120,7 @@ class ModelGenerator:
 
     #     return BCE + KLD
 
-    def train_model(self, epochs) -> None:
+    def train_model(self, epochs, beta=1) -> None:
         """ Trains and test the model over a set of iterations(epochs)
 
         Parameters
@@ -133,10 +133,10 @@ class ModelGenerator:
         # if not throw an exception. Make sure that it is in fact an integer and
         # that it is greater than zero.
         for epoch in range(1, epochs + 1):
-            self.train(epoch)
-            self.test(epoch)
+            self.train(epoch, beta)
+            self.test(epoch, beta)
 
-    def train(self, epoch) -> None:
+    def train(self, epoch, beta) -> None:
         """Trains the model on the set of images in train_loader
         Parameters
         ----------
@@ -169,8 +169,8 @@ class ModelGenerator:
             # The shape is torch.Size([128, 784]) implying that there are 128 images and
             # the dimensions have been reduced to a single array since sqrt(784) and 
             # earlier it is stated that the dimensions of an mnist image is 28x28.
-            loss = self.model.loss_function(recon_batch, data, mu, logvar)
-            print("loss:",loss)
+            loss = self.model.loss_function(recon_batch, data, mu, logvar, beta)
+            print("loss:",type(loss))
             loss.backward()
             train_loss += loss.item()
             self.optimizer.step()
@@ -184,7 +184,7 @@ class ModelGenerator:
         # print('====> Epoch: {} Average loss: {:.4f}'.format(
         #     epoch, train_loss / len(self.train_loader.dataset)))
 
-    def test(self, epoch, generate = False) -> None:
+    def test(self, epoch, beta, generate = False) -> None:
         """Tests the accuracy of the model with the set of images in test_loader
         If generate is set to True then the function will produce a comparison image 
         comparing the test data compared the image by the model
@@ -202,7 +202,7 @@ class ModelGenerator:
             for i, (data, _) in enumerate(self.test_loader):
                 data = data.to(self.device)
                 recon_batch, mu, logvar = self.model(data)
-                test_loss += self.model.loss_function(recon_batch, data, mu, logvar).item()
+                test_loss += self.model.loss_function(recon_batch, data, mu, logvar, beta).item()
                 if i == 0:
                     n = min(data.size(0), 8)
                     comparison = torch.cat([data[:n],
@@ -359,8 +359,27 @@ if __name__ == "__main__":
 
     generator = ModelGenerator()
     # generator.train_model(50)
-    generator.loadModel("BetaVAE-Epochs-50.pt")
+    from time import sleep
+    generator.loadModel("defaultModels/BetaVAE-Epochs-50.pt")
     generator.generateImage([0.0, 0.0, 0.0])
+    sleep(1)
+    generator.generateImage([0.1, 0.0, 0.0])
+    sleep(1)
+    generator.generateImage([0.2, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.03, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.04, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.05, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.06, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.022, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.024, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.056, 0.1, 0.0])
     # generator.loadModel(args.model)
 
     # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
