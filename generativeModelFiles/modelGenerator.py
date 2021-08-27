@@ -7,7 +7,6 @@ from torch.nn import functional as F
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
-from DisentangledVAE import BetaVAE
 import os
 from datetime import datetime, time
 from PIL import Image
@@ -94,15 +93,14 @@ class ModelGenerator:
         #     batch_size= 128, shuffle=True, **kwargs)
 
         self.train_loader = torch.utils.data.DataLoader(
-            datasets.MNIST('../data', train=True, download=True,
-                        transform=im_transform),
+            datasets.STL10("../data",split="train",download=True,transform=im_transform),
             batch_size= 128, shuffle=True, **kwargs)
 
         # self.test_loader = torch.utils.data.DataLoader(
         #     datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
         #     batch_size=128, shuffle=True, **kwargs)
         self.test_loader = torch.utils.data.DataLoader(
-            datasets.MNIST('../data', train=False, transform=im_transform),
+            datasets.STL10("../data",split="test",transform=im_transform),
             batch_size=128, shuffle=True, **kwargs)
 
         self.model = VAE(3).to(self.device)
@@ -170,7 +168,6 @@ class ModelGenerator:
             # the dimensions have been reduced to a single array since sqrt(784) and 
             # earlier it is stated that the dimensions of an mnist image is 28x28.
             loss = self.model.loss_function(recon_batch, data, mu, logvar, beta)
-            print("loss:",type(loss))
             loss.backward()
             train_loss += loss.item()
             self.optimizer.step()
@@ -232,7 +229,7 @@ class ModelGenerator:
         """
         if filepath == "":
             filepath = "defaultModels/Epochs-50.pt"
-            self.model = torch.load("defaultModels/Epochs-50.pt")
+            self.model = torch.load(filepath)
             print("Default VAE Model loaded")
             return filepath
             # return True
@@ -358,9 +355,10 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
-    # generator.train_model(50)
+    generator.train_model(50)
+    generator.saveModel("defaultModels/BetaVAE-STL10-Epochs-50.pt")
     from time import sleep
-    generator.loadModel("defaultModels/BetaVAE-Epochs-50.pt")
+    # generator.loadModel("defaultModels/BetaVAE-Fake-Data-Epochs-50.pt")
     generator.generateImage([0.0, 0.0, 0.0])
     sleep(1)
     generator.generateImage([0.1, 0.0, 0.0])

@@ -28,12 +28,7 @@ class VAE(nn.Module):
         return self.latent_size
 
     def encode(self, x) -> tuple:
-        # print(x.size())
-        # input()
         h1 = F.relu(self.fc1(x))
-        # print(h1.size())
-        # input()
-
         return self.fc21(h1), self.fc22(h1)
 
     def reparameterize(self, mu, logvar) -> float:
