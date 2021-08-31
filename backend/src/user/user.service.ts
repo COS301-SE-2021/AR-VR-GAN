@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -11,6 +11,7 @@ import { GetUserByUsernameResponse } from './dto/get-user-by-usernameResp.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 import { UserResponse } from './dto/user-response.dto';
 import config from '../config/keys';
+import { AuthenticateUserDto , AuthenticateUserResponseDto } from './dto/authenticate-user.dto';
 
 @Injectable()
 export class UserService {
@@ -366,5 +367,28 @@ export class UserService {
         }
 
         return new UserResponse(true, message);
+    }
+
+    /**
+     * Aunthenticates a user by verifying a jwt token
+     * @param user 
+     */
+    async authenticateUser(user: AuthenticateUserDto): Promise<AuthenticateUserResponseDto> {
+        try{
+            const data = await this.jwtService.verifyAsync(user.jwtToken);
+
+            if(!data){
+                const resp = new AuthenticateUserResponseDto(false);
+                return resp;
+            }
+
+            const resp = new AuthenticateUserResponseDto(true);
+            return resp;
+        }
+        catch(e){
+            const resp = new AuthenticateUserResponseDto(false);
+            return resp;
+        }
+        
     }
 }
