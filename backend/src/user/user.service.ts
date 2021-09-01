@@ -373,20 +373,21 @@ export class UserService {
      * Aunthenticates a user by verifying a jwt token
      * @param user 
      */
-    authenticateUser(user: AuthenticateUserDto): AuthenticateUserResponseDto {
+    async authenticateUser(user: AuthenticateUserDto): Promise<AuthenticateUserResponseDto> {
         try{
-            const data = this.jwtService.verifyAsync(user.jwtToken);
+            const data = await this.jwtService.verifyAsync(user.jwtToken);
 
             if(!data){
-                const resp = new AuthenticateUserResponseDto(false);
+                const resp = new AuthenticateUserResponseDto(false,"invalid jwt token");
                 return resp;
             }
-            console.log("safe")
-            const resp = new AuthenticateUserResponseDto(true);
-            return resp;
+            else{
+                const resp = new AuthenticateUserResponseDto(true,"authorized member");
+                return resp;
+            }
         }
         catch(e){
-            const resp = new AuthenticateUserResponseDto(false);
+            const resp = new AuthenticateUserResponseDto(false,"invalid jwt token");
             return resp;
         }
         
