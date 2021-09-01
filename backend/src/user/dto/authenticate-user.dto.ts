@@ -8,8 +8,10 @@ export class AuthenticateUserDto {
 
 export class AuthenticateUserResponseDto {
     readonly success: boolean;
+    readonly message: string;
     
-    constructor(success: boolean) {
+    constructor(success: boolean, message: string) {
         this.success = success;
+        this.message = message;
     }
 }
