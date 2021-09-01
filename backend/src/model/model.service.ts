@@ -1,14 +1,16 @@
-import { Injectable,Inject } from '@nestjs/common';
+import { Injectable,Inject, UnauthorizedException } from '@nestjs/common';
 import { Request } from './interfaces/request.interface';
 import { join } from 'path';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ModelGeneration,RequestProxy } from './grpc.interface';
 import { ReplaySubject} from 'rxjs';
+import { UserService } from '../user/user.service';
+import { AuthenticateUserDto} from '../user/dto/authenticate-user.dto';
 
 @Injectable()
 export class ModelService {
 
-    constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc) {}
+    constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc,private readonly userService: UserService) {}
     private grpcService: ModelGeneration;
 
     onModuleInit() {
@@ -56,6 +58,16 @@ export class ModelService {
      * @returns image byte array
      */
         public proxy(request: Request): Promise<any> {
+            const authenticateDto = new AuthenticateUserDto(request.jwt);
+            const success = this.userService.authenticateUser(authenticateDto);
+
+            success.then( data => {
+                if( data.success == false)
+                {
+                    throw new UnauthorizedException();
+                }
+            })
+            
             const subject = new ReplaySubject<RequestProxy>();
             subject.next({ vector: request.data });
             subject.complete();
