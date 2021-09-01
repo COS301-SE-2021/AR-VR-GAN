@@ -58,21 +58,23 @@ export class ModelService {
      * @returns image byte array
      */
         public proxy(request: Request): Promise<any> {
-            const authenticateDto = new AuthenticateUserDto(request.jwt);
-            const success = this.userService.authenticateUser(authenticateDto);
+            // const authenticateDto = new AuthenticateUserDto(request.jwt);
+            // const success = this.userService.authenticateUser(authenticateDto);
 
-            success.then( data => {
-                if( data.success == false)
-                {
-                    throw new UnauthorizedException();
-                }
-            })
-            
+            // success.then( data => {
+            //     if( data.success == false)
+            //     {
+            //         throw new UnauthorizedException();
+            //     }
+            // })
+
             const subject = new ReplaySubject<RequestProxy>();
             subject.next({ vector: request.data });
             subject.complete();
             const stream =this.grpcService.generateImage(subject.asObservable());
             return stream.toPromise();
+
+
         }
     
 
