@@ -1,4 +1,4 @@
-import { Controller} from '@nestjs/common';
+import { Controller, UnauthorizedException} from '@nestjs/common';
 import { Client, ClientGrpc, GrpcStreamMethod, Transport } from '@nestjs/microservices';
 import { Response } from './interfaces/response.interface'
 import { ResponsePython } from './interfaces/responsePython.interface';
@@ -6,6 +6,8 @@ import { Request } from './interfaces/request.interface'
 import { ModelService } from './model.service';
 import { Observable,Subject } from 'rxjs';
 import { join } from 'path';
+import { UserService } from '../user/user.service';
+import { AuthenticateUserDto} from '../user/dto/authenticate-user.dto';
 
 @Controller('model')
 export class ModelController {
@@ -19,7 +21,7 @@ export class ModelController {
       })
       client: ClientGrpc;
 
-    constructor(private modelService: ModelService) {}
+    constructor(private modelService: ModelService,private readonly userService: UserService) {}
 
     @GrpcStreamMethod()
     handleCoords(messages: Observable<Request>): Observable<Response> {
@@ -76,13 +78,24 @@ export class ModelController {
      */
     @GrpcStreamMethod('ModelController', 'Proxy')
     proxy(messages: Observable<Request>): Observable<ResponsePython> {
+
         const subject = new Subject<Response>();
     
         const onNext =async (message: Request) => {
-            var data =await this.modelService.proxy(message)
-            subject.next({
-                data: data.image
-            });
+            const authenticateDto = new AuthenticateUserDto(message.jwt);
+            const success = this.userService.authenticateUser(authenticateDto);
+    
+            if( success.success == false)
+            {
+                throw new UnauthorizedException();
+            }
+            else
+            {
+                var data =await this.modelService.proxy(message)
+                subject.next({
+                    data: data.image
+                });
+            }
         };
     
         const onComplete = () => subject.complete();
