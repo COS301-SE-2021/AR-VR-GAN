@@ -373,15 +373,15 @@ export class UserService {
      * Aunthenticates a user by verifying a jwt token
      * @param user 
      */
-    async authenticateUser(user: AuthenticateUserDto): Promise<AuthenticateUserResponseDto> {
+    authenticateUser(user: AuthenticateUserDto): AuthenticateUserResponseDto {
         try{
-            const data = await this.jwtService.verifyAsync(user.jwtToken);
+            const data = this.jwtService.verifyAsync(user.jwtToken);
 
             if(!data){
                 const resp = new AuthenticateUserResponseDto(false);
                 return resp;
             }
-
+            console.log("safe")
             const resp = new AuthenticateUserResponseDto(true);
             return resp;
         }
