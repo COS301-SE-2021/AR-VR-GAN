@@ -83,11 +83,12 @@ export class ModelController {
     
         const onNext =async (message: Request) => {
             const authenticateDto = new AuthenticateUserDto(message.jwt);
-            const success = this.userService.authenticateUser(authenticateDto);
+            const success =await  this.userService.authenticateUser(authenticateDto);
+            
     
             if( success.success == false)
             {
-                throw new UnauthorizedException();
+                //invalid jwt token code goes here
             }
             else
             {
