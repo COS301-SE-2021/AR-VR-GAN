@@ -3,9 +3,19 @@ import { ModelController } from './model.controller';
 import { ModelService } from './model.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { UsersModule } from '../user/user.module';
+import { UserService } from '../user/user.service';
+import { MongooseModule } from '@nestjs/mongoose';
+import { UserSchema } from '../user/schemas/user.schema';
+import { JwtModule } from '@nestjs/jwt';
+import config from '../config/keys';
 
 @Module({
-  imports: [
+  imports: [MongooseModule.forFeature([{ name: 'User', schema: UserSchema }]),
+  JwtModule.register({
+    secret: config.jwtSecret,
+    signOptions: { expiresIn: '7200s'}
+  }),
     ClientsModule.register([
       {
         name: 'MODEL_PACKAGE',
@@ -20,7 +30,7 @@ import { join } from 'path';
     ]),
   ],
   controllers: [ModelController],
-  providers: [ModelService],
+  providers: [ModelService,UserService],
   exports: [ModelService]
 })
 export class ModelModule {}
