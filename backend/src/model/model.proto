@@ -10,6 +10,7 @@ service ModelController {
 
 message RequestDto {
     repeated double data = 1;
+    string jwt = 2;
 }
 
 message ResponseDto {
