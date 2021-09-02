@@ -130,6 +130,7 @@ class ModelGenerator:
         # Check whether a valid integer is passed and pass through the fuction
         # if not throw an exception. Make sure that it is in fact an integer and
         # that it is greater than zero.
+        self.model.set_latent_size(self.latent_size)
         for epoch in range(1, epochs + 1):
             self.train(epoch, beta)
             self.test(epoch, beta)

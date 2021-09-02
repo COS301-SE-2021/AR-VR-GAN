@@ -6,7 +6,7 @@ import modelGenerator_pb2_grpc
 from modelGenerator import ModelGenerator
 # m_generator = ModelGenerator()
 global_vector = []
-
+SAVED_MODELS_DIR ="./savedModels/"
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
     
     m_generator = ModelGenerator()
@@ -37,9 +37,20 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         datasetName: str = request.datasetName 
         beta: int = request.beta
 
-        
+        # Create a temporary model generator so that a new model can be 
+        # trained while the server is running
+        temp = ModelGenerator()
+        response = modelGenerator_pb2.TrainModelResponse()
+        response.succesful = False
+        response.message = f"Model {modelName} sucessfully trained after {epochs} epochs."
+        try:
+            temp.set_latent_size(latent_size=latentSize)
+            temp.train_model(epochs=epochs, beta=beta)
+            temp.saveModel(SAVED_MODELS_DIR+modelName)
+        except Exception as e:
+            response.succesful = False
+            response.message = str(e)
 
-        pass
 
     def LoadModel(self, request, context):
         print(f"The Model: {request.modelName}")
