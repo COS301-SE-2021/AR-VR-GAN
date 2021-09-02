@@ -41,15 +41,17 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         # trained while the server is running
         temp = ModelGenerator()
         response = modelGenerator_pb2.TrainModelResponse()
-        response.succesful = False
-        response.message = f"Model {modelName} sucessfully trained after {epochs} epochs."
+        response.succesful = True
+        # response.message = f"Model {modelName} sucessfully trained after {epochs} epochs."
         try:
             temp.set_latent_size(latent_size=latentSize)
             temp.train_model(epochs=epochs, beta=beta)
-            temp.saveModel(SAVED_MODELS_DIR+modelName)
+            response.message = temp.saveModel(SAVED_MODELS_DIR+modelName)
         except Exception as e:
             response.succesful = False
             response.message = str(e)
+
+        return response
 
 
     def LoadModel(self, request, context):
@@ -70,7 +72,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 async def serve():
     server = grpc.aio.server()
     modelGenerator_pb2_grpc.add_ModelGenerationServicer_to_server(ModelGenerationServicer(), server)
-    server.add_insecure_port("[::]:50051")
+    server.add_insecure_port("127.0.0.1:50051")
     print(f"Model Generator Server Started. Listening on port 50051")
     await server.start()
     await server.wait_for_termination()
