@@ -8,6 +8,7 @@ import { Observable,Subject } from 'rxjs';
 import { join } from 'path';
 import { UserService } from '../user/user.service';
 import { AuthenticateUserDto} from '../user/dto/authenticate-user.dto';
+import * as fs from 'fs';
 
 @Controller('model')
 export class ModelController {
@@ -89,6 +90,11 @@ export class ModelController {
             if( success.success == false)
             {
                 //invalid jwt token code goes here
+                var imagePath = join(__dirname, '../../uploads/invalidJwt.png');
+                var img =await fs.readFileSync(imagePath)
+                subject.next({
+                    data: img
+                });
             }
             else
             {
