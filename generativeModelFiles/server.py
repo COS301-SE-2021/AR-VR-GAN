@@ -4,10 +4,12 @@ import asyncio
 import modelGenerator_pb2
 import modelGenerator_pb2_grpc
 from modelGenerator import ModelGenerator
-m_generator = ModelGenerator()
+# m_generator = ModelGenerator()
 global_vector = []
 
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
+    
+    m_generator = ModelGenerator()
 
     async def get_image_data(self, request, context):
         async for item in request:
@@ -16,8 +18,8 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
     async def write_image_data(self, context, latent_vector):
         if latent_vector == []:
-            latent_vector = [0.00 for x in range(m_generator.model.retrieve_latent_size())]
-        generated_image = bytes(m_generator.generateImage(latent_vector))
+            latent_vector = [0.00 for x in range(self.m_generator.model.retrieve_latent_size())]
+        generated_image = bytes(self.m_generator.generateImage(latent_vector))
         await context.write(modelGenerator_pb2.ImageResponse(width=0, height=0, image=generated_image))
 
     async def GenerateImage(self, request: modelGenerator_pb2.ImageRequest, context):
@@ -28,6 +30,15 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         pass
 
     def TrainModel(self, request, context):
+        modelName: str = request.modelName
+        epochs: int = request.trainingEpochs
+        latentSize: int = request.latentSize
+        # TODO: Create dataset loader selector
+        datasetName: str = request.datasetName 
+        beta: int = request.beta
+
+        
+
         pass
 
     def LoadModel(self, request, context):
@@ -36,12 +47,12 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         response = modelGenerator_pb2.LoadModelResponse()
         response.succesful = True
         try:
-            m_generator.loadModel(request.modelName)
+            self.m_generator.loadModel(request.modelName)
         except:
             response.succesful = False
             response.message = f"Unable to load {request.modelName}, try another model."
             return response
-        response.message = "Successful: "+ str(m_generator.model.retrieve_latent_size())
+        response.message = "Successful: "+ str(self.m_generator.model.retrieve_latent_size())
         return response
 
 
@@ -54,5 +65,5 @@ async def serve():
     await server.wait_for_termination()
 
 if __name__ == "__main__":
-    m_generator.loadModel("./defaultModels/Epochs-50.pt")
+    # m_generator.loadModel("./defaultModels/Epochs-50.pt")
     asyncio.run(serve())

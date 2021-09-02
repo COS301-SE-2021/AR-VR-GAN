@@ -28,7 +28,8 @@ message TrainModelRequest{
     int32 latentSize = 3;
     string datasetName = 4;
     bytes dataset = 5;
-    bool beta = 6;
+    // bool beta = 6;
+    int32 beta = 7;
 }
 
 message LoadModelRequest{
