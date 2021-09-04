@@ -1,3 +1,4 @@
+from matplotlib import pyplot as plt
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -47,10 +48,14 @@ class Autoencoder(nn.Module):
             nn.Sigmoid()
         )
 
-        def forward(self, x):
-            encoded = self.encoder(x)
-            decoded = self.decoder(encoded)
-            return decoded
+    def forward(self, x):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+        return decoded
+
+    def loss_function(self, recon, x):
+        criterion = nn.MSELoss()
+        return criterion(recon, x)
 
 if __name__ == "__main__":
     torch.manual_seed(1)
@@ -70,33 +75,44 @@ if __name__ == "__main__":
     datasets.CIFAR10("../data", train=False, transform=im_transform),
     batch_size=128, shuffle=True, **kwargs)
 
-    model = Autoencoder().to(device)
+    model = Autoencoder(3).to(device)
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     model.train()
 
-    for batch_idx, (data, _) in enumerate(train_loader):
-            # To view tensor in text file (Note returns a LARGE array of float values
-            # which supposed to represent each pixel in an image )
-            # numpy.savetxt('my_file.txt', data.numpy().reshape(4,-1))
-
+    num_epochs = 10
+    outputs = []
+    for epoch in range(num_epochs):
+        for (data, _) in train_loader:
             # Converts `data` to a tensor with a specified dtype
-            data = data.to(device)
+            # data = data.to(device)
             # Info on this https://stackoverflow.com/questions/48001598/why-do-we-need-to-call-zero-grad-in-pytorch0
+            img = data.reshape(-1, 28*28) # -> use for Autoencoder_Linear
+            recon = model(img)
+            loss = criterion(recon, img)
+        
             optimizer.zero_grad()
-            # This returns the output from forward in VAE model
-            recon_batch, mu, logvar = model(data)
-            # `recon_batch` returns all 128 images reconstructed
-            # The shape is torch.Size([128, 784]) implying that there are 128 images and
-            # the dimensions have been reduced to a single array since sqrt(784) and 
-            # earlier it is stated that the dimensions of an mnist image is 28x28.
-            loss = model.loss_function(recon_batch, data, mu, logvar, beta)
             loss.backward()
-            train_loss += loss.item()
             optimizer.step()
-            # Displays training data
-            if batch_idx % 10 == 0: # Change the 10 to the log_interval (self.args.log_interval)
-                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, batch_idx * len(data), len(train_loader.dataset),
-                    100. * batch_idx / len(train_loader),
-                    loss.item() / len(data)))
+            print(f'Epoch:{epoch+1}, Loss:{loss.item():.4f}')
+            outputs.append((epoch, img, recon))
+
+    for k in range(0, num_epochs):
+        plt.figure(figsize=(9, 2))
+        # plt.gray()
+        imgs = outputs[k][1].detach().numpy()
+        recon = outputs[k][2].detach().numpy()
+        for i, item in enumerate(imgs):
+            if i >= 9: break
+            plt.subplot(2, 9, i+1)
+            item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
+            # item: 1, 28, 28
+            plt.imshow(item[0])
+                
+        for i, item in enumerate(recon):
+            if i >= 9: break
+            plt.subplot(2, 9, 9+i+1) # row_length + i + 1
+            item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
+            # item: 1, 28, 28
+            plt.imshow(item[0])
+        plt.show()
