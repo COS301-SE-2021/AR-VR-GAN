@@ -84,7 +84,7 @@ class ModelGenerator:
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         im_transform = transforms.Compose([
-            transforms.Resize(28),
+            transforms.Resize((28,28)),
             transforms.ToTensor(),
         ])
         # self.train_loader = torch.utils.data.DataLoader(
@@ -92,19 +92,26 @@ class ModelGenerator:
         #                 transform=transforms.ToTensor()),
         #     batch_size= 128, shuffle=True, **kwargs)
 
+        # self.train_loader = torch.utils.data.DataLoader(
+        #     datasets.STL10("../data",split="train",download=True,transform=im_transform),
+        #     batch_size= 128, shuffle=True, **kwargs)
+
         self.train_loader = torch.utils.data.DataLoader(
-            datasets.STL10("../data",split="train",download=True,transform=im_transform),
+            datasets.CIFAR10("../data", train=True, download=False, transform=im_transform),
             batch_size= 128, shuffle=True, **kwargs)
 
         # self.test_loader = torch.utils.data.DataLoader(
         #     datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
         #     batch_size=128, shuffle=True, **kwargs)
+        # self.test_loader = torch.utils.data.DataLoader(
+        #     datasets.STL10("../data",split="test",transform=im_transform),
+        #     batch_size=128, shuffle=True, **kwargs)
         self.test_loader = torch.utils.data.DataLoader(
-            datasets.STL10("../data",split="test",transform=im_transform),
+            datasets.CIFAR10("../data", train=False, transform=im_transform),
             batch_size=128, shuffle=True, **kwargs)
 
-        self.model = VAE(3).to(self.device)
         self.latent_size = 0
+        self.model = VAE(self.latent_size).to(self.device)
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
     # # Reconstruction + KL divergence losses summed over all elements and batch
@@ -202,9 +209,9 @@ class ModelGenerator:
                 recon_batch, mu, logvar = self.model(data)
                 test_loss += self.model.loss_function(recon_batch, data, mu, logvar, beta).item()
                 if i == 0:
-                    n = min(data.size(0), 8)
-                    comparison = torch.cat([data[:n],
-                                        recon_batch.view(128, 1, 28, 28)[:n]])# Batch size instead of 128
+                    # n = min(data.size(0), 8)
+                    # comparison = torch.cat([data[:n],
+                    #                     recon_batch.view(128, 1, 28, 28)[:n]])# Batch size instead of 128
                     if generate == True:
                         save_image(comparison.cpu(),
                                 'test/reconstruction_' + str(epoch) + '.png', nrow=n)
@@ -356,29 +363,33 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
-    generator.train_model(50)
-    generator.saveModel("defaultModels/BetaVAE-STL10-Epochs-50.pt")
-    # from time import sleep
+    generator.set_latent_size(3)
+    generator.train_model(10)
+    generator.saveModel("defaultModels/BetaVAE1-CIRA10-Epochs-10.pt")
+    
+    # generator.train_model(50, 5)
+    # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
+    from time import sleep
     # # generator.loadModel("defaultModels/BetaVAE-Fake-Data-Epochs-50.pt")
-    # generator.generateImage([0.0, 0.0, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.1, 0.0, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.2, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.03, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.04, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.05, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.06, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.022, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.024, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.056, 0.1, 0.0])
+    generator.generateImage([0.0, 0.0, 0.0])
+    sleep(1)
+    generator.generateImage([0.1, 0.0, 0.0])
+    sleep(1)
+    generator.generateImage([0.2, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.03, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.04, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.05, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.06, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.022, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.024, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.056, 0.1, 0.0])
     # generator.loadModel(args.model)
 
     # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
