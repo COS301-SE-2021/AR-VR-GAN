@@ -208,13 +208,13 @@ class ModelGenerator:
                 data = data.to(self.device)
                 recon_batch, mu, logvar = self.model(data)
                 test_loss += self.model.loss_function(recon_batch, data, mu, logvar, beta).item()
-                if i == 0:
+                # if i == 0:
                     # n = min(data.size(0), 8)
                     # comparison = torch.cat([data[:n],
                     #                     recon_batch.view(128, 1, 28, 28)[:n]])# Batch size instead of 128
-                    if generate == True:
-                        save_image(comparison.cpu(),
-                                'test/reconstruction_' + str(epoch) + '.png', nrow=n)
+                    # if generate == True:
+                    #     save_image(comparison.cpu(),
+                    #             'test/reconstruction_' + str(epoch) + '.png', nrow=n)
 
         test_loss /= len(self.test_loader.dataset)
         # print('====> Test set loss: {:.4f}'.format(test_loss))
