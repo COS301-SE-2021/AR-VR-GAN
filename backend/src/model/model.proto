@@ -6,6 +6,7 @@ service ModelController {
     rpc HandleCoords(stream RequestDto) returns (stream ResponseDto) {}
     rpc RunPython(stream RequestDto) returns (stream ResponsePythonDTO) {}
     rpc Proxy(stream RequestDto) returns (stream ResponsePythonDTO){}
+    rpc Login(LoginDto) returns (LoginRespDto){}
 }
 
 message RequestDto {
@@ -19,4 +20,14 @@ message ResponseDto {
 
 message ResponsePythonDTO {
     bytes data = 1;
+}
+
+message LoginDto{
+    string username = 1;
+    string password = 2;
+}
+
+message LoginRespDto{
+    boolean succes = 1;
+    string message = 1;
 }
