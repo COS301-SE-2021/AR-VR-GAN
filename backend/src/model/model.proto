@@ -28,6 +28,6 @@ message LoginDto{
 }
 
 message LoginRespDto{
-    boolean succes = 1;
-    string message = 1;
+    bool success = 1;
+    string message = 2;
 }
