@@ -22,6 +22,7 @@ public class MovementOfPicture : MonoBehaviour
         //transform.position = smoothPos;
 
         transform.position = pos;
+        target.LookAt(Camera.main.transform.position);
 
         //Vector3 look = pos + rotationOffset;
 
