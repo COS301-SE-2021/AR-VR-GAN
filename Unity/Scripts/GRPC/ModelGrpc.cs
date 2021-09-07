@@ -51,6 +51,10 @@ namespace Model {
     static readonly grpc::Marshaller<global::Model.ResponseDto> __Marshaller_model_ResponseDto = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Model.ResponseDto.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Model.ResponsePythonDTO> __Marshaller_model_ResponsePythonDTO = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Model.ResponsePythonDTO.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Model.LoginDto> __Marshaller_model_LoginDto = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Model.LoginDto.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Model.LoginRespDto> __Marshaller_model_LoginRespDto = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Model.LoginRespDto.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Model.RequestDto, global::Model.ResponseDto> __Method_HandleCoords = new grpc::Method<global::Model.RequestDto, global::Model.ResponseDto>(
@@ -76,6 +80,14 @@ namespace Model {
         __Marshaller_model_RequestDto,
         __Marshaller_model_ResponsePythonDTO);
 
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Model.LoginDto, global::Model.LoginRespDto> __Method_Login = new grpc::Method<global::Model.LoginDto, global::Model.LoginRespDto>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "Login",
+        __Marshaller_model_LoginDto,
+        __Marshaller_model_LoginRespDto);
+
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
     {
@@ -100,6 +112,12 @@ namespace Model {
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task Proxy(grpc::IAsyncStreamReader<global::Model.RequestDto> requestStream, grpc::IServerStreamWriter<global::Model.ResponsePythonDTO> responseStream, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Model.LoginRespDto> Login(global::Model.LoginDto request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -163,6 +181,26 @@ namespace Model {
       {
         return CallInvoker.AsyncDuplexStreamingCall(__Method_Proxy, null, options);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Model.LoginRespDto Login(global::Model.LoginDto request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return Login(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Model.LoginRespDto Login(global::Model.LoginDto request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_Login, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Model.LoginRespDto> LoginAsync(global::Model.LoginDto request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return LoginAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Model.LoginRespDto> LoginAsync(global::Model.LoginDto request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_Login, null, options, request);
+      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override ModelControllerClient NewInstance(ClientBaseConfiguration configuration)
@@ -179,7 +217,8 @@ namespace Model {
       return grpc::ServerServiceDefinition.CreateBuilder()
           .AddMethod(__Method_HandleCoords, serviceImpl.HandleCoords)
           .AddMethod(__Method_RunPython, serviceImpl.RunPython)
-          .AddMethod(__Method_Proxy, serviceImpl.Proxy).Build();
+          .AddMethod(__Method_Proxy, serviceImpl.Proxy)
+          .AddMethod(__Method_Login, serviceImpl.Login).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the  service binding logic.
@@ -192,6 +231,7 @@ namespace Model {
       serviceBinder.AddMethod(__Method_HandleCoords, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Model.RequestDto, global::Model.ResponseDto>(serviceImpl.HandleCoords));
       serviceBinder.AddMethod(__Method_RunPython, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Model.RequestDto, global::Model.ResponsePythonDTO>(serviceImpl.RunPython));
       serviceBinder.AddMethod(__Method_Proxy, serviceImpl == null ? null : new grpc::DuplexStreamingServerMethod<global::Model.RequestDto, global::Model.ResponsePythonDTO>(serviceImpl.Proxy));
+      serviceBinder.AddMethod(__Method_Login, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Model.LoginDto, global::Model.LoginRespDto>(serviceImpl.Login));
     }
 
   }
