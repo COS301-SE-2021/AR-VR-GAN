@@ -1,8 +1,10 @@
 from matplotlib import pyplot as plt
 import torch
 import torch.nn as nn
+from torch.nn.modules.activation import Sigmoid
 import torch.optim as optim
 from torchvision import datasets, transforms
+from torchvision.utils import save_image
 
 class View(nn.Module):
     def __init__(self, size):
@@ -29,7 +31,8 @@ class ConvolutionalAutoencoder(nn.Module):
             nn.ReLU(),
             nn.Conv2d(64, 128, 12, stride=1, padding=1),
             View((-1, 128*1*1)), 
-            nn.Linear(128, self.z)
+            nn.Linear(128, self.z),
+            nn.Sigmoid()
         )
         
         # N , latent_vector, <- input
@@ -44,7 +47,7 @@ class ConvolutionalAutoencoder(nn.Module):
             nn.ConvTranspose2d(32, 16, 7, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
             nn.ReLU(),
             nn.ConvTranspose2d(16, 3, 11, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
-            # nn.Sigmoid()
+            nn.Sigmoid()
         )
 
     def forward(self, x):
@@ -75,42 +78,48 @@ if __name__ == "__main__":
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     model.train()
 
-    num_epochs = 10
+    num_epochs = 100
     outputs = []
     for epoch in range(num_epochs):
+        i = 0
         for (data, _) in train_loader:
-            # print(data.shape)
+            # print(len(train_loader))
             # input()
             # Converts `data` to a tensor with a specified dtype
             # data = data.to(device)
             # Info on this https://stackoverflow.com/questions/48001598/why-do-we-need-to-call-zero-grad-in-pytorch0
             # img = data.reshape(-1, 28*28) # -> use for Autoencoder_Linear
             # img = data
+            i+=1
             recon = model(data)
             loss = criterion(recon,data)
         
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            print(f'Epoch:{epoch+1}, Loss:{loss.item():.4f}')
+            print(recon.shape)
+            # input()
+            save_image(recon.view(recon.shape[0], 3, 28, 28), f"./training/v2image{epoch+1}.png")
+            print(f'{i}:Epoch:{epoch+1}, Loss:{loss.item():.4f}')
             outputs.append((epoch, data, recon))
 
-    for k in range(0, num_epochs):
-        plt.figure(figsize=(9, 2))
-        # plt.gray()
-        imgs = outputs[k][1].detach().numpy()
-        recon = outputs[k][2].detach().numpy()
-        for i, item in enumerate(imgs):
-            if i >= 9: break
-            plt.subplot(2, 9, i+1)
-            # item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
-            # item: 1, 28, 28
-            plt.imshow(item[0])
+    # for k in range(0, num_epochs):
+    #     plt.figure(figsize=(9, 2))
+    #     # plt.gray()
+    #     imgs = outputs[k][1].detach().numpy()
+    #     recon = outputs[k][2].detach().numpy()
+    #     for i, item in enumerate(imgs):
+    #         if i >= 9: break
+    #         plt.subplot(2, 9, i+1)
+    #         # item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
+    #         # item: 1, 28, 28
+    #         plt.imshow(item[0])
                 
-        for i, item in enumerate(recon):
-            if i >= 9: break
-            plt.subplot(2, 9, 9+i+1) # row_length + i + 1
-            # item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
-            # item: 1, 28, 28
-            plt.imshow(item[0])
-        plt.show()
+    #     for i, item in enumerate(recon):
+    #         if i >= 9: break
+    #         plt.subplot(2, 9, 9+i+1) # row_length + i + 1
+    #         # item = item.reshape(-1, 28,28) # -> use for Autoencoder_Linear
+    #         # item: 1, 28, 28
+    #         plt.imshow(item[0])
+    #     plt.show()
+    torch.save(model, "./CAE-100.pt")

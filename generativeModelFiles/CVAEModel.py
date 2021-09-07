@@ -1,8 +1,10 @@
 from matplotlib import pyplot as plt
 import torch
+from torch.functional import Tensor
 import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
+from torch.nn import functional as F
 
 class View(nn.Module):
     def __init__(self, size):
@@ -29,7 +31,8 @@ class CVAE(nn.Module):
             nn.ReLU(),
             nn.Conv2d(64, 128, 12, stride=1, padding=1),
             View((-1, 128*1*1)), 
-            nn.Linear(128, self.z)
+            nn.Linear(128, self.z*2),
+            nn.Sigmoid()
         )
         
         # N , latent_vector, <- input
@@ -44,11 +47,31 @@ class CVAE(nn.Module):
             nn.ConvTranspose2d(32, 16, 7, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
             nn.ReLU(),
             nn.ConvTranspose2d(16, channels, 11, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
-            # nn.Sigmoid()
+            nn.Sigmoid()
         )
 
     def forward(self, x):
-        encoded = self.encoder(x)
-        decoded = self.decoder(encoded)
-        return decoded
+        distributions = self.encoder(x)
+        mu = distributions[:, :self.z]
+        logvar = distributions[:, self.z]
+        z = self.reparametrize(mu, logvar)
+        x_recon = self.decoder(z)
+
+        return x_recon, mu , logvar
+    
+    def reparametrize(self, mu, logvar):
+        std = std = torch.exp(0.5*logvar)
+        eps = torch.randn_like(std)
+        return mu + std*eps
+
+    def loss_function(self,recon_x, x, mu, logvar, beta = 1) -> float:
+        BETA = beta
+        BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
+        # see Appendix B from VAE paper:
+        # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
+        # https://arxiv.org/abs/1312.6114
+        # 0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
+        KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
+
+        return BCE + BETA*KLD
     
