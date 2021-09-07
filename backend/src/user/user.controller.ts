@@ -8,6 +8,7 @@ import { GetUserByUsernameDto } from './dto/get-user-by-username.dto';
 import { GetUserByUsernameResponse } from './dto/get-user-by-usernameResp.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 import { GetUserByJWTTokenDto } from './dto/get-user-by-jwtToken.dto';
+import { GrpcMethod } from '@nestjs/microservices';
 
 @Controller('user')
 export class UserController {
@@ -30,6 +31,11 @@ export class UserController {
      */
     @Post('/login')
     loginUser(@Body() loginUserDto: LoginUserDto): Promise<UserResponse> {
+        return this.userService.loginUser(loginUserDto);
+    }
+
+    @GrpcMethod('ModelController','Login')
+    login(loginUserDto: LoginUserDto): Promise<UserResponse>{
         return this.userService.loginUser(loginUserDto);
     }
 
@@ -77,4 +83,5 @@ export class UserController {
     getUserByJWTToken(@Body() getUserByJWTTokenDto: GetUserByJWTTokenDto): Promise<GetUserByUsernameResponse> {
         return this.userService.getUserByJWTToken(getUserByJWTTokenDto.jwtToken);
     }
+
 }
