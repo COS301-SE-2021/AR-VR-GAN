@@ -4,6 +4,9 @@ import { MockUserModel } from './mocks/userRepository.mock'
 import { getModelToken } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
+import { RegisterUserDto } from './dto/register-user.dto';
+import { UserResponse } from './dto/user-response.dto';
+import { userInfo } from 'os';
 
 describe('UserService', () => {
   let service: UserService;
@@ -67,6 +70,20 @@ describe('UserService', () => {
       message: "This JWTToken does not exist.",
       success: false,
     });;
+  });
+
+  test('RegisterUser', async () => {
+    expect(service.registerUser(new RegisterUserDto("testun","testem","testpw"))).toBeDefined();
+  });
+
+
+  test('UserResponse', async () => {
+    const obj = new UserResponse(true,"test")
+    expect(obj).toEqual({
+      message: "test",
+      success: true,
+    });
+  
   });
 
 });
