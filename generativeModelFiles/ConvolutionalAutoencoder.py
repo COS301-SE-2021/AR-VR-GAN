@@ -67,18 +67,18 @@ if __name__ == "__main__":
         ])
     train_loader = torch.utils.data.DataLoader(
     datasets.CIFAR10("../data", train=True, download=False, transform=im_transform),
-    batch_size= 128, shuffle=True, **kwargs)
+    batch_size= 32, shuffle=True, **kwargs)
 
     test_loader = torch.utils.data.DataLoader(
     datasets.CIFAR10("../data", train=False, transform=im_transform),
-    batch_size=128, shuffle=True, **kwargs)
+    batch_size=32, shuffle=True, **kwargs)
 
     model = ConvolutionalAutoencoder(3).to(device)
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=1e-3)
     model.train()
 
-    num_epochs = 100
+    num_epochs = 30
     outputs = []
     for epoch in range(num_epochs):
         i = 0
@@ -99,9 +99,10 @@ if __name__ == "__main__":
             optimizer.step()
             print(recon.shape)
             # input()
-            save_image(recon.view(recon.shape[0], 3, 28, 28), f"./training/v2image{epoch+1}.png")
+            save_image(recon.view(recon.shape[0], 3, 28, 28), f"./training/v3image{epoch+1}.png")
             print(f'{i}:Epoch:{epoch+1}, Loss:{loss.item():.4f}')
             outputs.append((epoch, data, recon))
+        torch.save(model, f"./CAE-{i}.pt")
 
     # for k in range(0, num_epochs):
     #     plt.figure(figsize=(9, 2))

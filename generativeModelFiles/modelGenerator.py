@@ -11,6 +11,7 @@ import os
 from datetime import datetime, time
 from PIL import Image
 from modelExceptions import ModelException
+from DataLoaders import DataLoaders
 
 class ModelGenerator:
     """ This class trains VAE models and generates images from said models
@@ -77,16 +78,12 @@ class ModelGenerator:
 
         kwargs = {'num_workers': 1, 'pin_memory': True} if self.cuda else {}
 
-        # Loads the MNIST dataset 
-        # You can change from MNIST to any other torch dataset by changing
-        # datsets.MNIST to datasets.Caltect 101
-        # Go to https://pytorch.org/vision/stable/datasets.html for more information
-
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         im_transform = transforms.Compose([
             transforms.Resize((28,28)),
             transforms.ToTensor(),
         ])
+        self.data_loaders = DataLoaders(im_transform, kwargs)
         # self.train_loader = torch.utils.data.DataLoader(
         #     datasets.MNIST('../data', train=True, download=True,
         #                 transform=transforms.ToTensor()),
@@ -110,8 +107,7 @@ class ModelGenerator:
             datasets.CIFAR10("../data", train=False, transform=im_transform),
             batch_size=128, shuffle=True, **kwargs)
 
-        self.latent_size = 0
-        self.model = VAE(self.latent_size).to(self.device)
+        self.model = None
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
     # # Reconstruction + KL divergence losses summed over all elements and batch
