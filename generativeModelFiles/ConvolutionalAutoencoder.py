@@ -54,12 +54,42 @@ class ConvolutionalAutoencoder(nn.Module):
         encoded = self.encoder(x)
         decoded = self.decoder(encoded)
         return decoded
+
+    def training_loop(self, epochs: int, train_loader, name: str="", show: bool=False ) -> None:
+        criterion = nn.MSELoss()
+        optimizer = optim.Adam(self.parameters(), lr=1e-3)
+        self.train()
+
+        outputs = []
+        save = False
+        if name == "" : 
+            save == True
+        
+        j = 0
+        for iter in range(epochs):
+            i = 0
+            j +=1
+            for (data, _) in train_loader:
+                i+=1
+                recon = self(data)
+                loss = criterion(recon,data)
+            
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+
+                if show == True:
+                    save_image(recon.view(recon.shape[0], recon.shape[1], 28, 28), f"./training/{name}{iter+1}.png")
+                print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
+                outputs.append((iter, data, recon))
+            if save and j % 10 == 0:
+                torch.save(self, f"./savedModels/{name}.pt")
     
 if __name__ == "__main__":
     torch.manual_seed(1)
     cuda = torch.cuda.is_available()
     device = torch.device("cuda" if cuda else "cpu")
-
+    model = ConvolutionalAutoencoder(3).to(device)
     kwargs = {'num_workers': 1, 'pin_memory': True} if cuda else {}
     im_transform = transforms.Compose([
                 transforms.Resize((28,28)),
@@ -69,40 +99,41 @@ if __name__ == "__main__":
     datasets.CIFAR10("../data", train=True, download=False, transform=im_transform),
     batch_size= 32, shuffle=True, **kwargs)
 
-    test_loader = torch.utils.data.DataLoader(
-    datasets.CIFAR10("../data", train=False, transform=im_transform),
-    batch_size=32, shuffle=True, **kwargs)
+    model.training_loop(10, train_loader, "testing129", True)
+    # test_loader = torch.utils.data.DataLoader(
+    # datasets.CIFAR10("../data", train=False, transform=im_transform),
+    # batch_size=32, shuffle=True, **kwargs)
 
-    model = ConvolutionalAutoencoder(3).to(device)
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=1e-3)
-    model.train()
+    # model = ConvolutionalAutoencoder(3).to(device)
+    # criterion = nn.MSELoss()
+    # optimizer = optim.Adam(model.parameters(), lr=1e-3)
+    # model.train()
 
-    num_epochs = 30
-    outputs = []
-    for epoch in range(num_epochs):
-        i = 0
-        for (data, _) in train_loader:
-            # print(len(train_loader))
-            # input()
-            # Converts `data` to a tensor with a specified dtype
-            # data = data.to(device)
-            # Info on this https://stackoverflow.com/questions/48001598/why-do-we-need-to-call-zero-grad-in-pytorch0
-            # img = data.reshape(-1, 28*28) # -> use for Autoencoder_Linear
-            # img = data
-            i+=1
-            recon = model(data)
-            loss = criterion(recon,data)
+    # num_epochs = 30
+    # outputs = []
+    # for epoch in range(num_epochs):
+    #     i = 0
+    #     for (data, _) in train_loader:
+    #         # print(len(train_loader))
+    #         # input()
+    #         # Converts `data` to a tensor with a specified dtype
+    #         # data = data.to(device)
+    #         # Info on this https://stackoverflow.com/questions/48001598/why-do-we-need-to-call-zero-grad-in-pytorch0
+    #         # img = data.reshape(-1, 28*28) # -> use for Autoencoder_Linear
+    #         # img = data
+    #         i+=1
+    #         recon = model(data)
+    #         loss = criterion(recon,data)
         
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-            print(recon.shape)
-            # input()
-            save_image(recon.view(recon.shape[0], 3, 28, 28), f"./training/v3image{epoch+1}.png")
-            print(f'{i}:Epoch:{epoch+1}, Loss:{loss.item():.4f}')
-            outputs.append((epoch, data, recon))
-        torch.save(model, f"./CAE-{i}.pt")
+    #         optimizer.zero_grad()
+    #         loss.backward()
+    #         optimizer.step()
+    #         print(recon.shape)
+    #         # input()
+    #         save_image(recon.view(recon.shape[0], 3, 28, 28), f"./training/v3image{epoch+1}.png")
+    #         print(f'{i}:Epoch:{epoch+1}, Loss:{loss.item():.4f}')
+    #         outputs.append((epoch, data, recon))
+    #     torch.save(model, f"./CAE-{i}.pt")
 
     # for k in range(0, num_epochs):
     #     plt.figure(figsize=(9, 2))
