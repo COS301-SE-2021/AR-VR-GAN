@@ -16,14 +16,14 @@ class View(nn.Module):
 
 
 class ConvolutionalAutoencoder(nn.Module):
-    def __init__(self, latent_vector: int = 3):
+    def __init__(self, latent_vector: int = 3, channel_size: int=3):
         super().__init__()        
         # input is Nx1x28x28
         # N, 3, 28, 28
         self.z = latent_vector
         self.encoder = nn.Sequential(
             # Note we increase the channels but reduce the size of the image
-            nn.Conv2d(3, 16, 11, stride=1, padding=1), # -> (N, 16 , (14, 14) <- image size);<-output, reduces image size by half; 1<- input size, 16 <- output channels, 3 <- kernal size, 
+            nn.Conv2d(channel_size, 16, 11, stride=1, padding=1), # -> (N, 16 , (14, 14) <- image size);<-output, reduces image size by half; 1<- input size, 16 <- output channels, 3 <- kernal size, 
             nn.ReLU(),
             nn.Conv2d(16, 32, 7, stride=1, padding=1), # -> N, 32, 7, 7;<-output ;16 <- input
             nn.ReLU(),
@@ -46,7 +46,7 @@ class ConvolutionalAutoencoder(nn.Module):
             nn.ReLU(),
             nn.ConvTranspose2d(32, 16, 7, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
             nn.ReLU(),
-            nn.ConvTranspose2d(16, 3, 11, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
+            nn.ConvTranspose2d(16, channel_size, 11, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
             nn.Sigmoid()
         )
 
