@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x14modelGenerator.proto\x12\x0eModelGenerator\"\x1e\n\x0cImageRequest\x12\x0e\n\x06vector\x18\x01 \x03(\x02\"O\n\x12LoadDatasetRequest\x12\x13\n\x0b\x64\x61tasetName\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x61tasetType\x18\x02 \x01(\t\x12\x0f\n\x07\x64\x61taset\x18\x03 \x01(\x0c\"\x86\x01\n\x11TrainModelRequest\x12\x11\n\tmodelName\x18\x01 \x01(\t\x12\x16\n\x0etrainingEpochs\x18\x02 \x01(\x05\x12\x12\n\nlatentSize\x18\x03 \x01(\x05\x12\x13\n\x0b\x64\x61tasetName\x18\x04 \x01(\t\x12\x0f\n\x07\x64\x61taset\x18\x05 \x01(\x0c\x12\x0c\n\x04\x62\x65ta\x18\x06 \x01(\x08\"%\n\x10LoadModelRequest\x12\x11\n\tmodelName\x18\x01 \x01(\t\"=\n\rImageResponse\x12\r\n\x05width\x18\x01 \x01(\x05\x12\x0e\n\x06height\x18\x02 \x01(\x05\x12\r\n\x05image\x18\x03 \x01(\x0c\"9\n\x13LoadDatasetResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"8\n\x12TrainModelResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"7\n\x11LoadModelResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\xe2\x02\n\x0fModelGeneration\x12P\n\rGenerateImage\x12\x1c.ModelGenerator.ImageRequest\x1a\x1d.ModelGenerator.ImageResponse(\x01\x30\x01\x12V\n\x0bLoadDataset\x12\".ModelGenerator.LoadDatasetRequest\x1a#.ModelGenerator.LoadDatasetResponse\x12S\n\nTrainModel\x12!.ModelGenerator.TrainModelRequest\x1a\".ModelGenerator.TrainModelResponse\x12P\n\tLoadModel\x12 .ModelGenerator.LoadModelRequest\x1a!.ModelGenerator.LoadModelResponseb\x06proto3'
+  serialized_pb=b'\n\x14modelGenerator.proto\x12\x0eModelGenerator\"\x1e\n\x0cImageRequest\x12\x0e\n\x06vector\x18\x01 \x03(\x02\"O\n\x12LoadDatasetRequest\x12\x13\n\x0b\x64\x61tasetName\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x61tasetType\x18\x02 \x01(\t\x12\x0f\n\x07\x64\x61taset\x18\x03 \x01(\x0c\"\x99\x01\n\x11TrainModelRequest\x12\x11\n\tmodelName\x18\x01 \x01(\t\x12\x16\n\x0etrainingEpochs\x18\x02 \x01(\x05\x12\x12\n\nlatentSize\x18\x03 \x01(\x05\x12\x13\n\x0b\x64\x61tasetName\x18\x04 \x01(\t\x12\x0f\n\x07\x64\x61taset\x18\x05 \x01(\x0c\x12\x0c\n\x04\x62\x65ta\x18\x07 \x01(\x05\x12\x11\n\tmodelType\x18\x08 \x01(\t\"%\n\x10LoadModelRequest\x12\x11\n\tmodelName\x18\x01 \x01(\t\"=\n\rImageResponse\x12\r\n\x05width\x18\x01 \x01(\x05\x12\x0e\n\x06height\x18\x02 \x01(\x05\x12\r\n\x05image\x18\x03 \x01(\x0c\"9\n\x13LoadDatasetResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"8\n\x12TrainModelResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"7\n\x11LoadModelResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\xe2\x02\n\x0fModelGeneration\x12P\n\rGenerateImage\x12\x1c.ModelGenerator.ImageRequest\x1a\x1d.ModelGenerator.ImageResponse(\x01\x30\x01\x12V\n\x0bLoadDataset\x12\".ModelGenerator.LoadDatasetRequest\x1a#.ModelGenerator.LoadDatasetResponse\x12S\n\nTrainModel\x12!.ModelGenerator.TrainModelRequest\x1a\".ModelGenerator.TrainModelResponse\x12P\n\tLoadModel\x12 .ModelGenerator.LoadModelRequest\x1a!.ModelGenerator.LoadModelResponseb\x06proto3'
 )
 
 
@@ -148,8 +148,15 @@ _TRAINMODELREQUEST = _descriptor.Descriptor(
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
       name='beta', full_name='ModelGenerator.TrainModelRequest.beta', index=5,
-      number=6, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
+      number=7, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='modelType', full_name='ModelGenerator.TrainModelRequest.modelType', index=6,
+      number=8, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
@@ -166,7 +173,7 @@ _TRAINMODELREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=154,
-  serialized_end=288,
+  serialized_end=307,
 )
 
 
@@ -197,8 +204,8 @@ _LOADMODELREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=290,
-  serialized_end=327,
+  serialized_start=309,
+  serialized_end=346,
 )
 
 
@@ -243,8 +250,8 @@ _IMAGERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=329,
-  serialized_end=390,
+  serialized_start=348,
+  serialized_end=409,
 )
 
 
@@ -282,8 +289,8 @@ _LOADDATASETRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=392,
-  serialized_end=449,
+  serialized_start=411,
+  serialized_end=468,
 )
 
 
@@ -321,8 +328,8 @@ _TRAINMODELRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=451,
-  serialized_end=507,
+  serialized_start=470,
+  serialized_end=526,
 )
 
 
@@ -360,8 +367,8 @@ _LOADMODELRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=509,
-  serialized_end=564,
+  serialized_start=528,
+  serialized_end=583,
 )
 
 DESCRIPTOR.message_types_by_name['ImageRequest'] = _IMAGEREQUEST
@@ -439,8 +446,8 @@ _MODELGENERATION = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=567,
-  serialized_end=921,
+  serialized_start=586,
+  serialized_end=940,
   methods=[
   _descriptor.MethodDescriptor(
     name='GenerateImage',

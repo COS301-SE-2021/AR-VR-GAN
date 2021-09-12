@@ -64,9 +64,7 @@ class ModelGenerator:
         Loads a new dataset to train the model on 
 
     """
-    # TODO: Handle edge cases in function i.e when a model is not loaded raise an exception
-    # TODO: Create a throughout main i.e one that handles executes all the functions 
-    # TODO: Adjust test files so that it can handle file changes made 
+
     def __init__(self) -> None:
         # Sets the seed for generating random numbers. Returns a torch.Generator object.
         torch.manual_seed(1)
@@ -112,29 +110,6 @@ class ModelGenerator:
             self.model = VAE(latent_vector)
 
         self.model.training_loop(epochs, loader, beta, name, False)
-
-    def train(self, epoch, beta) -> None:
-        """Trains the model on the set of images in train_loader
-        Parameters
-        ----------
-        epoch : int
-            The iteration the training is currently executing
-        """
-        pass
-        
-
-    def test(self, epoch, beta, generate = False) -> None:
-        """Tests the accuracy of the model with the set of images in test_loader
-        If generate is set to True then the function will produce a comparison image 
-        comparing the test data compared the image by the model
-        Parameters
-        ----------
-        epoch : int
-            The iteration the training is currently executing
-        generate : bool, optional
-            To decide whether or not to save an image displaying the comparison between the model and the actual results
-        """
-        pass
 
     def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator
@@ -233,7 +208,7 @@ class ModelGenerator:
                 if self.model.retrieve_latent_size() != len(vector):
                     raise ModelException("Input vector not the same size as model's vector")
 
-                sample = torch.tensor([vector]).to(self.device)
+                sample = torch.tensor([1,vector]).to(self.device)
                 # print(sample)
                 # print(sample.size())
                 sample = self.model.decode(sample).cpu() 

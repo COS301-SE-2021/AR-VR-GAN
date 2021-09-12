@@ -21,6 +21,7 @@ class ConvolutionalAutoencoder(nn.Module):
         # input is Nx1x28x28
         # N, 3, 28, 28
         self.z = latent_vector
+        self.channel_size = channel_size
         self.encoder = nn.Sequential(
             # Note we increase the channels but reduce the size of the image
             nn.Conv2d(channel_size, 16, 11, stride=1, padding=1), # -> (N, 16 , (14, 14) <- image size);<-output, reduces image size by half; 1<- input size, 16 <- output channels, 3 <- kernal size, 
