@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.nn import functional as F
+from torchvision.utils import save_image
 
 class View(nn.Module):
     def __init__(self, size):
@@ -74,4 +75,33 @@ class CVAE(nn.Module):
         KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
 
         return BCE + BETA*KLD
+
+    def training_loop(self, epochs: int, train_loader, beta: int=1, name: str="", show: bool=False ) -> None:
+        optimizer = optim.Adam(self.parameters(), lr=1e-3)
+        self.train()
+        train_loss = 0
+        outputs = []
+        save = False
+        if name == "" : 
+            save == True
+        
+        j = 0
+        for iter in range(epochs):
+            i = 0
+            j +=1
+            for (data, _) in train_loader:
+                i+=1
+                recon_batch, mu, logvar = self(data)
+                optimizer.zero_grad()
+                loss = self.loss_function(recon_batch, data, mu, logvar, beta)
+                loss.backward()
+                train_loss += loss.item()
+                optimizer.step()
+                # Displays training data
+                if show == True:
+                    save_image(recon_batch.view(recon_batch.shape[0], recon_batch.shape[1], 28, 28), f"./training/{name}-{iter+1}.png")
+                print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
+                outputs.append((iter, data, recon_batch))
+            if save and j % 10 == 0:
+                torch.save(self, f"./savedModels/{name}.pt")
     
