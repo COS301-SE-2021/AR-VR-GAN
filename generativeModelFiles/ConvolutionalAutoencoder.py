@@ -83,4 +83,4 @@ class ConvolutionalAutoencoder(nn.Module):
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon))
             if save and j % 10 == 0:
-                torch.save(self, f"./savedModels/{name}.pt")
+                torch.save(self, f"./savedModels/CAE/{name}.pt")

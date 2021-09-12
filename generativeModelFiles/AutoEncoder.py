@@ -62,13 +62,14 @@ class Autoencoder(nn.Module):
         criterion = nn.MSELoss()
         optimizer = optim.Adam(model.parameters(), lr=1e-3)
         model.train()
-
+        save = False
+        if name == "" : 
+            save == True
         outputs = []
+        j =0
         for epoch in range(epochs):
+            j+=1
             for (data, _) in train_loader:
-                # Converts `data` to a tensor with a specified dtype
-                # data = data.to(device)
-                # Info on this https://stackoverflow.com/questions/48001598/why-do-we-need-to-call-zero-grad-in-pytorch0
                 img = data.reshape(-1, 28*28) # -> use for Autoencoder_Linear
                 recon = model(img)
                 loss = criterion(recon, img)
@@ -77,7 +78,9 @@ class Autoencoder(nn.Module):
                 loss.backward()
                 optimizer.step()
                 print(f'Epoch:{epoch+1}, Loss:{loss.item():.4f}')
-                outputs.append((epoch, img, recon))        
+                outputs.append((epoch, img, recon))  
+            if save and j % 10 == 0:
+                torch.save(self, f"./savedModels/Autoencoder/{name}.pt")      
 
 if __name__ == "__main__":
     torch.manual_seed(1)

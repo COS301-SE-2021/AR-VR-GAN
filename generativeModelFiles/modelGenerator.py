@@ -7,6 +7,9 @@ from torch.nn import functional as F
 from torchvision import datasets, transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
+from Autoencoder import Autoencoder
+from ConvolutionalAutoencoder import ConvolutionalAutoencoder
+from CVAEModel import CVAE
 import os
 from datetime import datetime, time
 from PIL import Image
@@ -84,44 +87,10 @@ class ModelGenerator:
             transforms.ToTensor(),
         ])
         self.data_loaders = DataLoaders(im_transform, kwargs)
-        # self.train_loader = torch.utils.data.DataLoader(
-        #     datasets.MNIST('../data', train=True, download=True,
-        #                 transform=transforms.ToTensor()),
-        #     batch_size= 128, shuffle=True, **kwargs)
-
-        # self.train_loader = torch.utils.data.DataLoader(
-        #     datasets.STL10("../data",split="train",download=True,transform=im_transform),
-        #     batch_size= 128, shuffle=True, **kwargs)
-
-        self.train_loader = torch.utils.data.DataLoader(
-            datasets.CIFAR10("../data", train=True, download=False, transform=im_transform),
-            batch_size= 128, shuffle=True, **kwargs)
-
-        # self.test_loader = torch.utils.data.DataLoader(
-        #     datasets.MNIST('../data', train=False, transform=transforms.ToTensor()),
-        #     batch_size=128, shuffle=True, **kwargs)
-        # self.test_loader = torch.utils.data.DataLoader(
-        #     datasets.STL10("../data",split="test",transform=im_transform),
-        #     batch_size=128, shuffle=True, **kwargs)
-        self.test_loader = torch.utils.data.DataLoader(
-            datasets.CIFAR10("../data", train=False, transform=im_transform),
-            batch_size=128, shuffle=True, **kwargs)
-
+        
         self.model = None
-        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
 
-    # # Reconstruction + KL divergence losses summed over all elements and batch
-    # def loss_function(self,recon_x, x, mu, logvar) -> float:
-    #     BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
-    #     # see Appendix B from VAE paper:
-    #     # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
-    #     # https://arxiv.org/abs/1312.6114
-    #     # 0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
-    #     KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
-
-    #     return BCE + KLD
-
-    def train_model(self, epochs, beta=1) -> None:
+    def train_model(self, epochs: int, model_type: str, latent_vector: int, dataset: str, beta: int=1, name: str="", show: bool=False ) -> None:
         """ Trains and test the model over a set of iterations(epochs)
 
         Parameters
@@ -129,14 +98,20 @@ class ModelGenerator:
         epochs : int
             The number of iterations the model will be tested
         """
+        loader = self.data_loaders.get_dataloader(dataset)
 
-        # Check whether a valid integer is passed and pass through the fuction
-        # if not throw an exception. Make sure that it is in fact an integer and
-        # that it is greater than zero.
-        self.model.set_latent_size(self.latent_size)
-        for epoch in range(1, epochs + 1):
-            self.train(epoch, beta)
-            self.test(epoch, beta)
+        if model_type == "autoencoder":
+            self.model = Autoencoder(latent_vector)
+        elif model_type == "convolutional":
+            self.model = CVAE(loader[1], latent_vector)
+        elif model_type == "vae":
+            self.model = VAE(latent_vector)
+        elif model_type == "cvae":
+            self.model = CVAE(loader[1], latent_vector)
+        else:
+            self.model = VAE(latent_vector)
+
+        self.model.training_loop(epochs, loader, beta, name, False)
 
     def train(self, epoch, beta) -> None:
         """Trains the model on the set of images in train_loader
@@ -145,45 +120,8 @@ class ModelGenerator:
         epoch : int
             The iteration the training is currently executing
         """
-        self.model.train()
-        train_loss = 0
-        # Note torch.DataLoader combines a dataset and a sampler, and provides an 
-        # iterable over the given dataset. Therefore `batch_idx` gives an index of 
-        # which image the function is on (it is an int), `data` provides the image 
-        # (it is a tensor and its shape is torch.Size([128, 1, 28, 28])) and `_` is
-        #  the sampler (also a tensor and it shape is torch.Size([128])). 
-        # Note that 128 is a common number because that is the batch size of the dataset
-        # And 28 is the height and width of the image in pixels. 
-        # From Medium https://medium.com/@o.kroeger/tensorflow-mnist-and-your-own-handwritten-digits-4d1cd32bbab4: 
-        # All images are size normalized to fit in a 20x20 pixel box and there are centered in a 28x28 image using the center of mass.
-        for batch_idx, (data, _) in enumerate(self.train_loader):
-            # To view tensor in text file (Note returns a LARGE array of float values
-            # which supposed to represent each pixel in an image )
-            # numpy.savetxt('my_file.txt', data.numpy().reshape(4,-1))
-
-            # Converts `data` to a tensor with a specified dtype
-            data = data.to(self.device)
-            # Info on this https://stackoverflow.com/questions/48001598/why-do-we-need-to-call-zero-grad-in-pytorch0
-            self.optimizer.zero_grad()
-            # This returns the output from forward in VAE model
-            recon_batch, mu, logvar = self.model(data)
-            # `recon_batch` returns all 128 images reconstructed
-            # The shape is torch.Size([128, 784]) implying that there are 128 images and
-            # the dimensions have been reduced to a single array since sqrt(784) and 
-            # earlier it is stated that the dimensions of an mnist image is 28x28.
-            loss = self.model.loss_function(recon_batch, data, mu, logvar, beta)
-            loss.backward()
-            train_loss += loss.item()
-            self.optimizer.step()
-            # Displays training data
-            if batch_idx % 10 == 0: # Change the 10 to the log_interval (self.args.log_interval)
-                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
-                    epoch, batch_idx * len(data), len(self.train_loader.dataset),
-                    100. * batch_idx / len(self.train_loader),
-                    loss.item() / len(data)))
-
-        # print('====> Epoch: {} Average loss: {:.4f}'.format(
-        #     epoch, train_loss / len(self.train_loader.dataset)))
+        pass
+        
 
     def test(self, epoch, beta, generate = False) -> None:
         """Tests the accuracy of the model with the set of images in test_loader
@@ -196,24 +134,7 @@ class ModelGenerator:
         generate : bool, optional
             To decide whether or not to save an image displaying the comparison between the model and the actual results
         """
-        # Note to self change 128 to batch size and 28 to the pixels
-        self.model.eval()
-        test_loss = 0
-        with torch.no_grad():
-            for i, (data, _) in enumerate(self.test_loader):
-                data = data.to(self.device)
-                recon_batch, mu, logvar = self.model(data)
-                test_loss += self.model.loss_function(recon_batch, data, mu, logvar, beta).item()
-                # if i == 0:
-                    # n = min(data.size(0), 8)
-                    # comparison = torch.cat([data[:n],
-                    #                     recon_batch.view(128, 1, 28, 28)[:n]])# Batch size instead of 128
-                    # if generate == True:
-                    #     save_image(comparison.cpu(),
-                    #             'test/reconstruction_' + str(epoch) + '.png', nrow=n)
-
-        test_loss /= len(self.test_loader.dataset)
-        # print('====> Test set loss: {:.4f}'.format(test_loss))
+        pass
 
     def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator

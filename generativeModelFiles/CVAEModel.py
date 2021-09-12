@@ -103,5 +103,5 @@ class CVAE(nn.Module):
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon_batch))
             if save and j % 10 == 0:
-                torch.save(self, f"./savedModels/{name}.pt")
+                torch.save(self, f"./savedModels/CVAE/{name}.pt")
     
