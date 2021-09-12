@@ -1,0 +1,48 @@
+<mat-grid-list cols=5 gutterSize="15px" rowHeight="40px">
+    <mat-grid-tile colspan=5></mat-grid-tile>
+    
+    <mat-grid-tile rowspan=4 colspan=2></mat-grid-tile>
+    <mat-grid-tile rowspan=4>
+        <app-download-vr-exe></app-download-vr-exe>
+    </mat-grid-tile>
+    <mat-grid-tile rowspan=4 colspan=2></mat-grid-tile>
+
+    <mat-grid-tile rowspan=8></mat-grid-tile>
+    <mat-grid-tile rowspan=8>
+        <mat-card>
+            <div class="track" (mousemove)="trackCoords($event)">
+                Track Mouse
+            </div>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile rowspan=8>
+        <mat-card>
+            <table>
+                <tr>
+                    <mat-form-field appearance="outline">
+                        <mat-label>x</mat-label>
+                        <input matInput type="number" class="inputBoxes" id="x" value="0" step="0.1" [(ngModel)]="x" (change)="postCoords(x, y, z)">
+                    </mat-form-field>
+                </tr>
+                <tr>
+                    <mat-form-field appearance="outline">
+                        <mat-label>y</mat-label>
+                        <input matInput type="number" class="inputBoxes" id="y" value="0" step="0.1" [(ngModel)]="y" (change)="postCoords(x, y, z)">
+                    </mat-form-field>
+                </tr>
+                <tr>
+                    <mat-form-field appearance="outline">
+                        <mat-label>z</mat-label>
+                        <input matInput type="number" class="inputBoxes" id="z" value="0" step="0.1" [(ngModel)]="z" (change)="postCoords(x, y, z)">
+                    </mat-form-field>
+                </tr>
+            </table>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile rowspan=8>
+        <mat-card>
+            <img id="imageReturned" src={{image}} alt="Returned Image">
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile rowspan=8></mat-grid-tile>
+</mat-grid-list>

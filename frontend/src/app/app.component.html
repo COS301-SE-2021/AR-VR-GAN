@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+    <span routerLink="/">AR/VR-GAN</span>
+    <span class="example-spacer"></span>
+    <button *ngIf="!loggedIn" mat-button routerLink="/login">Login</button>
+    <button *ngIf="!loggedIn" mat-button routerLink="/register">Register</button>
+    <button *ngIf="loggedIn" mat-button>{{getUsername()}}</button>
+    <button *ngIf="loggedIn" (click)="logOut()" mat-button>Logout</button>
+</mat-toolbar>
+<mat-tab-group *ngIf="loggedIn" mat-align-tabs="center" dynamicHeight backgroundColor="primary">
+    <mat-tab label="Server Coordinate Testing">
+        <app-coords></app-coords>
+    </mat-tab>
+    <mat-tab label="Change Dataset">
+        <app-coords></app-coords>
+    </mat-tab>
+</mat-tab-group>
+<div *ngIf="!loggedIn" class="content">
+    <router-outlet></router-outlet>
+</div>

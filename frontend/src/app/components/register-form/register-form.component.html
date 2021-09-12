@@ -1,0 +1,41 @@
+<mat-card>
+    <table>
+        <tr>
+            <mat-form-field appearance="outline">
+                <mat-label>Enter your username</mat-label>
+                <input matInput type="text" [formControl]="usernameFormControl" [errorStateMatcher]="matcher" #username>
+                <mat-error *ngIf="usernameFormControl.hasError('required')">Username is required</mat-error>
+            </mat-form-field>
+        </tr>
+        <tr>
+            <mat-form-field appearance="outline">
+                <mat-label>Enter your email</mat-label>
+                <input matInput type="email" [formControl]="emailFormControl" [errorStateMatcher]="matcher" #email>
+                <mat-error *ngIf="emailFormControl.hasError('required')">Email is required</mat-error>
+            </mat-form-field>
+        </tr>
+        <tr>
+            <mat-form-field appearance="outline">
+                <mat-label>Enter your password</mat-label>
+                <input matInput [type]="hideFirst ? 'password' : 'text'" [formControl]="passwordFormControl" [errorStateMatcher]="matcher" #password>
+                <button mat-icon-button matSuffix (click)="hideFirst = !hideFirst" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideFirst">
+                    <mat-icon>{{hideFirst ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="passwordFormControl.hasError('required')">Password is required</mat-error>
+            </mat-form-field>
+        </tr>
+        <tr>
+            <mat-form-field appearance="outline">
+                <mat-label>Confirm your password</mat-label>
+                <input matInput [type]="hideSecond ? 'password' : 'text'" [formControl]="passwordConfirmFormControl" [errorStateMatcher]="matcher" #passwordConfirmation>
+                <button mat-icon-button matSuffix (click)="hideSecond = !hideSecond" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideSecond">
+                    <mat-icon>{{hideSecond ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error *ngIf="passwordConfirmFormControl.hasError('required')">Password confirmation is required</mat-error>
+            </mat-form-field>
+        </tr>
+        <tr>
+            <button mat-button color="primary" (click)="registerUser(username.value, email.value, password.value, passwordConfirmation.value)">Register</button>
+        </tr>
+    </table>
+</mat-card>
