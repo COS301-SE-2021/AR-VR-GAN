@@ -212,7 +212,7 @@ class ModelGenerator:
                 if self.model.retrieve_latent_size() != len(vector):
                     raise ModelException("Input vector not the same size as model's vector")
 
-                sample = torch.tensor([1,vector]).to(self.device)
+                sample = torch.tensor([vector]).to(self.device)
                 # print(sample)
                 # print(sample.size())
                 sample = self.model.decode(sample).cpu() 
@@ -252,13 +252,13 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
-    generator.train_model(1, 3, "mnist", name="Beta-1-MNIST-1")
-    # generator.saveModel("defaultModels/BetaVAE1-MNIST-Epochs-10.pt")
+    # generator.train_model(1, 3, "mnist", name="Beta-1-MNIST-1")
+    # generator.saveModel("savedModels/Beta-1-MNIST-1.pt")
     
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
     from time import sleep
-    # # generator.loadModel("defaultModels/BetaVAE-Fake-Data-Epochs-50.pt")
+    generator.loadModel("savedModels/Beta-1-MNIST-1.pt")
     generator.generateImage([0.0, 0.0, 0.0])
     # sleep(1)
     # generator.generateImage([0.1, 0.0, 0.0])

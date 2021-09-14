@@ -56,6 +56,9 @@ class ConvolutionalAutoencoder(nn.Module):
         decoded = self.decoder(encoded)
         return decoded
 
+    def retrieve_latent_size(self) -> int:
+        return self.z
+
     def training_loop(self, epochs: int, train_loader, name: str="", show: bool=False ) -> None:
         criterion = nn.MSELoss()
         optimizer = optim.Adam(self.parameters(), lr=1e-3)

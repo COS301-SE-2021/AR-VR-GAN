@@ -61,6 +61,9 @@ class CVAE(nn.Module):
 
         return x_recon, mu , logvar
     
+    def retrieve_latent_size(self) -> int:
+        return self.z
+
     def reparametrize(self, mu, logvar):
         # print("logvar",logvar.shape)
         std = torch.exp(0.5*logvar)
