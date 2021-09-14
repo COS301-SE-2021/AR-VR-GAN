@@ -255,25 +255,36 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
+    # To create a new model run the function below
+    # The first parameter is the number of epochs(iterations), the second is the size of the latent
+    # vector (so its best you leave it a 3), the third is dataset you want to train it on, you can 
+    # choose betweeen `cifar10`, `mnist`, and `fashion`, model_type can be left as blank it just 
+    # changes between a Variational autoencoder and a normal autoencoder, beta can be set to any integer 
+    # greater than or equal to one but there are no checks for this and `name` will be the name of the 
+    # checkpoint of the model. I adjusted 
+    # the training sequence so that it saves the model every 10 epochs so that you can cancel the 
+    # training any time with out losing progress. 
     generator.train_model(15, 3, "cifar10", model_type="cvae", name="Beta-1-CIFAR-15")
+    # Remember to save it
     generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
-    generator.generateImage([0.0, 0.0, 0.0])
 
-    generator = ModelGenerator()
-    generator.train_model(15, 3, "cifar10", model_type="convolutional", name="Normal-CIFAR-15")
-    generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
-    generator.generateImage([0.0, 0.0, 0.0])
+    # generator.generateImage([0.0, 0.0, 0.0])
+
+    # generator = ModelGenerator()
+    # generator.train_model(15, 3, "cifar10", model_type="convolutional", name="Normal-CIFAR-15")
+    # generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
+    # generator.generateImage([0.0, 0.0, 0.0])
 
 
-    generator = ModelGenerator()
-    generator.train_model(15, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-15")
-    generator.saveModel("savedModels/Beta-1-MNIST-15.pt")
-    generator.generateImage([0.0, 0.0, 0.0])
+    # generator = ModelGenerator()
+    # generator.train_model(15, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-15")
+    # generator.saveModel("savedModels/Beta-1-MNIST-15.pt")
+    # generator.generateImage([0.0, 0.0, 0.0])
 
-    generator = ModelGenerator()
-    generator.train_model(15, 3, "mnist", model_type="convolutional", name="Normal-MNIST-15")
-    generator.saveModel("savedModels/Normal-MNIST-15.pt")
-    generator.generateImage([0.0, 0.0, 0.0])
+    # generator = ModelGenerator()
+    # generator.train_model(15, 3, "mnist", model_type="convolutional", name="Normal-MNIST-15")
+    # generator.saveModel("savedModels/Normal-MNIST-15.pt")
+    # generator.generateImage([0.0, 0.0, 0.0])
     
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
