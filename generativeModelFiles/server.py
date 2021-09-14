@@ -78,8 +78,9 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         response = modelGenerator_pb2.LoadModelResponse()
         response.succesful = True
         try:
-            self.m_generator.loadModel(SAVED_MODELS_DIR+request.modelName)
-        except:
+            self.m_generator.loadModel(request.modelName)
+        except Exception as e:
+            print(e)
             response.succesful = False
             response.message = f"Unable to load {request.modelName}, try another model."
             return response

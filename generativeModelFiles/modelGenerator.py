@@ -5,7 +5,7 @@ import torch.utils.data
 from torchvision import transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
-from ConvolutionalAutoencoder import ConvolutionalAutoencoder
+from ConvolutionalAutoencoder import CAutoencoder
 from CVAEModel import CVAE
 import os
 from datetime import datetime, time
@@ -104,7 +104,7 @@ class ModelGenerator:
         channel_size = images.shape[1]
 
         if model_type == "convolutional":
-            self.model = ConvolutionalAutoencoder(latent_vector, channel_size)
+            self.model = CAutoencoder(latent_vector, channel_size)
             self.model.training_loop(epochs, loader, name, False)
         elif model_type == "cvae":
             self.model = CVAE(channel_size, latent_vector)
@@ -135,24 +135,20 @@ class ModelGenerator:
             print("Default VAE Model loaded")
             return filepath
         else:
-            test_check = True
-            check1 = self.get_available_models()
             if not filepath.endswith('.pt'):
                 raise ModelException("File needs to be a pytorch file")
-            elif filepath not in check1:
-                test_check = False
-                check2 = self.get_available_models(False)
-                if filepath not in check2:
-                    raise ModelException(f"File {filepath} does not exist")
-            else:
-                if test_check == True:
-                    self.model = torch.load("./defaultModels/"+filepath)
-                else:
-                    self.model = torch.load("./savedModels/"+filepath)
 
-                self.set_latent_size(self.model.retrieve_latent_size())
-                print(filepath+" VAE Model loaded")
-                return filepath
+            if filepath in self.get_available_models():
+                filepath = "./defaultModels/"+filepath
+                self.model = torch.load(filepath)
+            elif filepath in self.get_available_models(False):
+                self.model = torch.load("./savedModels/"+filepath)
+            else:
+                raise ModelException(f"File {filepath} does not exist")
+
+            self.set_latent_size(self.model.retrieve_latent_size())
+            print(filepath+" VAE Model loaded")
+            return filepath
 
     def saveModel(self, filepath: str="") -> str:
         """Saves the model currently held by the model generator 
@@ -226,7 +222,7 @@ class ModelGenerator:
                     f = image.read()
                     b = bytearray(f)
 
-                # os.remove(filepath)
+                os.remove(filepath)
                 return list(b)
 
     def clearModel(self) -> None:

@@ -15,7 +15,7 @@ class View(nn.Module):
         return tensor.view(self.size)
 
 
-class ConvolutionalAutoencoder(nn.Module):
+class CAutoencoder(nn.Module):
     def __init__(self, latent_vector: int = 3, channel_size: int=3):
         super().__init__()        
         # input is Nx1x28x28
