@@ -47,7 +47,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         total_list = list(set(total_list)) # Removes duplicates from the list
 
         response = modelGenerator_pb2.ListModelsResponse()
-        response.availableModels = bytes(total_list)
+        response.models.extend(total_list)
         return response
 
     def TrainModel(self, request, context):
