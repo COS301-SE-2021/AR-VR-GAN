@@ -3,7 +3,7 @@ from torch.utils.data import DataLoader
 
 class DataLoaders:
     def __init__(self, transform: transforms = None, kwargs: dict = {}, batch_size: int = 32):
-        self.transform: transforms = None
+        self.transform: transforms = transform
         self.batch_size: int = batch_size
         self.kwargs: dict = kwargs
         if transform == None:
@@ -19,7 +19,7 @@ class DataLoaders:
         }
         
     def get_dataloader(self, name: str = "mnist") -> DataLoader:
-        if self.datasets.has_key(name):
+        if name in self.datasets:
             return DataLoader(self.datasets[name], batch_size=self.batch_size, shuffle=True, **self.kwargs)
         else:
             return DataLoader(self.datasets["mnist"], batch_size=self.batch_size, shuffle=True, **self.kwargs)
