@@ -1,3 +1,4 @@
+from concurrent import futures
 import grpc
 import asyncio
 
@@ -8,8 +9,9 @@ from modelGenerator import ModelGenerator
 global_vector = []
 SAVED_MODELS_DIR ="./savedModels/"
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
-    
-    m_generator = ModelGenerator()
+    def __init__(self) -> None:
+        super().__init__()
+        self.m_generator = ModelGenerator()
 
     async def get_image_data(self, request, context):
         async for item in request:
@@ -28,6 +30,25 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
     def LoadDataset(self, request, context):
         pass
+
+    def ListModels(self, request, context):
+        defaults: bool = request.default
+        saved: bool = request.saved
+
+        default_list: list = []
+        saved_list: list = []
+
+        if defaults:
+            default_list = self.m_generator.get_available_models()
+        if saved:
+            saved_list = self.m_generator.get_available_models(False)
+        
+        total_list: list = default_list + saved_list
+        total_list = list(set(total_list)) # Removes duplicates from the list
+
+        response = modelGenerator_pb2.ListModelsResponse()
+        response.availableModels = bytes(total_list)
+        return response
 
     def TrainModel(self, request, context):
         modelName: str = request.modelName
@@ -54,7 +75,6 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
 
     def LoadModel(self, request, context):
-        # Create a dict with the name of the model and file path
         response = modelGenerator_pb2.LoadModelResponse()
         response.succesful = True
         try:
@@ -68,7 +88,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
 
 async def serve():
-    server = grpc.aio.server()
+    server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=100))
     modelGenerator_pb2_grpc.add_ModelGenerationServicer_to_server(ModelGenerationServicer(), server)
     server.add_insecure_port("[::]:50051")
     print(f"Model Generator Server Started. Listening on port 50051")
