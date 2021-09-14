@@ -3,10 +3,11 @@ syntax = "proto3";
 package ModelGenerator;
 
 service ModelGeneration{
-    rpc GenerateImage (stream ImageRequest) returns (stream ImageResponse); 
+    rpc GenerateImage (stream ImageRequest) returns (stream ImageResponse); // Implemented
     rpc LoadDataset (LoadDatasetRequest) returns (LoadDatasetResponse); // Not implemented
-    rpc TrainModel (TrainModelRequest) returns (TrainModelResponse); // Not fully implemented
-    rpc LoadModel (LoadModelRequest) returns (LoadModelResponse); // Partially implemented
+    rpc TrainModel (TrainModelRequest) returns (TrainModelResponse); // Implemented
+    rpc LoadModel (LoadModelRequest) returns (LoadModelResponse); // Implemented
+    rpc ListModels (ListModelsRequest) returns (ListModelsResponse); // Implemented
     // - Delete Model // Could be used later
 }
 
@@ -37,6 +38,12 @@ message LoadModelRequest{
     string modelName = 1;
 }
 
+message ListModelsRequest{
+    bool default = 1; // To show only the default models
+    bool saved = 2; // To show only the ones saved by the user 
+    // Set both to true if you want both
+}
+
 message ImageResponse{
     int32 width = 1;
     int32 height = 2;
@@ -58,3 +65,6 @@ message LoadModelResponse{
     string message = 2; // Shows error message if `succesful` is false and the name of the model when successful
 }
 
+message ListModelsResponse{
+    bytes availableModels = 1; // Will return an array of all the names of available models from the specifed folder in the request
+}

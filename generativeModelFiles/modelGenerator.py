@@ -135,12 +135,21 @@ class ModelGenerator:
             print("Default VAE Model loaded")
             return filepath
         else:
-            if not os.path.isfile(filepath):
-                raise ModelException(f"File {filepath} does not exist")
-            elif not filepath.endswith('.pt'):
+            test_check = True
+            check1 = self.get_available_models()
+            if not filepath.endswith('.pt'):
                 raise ModelException("File needs to be a pytorch file")
+            elif filepath not in check1:
+                test_check = False
+                check2 = self.get_available_models(False)
+                if filepath not in check2:
+                    raise ModelException(f"File {filepath} does not exist")
             else:
-                self.model = torch.load(filepath)
+                if test_check == True:
+                    self.model = torch.load("./defaultModels/"+filepath)
+                else:
+                    self.model = torch.load("./savedModels/"+filepath)
+
                 self.set_latent_size(self.model.retrieve_latent_size())
                 print(filepath+" VAE Model loaded")
                 return filepath
