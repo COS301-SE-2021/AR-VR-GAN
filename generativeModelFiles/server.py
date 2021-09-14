@@ -35,16 +35,16 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         latentSize: int = request.latentSize
         datasetName: str = request.datasetName 
         beta: int = request.beta
+        # Check for model type
 
         # Create a temporary model generator so that a new model can be 
         # trained while the server is running
         temp = ModelGenerator()
         response = modelGenerator_pb2.TrainModelResponse()
         response.succesful = True
-        # response.message = f"Model {modelName} sucessfully trained after {epochs} epochs."
         try:
             temp.set_latent_size(latent_size=latentSize)
-            temp.train_model(epochs=epochs, beta=beta)
+            temp.train_model(epochs=epochs, latent_vector=latentSize, dataset=datasetName.lower(), model_type="cvae", beta=beta, name=modelName)
             response.message = temp.saveModel(SAVED_MODELS_DIR+modelName)
         except Exception as e:
             response.succesful = False
@@ -54,12 +54,11 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
 
     def LoadModel(self, request, context):
-        # print(f"The Model: {request.modelName}")
         # Create a dict with the name of the model and file path
         response = modelGenerator_pb2.LoadModelResponse()
         response.succesful = True
         try:
-            self.m_generator.loadModel(request.modelName)
+            self.m_generator.loadModel(SAVED_MODELS_DIR+request.modelName)
         except:
             response.succesful = False
             response.message = f"Unable to load {request.modelName}, try another model."
@@ -71,7 +70,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 async def serve():
     server = grpc.aio.server()
     modelGenerator_pb2_grpc.add_ModelGenerationServicer_to_server(ModelGenerationServicer(), server)
-    server.add_insecure_port("127.0.0.1:50051")
+    server.add_insecure_port("[::]:50051")
     print(f"Model Generator Server Started. Listening on port 50051")
     await server.start()
     await server.wait_for_termination()

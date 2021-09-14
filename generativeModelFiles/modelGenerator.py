@@ -2,12 +2,9 @@ from __future__ import print_function
 import argparse
 import torch
 import torch.utils.data
-from torch import optim
-from torch.nn import functional as F
-from torchvision import datasets, transforms
+from torchvision import transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
-from Autoencoder import Autoencoder
 from ConvolutionalAutoencoder import ConvolutionalAutoencoder
 from CVAEModel import CVAE
 import os
@@ -15,6 +12,9 @@ from datetime import datetime, time
 from PIL import Image
 from modelExceptions import ModelException
 from DataLoaders import DataLoaders
+
+from os import listdir
+from os.path import isfile, join
 
 class ModelGenerator:
     """ This class trains VAE models and generates images from said models
@@ -102,18 +102,16 @@ class ModelGenerator:
         loader_iter = iter(loader)
         images, labels = loader_iter.next()
         channel_size = images.shape[1]
-        # print(type(images))
-        # print(images.shape[1])
-        # input()
 
         if model_type == "convolutional":
             self.model = ConvolutionalAutoencoder(latent_vector, channel_size)
+            self.model.training_loop(epochs, loader, name, False)
         elif model_type == "cvae":
             self.model = CVAE(channel_size, latent_vector)
+            self.model.training_loop(epochs, loader, beta, name, False)
         else:
             self.model = CVAE(channel_size,latent_vector)
-
-        self.model.training_loop(epochs, loader, beta, name, False)
+            self.model.training_loop(epochs, loader, beta, name, False)
 
     def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator
@@ -136,7 +134,6 @@ class ModelGenerator:
             self.model = torch.load(filepath)
             print("Default VAE Model loaded")
             return filepath
-            # return True
         else:
             if not os.path.isfile(filepath):
                 raise ModelException(f"File {filepath} does not exist")
@@ -147,7 +144,6 @@ class ModelGenerator:
                 self.set_latent_size(self.model.retrieve_latent_size())
                 print(filepath+" VAE Model loaded")
                 return filepath
-                # return True
 
     def saveModel(self, filepath: str="") -> str:
         """Saves the model currently held by the model generator 
@@ -206,25 +202,17 @@ class ModelGenerator:
             ModelException("File extension must be either be png, jpg, jpeg")
         else:    
             with torch.no_grad():
-                # Returns a 1x20 array with random values from 0-1
-                # The second value in the randn decides the the dimesion check VAEModel
-                # sample = torch.randn(1,2).to(self.device)
                 if self.model.retrieve_latent_size() != len(vector):
                     raise ModelException("Input vector not the same size as model's vector")
 
                 sample = torch.tensor([vector]).to(self.device)
-                # print(sample.size())
                 sample = self.model.decoder(sample).cpu() 
 
-                # print(sample.shape)
-                # input()
                 save_image(sample.view(1, sample.shape[1], 28, 28), filepath)
-                # save_image(sample.view(1, 3, 64, 64), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
 
-                #print("Imaged Saved as "+filepath)
                 with open(filepath, "rb") as image:
                     f = image.read()
                     b = bytearray(f)
@@ -241,6 +229,14 @@ class ModelGenerator:
     def set_latent_size(self, latent_size: int) -> None:
         self.latent_size = latent_size
 
+    def get_available_models(self, default: bool = True):
+        if default != True:
+            mypath = "./savedModels/"
+        else:
+            mypath = "./defaultModels/"
+
+        onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+        return onlyfiles
 
 if __name__ == "__main__":
 
@@ -254,14 +250,30 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
-    # generator.train_model(1, 3, "mnist", name="Beta-1-MNIST-1")
-    # generator.saveModel("savedModels/Beta-1-MNIST-1.pt")
+    generator.train_model(15, 3, "cifar10", model_type="cvae", name="Beta-1-CIFAR-15")
+    generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
+    generator.generateImage([0.0, 0.0, 0.0])
+
+    generator = ModelGenerator()
+    generator.train_model(15, 3, "cifar10", model_type="convolutional", name="Normal-CIFAR-15")
+    generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
+    generator.generateImage([0.0, 0.0, 0.0])
+
+
+    generator = ModelGenerator()
+    generator.train_model(15, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-15")
+    generator.saveModel("savedModels/Beta-1-MNIST-15.pt")
+    generator.generateImage([0.0, 0.0, 0.0])
+
+    generator = ModelGenerator()
+    generator.train_model(15, 3, "mnist", model_type="convolutional", name="Normal-MNIST-15")
+    generator.saveModel("savedModels/Normal-MNIST-15.pt")
+    generator.generateImage([0.0, 0.0, 0.0])
     
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
     from time import sleep
-    generator.loadModel("savedModels/Beta-1-MNIST-1.pt")
-    generator.generateImage([0.0, 0.0, 0.0])
+    # generator.saveModel("savedModels/CBeta-1-MNIST-1.pt")
     # sleep(1)
     # generator.generateImage([0.1, 0.0, 0.0])
     # sleep(1)
