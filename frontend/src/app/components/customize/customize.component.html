@@ -1,0 +1,24 @@
+<mat-grid-list cols=5 gutterSize="15px" rowHeight="40px">
+    <mat-grid-tile colspan=5></mat-grid-tile>
+    <mat-grid-tile rowspan=8></mat-grid-tile>
+    <mat-grid-tile colspan=3 rowspan=8>
+        <mat-card>
+            <table>
+                <tr>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Choose a dataset</mat-label>
+                        <mat-select [(value)]="selected" #datasetOption>
+                            <mat-option value="option1">Option 1</mat-option>
+                            <mat-option value="option2">Option 2</mat-option>
+                            <mat-option value="option3">Option 3</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </tr>
+                <tr>
+                    <button mat-raised-button color="primary" (click)="saveChanges(datasetOption.value)">Customize</button>
+                </tr>
+            </table>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile rowspan=8></mat-grid-tile>
+</mat-grid-list>
