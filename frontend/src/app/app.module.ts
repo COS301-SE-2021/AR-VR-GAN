@@ -15,6 +15,7 @@ import { RegisterFormComponent } from './components/register-form/register-form.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CoordsComponent } from './components/coords/coords.component';
 import { DownloadVrExeComponent } from './components/download-vr-exe/download-vr-exe.component';
+import { CustomizeComponent } from './components/customize/customize.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { DownloadVrExeComponent } from './components/download-vr-exe/download-vr
     LoginFormComponent,
     RegisterFormComponent,
     CoordsComponent,
-    DownloadVrExeComponent
+    DownloadVrExeComponent,
+    CustomizeComponent
   ],
   imports: [
     BrowserModule,
