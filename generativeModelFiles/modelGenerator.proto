@@ -4,9 +4,9 @@ package ModelGenerator;
 
 service ModelGeneration{
     rpc GenerateImage (stream ImageRequest) returns (stream ImageResponse); 
-    rpc LoadDataset (LoadDatasetRequest) returns (LoadDatasetResponse);
-    rpc TrainModel (TrainModelRequest) returns (TrainModelResponse);
-    rpc LoadModel (LoadModelRequest) returns (LoadModelResponse);
+    rpc LoadDataset (LoadDatasetRequest) returns (LoadDatasetResponse); // Not implemented
+    rpc TrainModel (TrainModelRequest) returns (TrainModelResponse); // Not fully implemented
+    rpc LoadModel (LoadModelRequest) returns (LoadModelResponse); // Partially implemented
     // - Delete Model // Could be used later
 }
 
@@ -23,20 +23,18 @@ message LoadDatasetRequest{
 }
 
 message TrainModelRequest{
-    string modelName = 1;
-    int32 trainingEpochs = 2;
-    int32 latentSize = 3;
-    string datasetName = 4;
-    bytes dataset = 5;
+    string modelName = 1; // The name that model will be saved as; will be saved in the savedModels directory
+    int32 trainingEpochs = 2; // The number of iterations that will be used to train the model; a good number is 30
+    int32 latentSize = 3; // The size of the latent vector; good size is 3
+    string datasetName = 4; // only 3 options available, mnist, fashion and cifar10
+    // bytes dataset = 5;
     // bool beta = 6;
-    int32 beta = 7;
-    string modelType = 8;
+    int32 beta = 7; // must be greater than or equal to 1
+    string modelType = 8; // 2 options available CVAE and CAE; you don't have to use this rn
 }
 
 message LoadModelRequest{
     string modelName = 1;
-    // have a bytes section then the client sends over a model
-    // from its database.
 }
 
 message ImageResponse{
@@ -46,17 +44,17 @@ message ImageResponse{
 }
 
 message LoadDatasetResponse{
-    bool succesful = 1;
+    bool succesful = 1; 
     string message = 2;
 }
 
 message TrainModelResponse{
-    bool succesful = 1;
-    string message = 2;
+    bool succesful = 1; // When training is successful will return a true value and returns false when exception is thrown 
+    string message = 2; // Shows error message if `succesful` is false and the name of the model when successful
 }
 
 message LoadModelResponse{
-    bool succesful = 1;
-    string message = 2;
+    bool succesful = 1;  // When loading is successful will return a true value and returns false when exception is thrown
+    string message = 2; // Shows error message if `succesful` is false and the name of the model when successful
 }
 

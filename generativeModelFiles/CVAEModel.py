@@ -82,9 +82,9 @@ class CVAE(nn.Module):
         self.train()
         train_loss = 0
         outputs = []
-        save = False
+        save = True
         if name == "" : 
-            save == True
+            save == False
         
         j = 0
         for iter in range(epochs):

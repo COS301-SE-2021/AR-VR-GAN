@@ -15,8 +15,7 @@ class DataLoaders:
         self.datasets: dict = {
             "mnist": datasets.MNIST('../data', train=True, download=True, transform=self.transform), 
             "fashion": datasets.FashionMNIST('../data', train=True, download=True, transform=self.transform),
-            "cira10": datasets.CIFAR10('../data', train=True, transform=self.transform),
-            "city": datasets.Cityscapes('../data', split="train", transform=self.transform)
+            "cifar10": datasets.CIFAR10('../data', train=True, transform=self.transform)
         }
         
     def get_dataloader(self, name: str = "mnist") -> DataLoader:

@@ -33,7 +33,6 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         modelName: str = request.modelName
         epochs: int = request.trainingEpochs
         latentSize: int = request.latentSize
-        # TODO: Create dataset loader selector
         datasetName: str = request.datasetName 
         beta: int = request.beta
 
@@ -55,8 +54,8 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 
 
     def LoadModel(self, request, context):
-        print(f"The Model: {request.modelName}")
-
+        # print(f"The Model: {request.modelName}")
+        # Create a dict with the name of the model and file path
         response = modelGenerator_pb2.LoadModelResponse()
         response.succesful = True
         try:
