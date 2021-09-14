@@ -98,16 +98,12 @@ class ModelGenerator:
         """
         loader = self.data_loaders.get_dataloader(dataset)
 
-        if model_type == "autoencoder":
-            self.model = Autoencoder(latent_vector)
-        elif model_type == "convolutional":
-            self.model = CVAE(loader[1], latent_vector)
-        elif model_type == "vae":
-            self.model = VAE(latent_vector)
+        if model_type == "convolutional":
+            self.model = ConvolutionalAutoencoder(latent_vector, loader[1])
         elif model_type == "cvae":
             self.model = CVAE(loader[1], latent_vector)
         else:
-            self.model = VAE(latent_vector)
+            self.model = CVAE(latent_vector)
 
         self.model.training_loop(epochs, loader, beta, name, False)
 
@@ -234,13 +230,6 @@ class ModelGenerator:
 
     def set_latent_size(self, latent_size: int) -> None:
         self.latent_size = latent_size
-
-    def loadDataset(self) -> None:
-        # TODO Complete this function but first create dataset loader class
-        #       and related variables that need to created in this class.
-        """Loads a new dataset to train the model on 
-        """
-        pass
 
 
 if __name__ == "__main__":
