@@ -213,10 +213,12 @@ class ModelGenerator:
                     raise ModelException("Input vector not the same size as model's vector")
 
                 sample = torch.tensor([vector]).to(self.device)
-                # print(sample)
                 # print(sample.size())
-                sample = self.model.decode(sample).cpu() 
-                save_image(sample.view(1, sample[1], 28, 28), filepath)
+                sample = self.model.decoder(sample).cpu() 
+
+                # print(sample.shape)
+                # input()
+                save_image(sample.view(1, sample.shape[1], 28, 28), filepath)
                 # save_image(sample.view(1, 3, 64, 64), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
