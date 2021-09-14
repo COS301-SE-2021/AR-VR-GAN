@@ -55,20 +55,28 @@ class CVAE(nn.Module):
     def forward(self, x):
         distributions = self.encoder(x)
         mu = distributions[:, :self.z]
-        logvar = distributions[:, self.z]
+        logvar = distributions[:, self.z:]
         z = self.reparametrize(mu, logvar)
         x_recon = self.decoder(z)
 
         return x_recon, mu , logvar
     
     def reparametrize(self, mu, logvar):
-        std = std = torch.exp(0.5*logvar)
+        # print("logvar",logvar.shape)
+        std = torch.exp(0.5*logvar)
         eps = torch.randn_like(std)
+        # print("std",std.shape)
+        # print("eps", eps.shape)
+        # print("mu", mu)
+        # input()
         return mu + std*eps
 
     def loss_function(self,recon_x, x, mu, logvar, beta = 1) -> float:
         BETA = beta
-        BCE = F.binary_cross_entropy(recon_x, x.view(-1, 784), reduction='sum')
+        # print(x.shape)
+        # input()
+        BCE = F.binary_cross_entropy(recon_x, x, reduction='sum').div(x.shape[0])
+        # print("BCE", BCE)
         # see Appendix B from VAE paper:
         # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
         # https://arxiv.org/abs/1312.6114

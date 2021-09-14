@@ -88,7 +88,8 @@ class ModelGenerator:
         
         self.model = None
 
-    def train_model(self, epochs: int, model_type: str, latent_vector: int, dataset: str, beta: int=1, name: str="", show: bool=False ) -> None:
+    def train_model(self, epochs: int, latent_vector: int, dataset: str = "mnist", model_type: str = "cvae", 
+    beta: int=1, name: str="", show: bool=False) -> None:
         """ Trains and test the model over a set of iterations(epochs)
 
         Parameters
@@ -96,14 +97,21 @@ class ModelGenerator:
         epochs : int
             The number of iterations the model will be tested
         """
+        self.set_latent_size(latent_vector)
         loader = self.data_loaders.get_dataloader(dataset)
+        loader_iter = iter(loader)
+        images, labels = loader_iter.next()
+        channel_size = images.shape[1]
+        # print(type(images))
+        # print(images.shape[1])
+        # input()
 
         if model_type == "convolutional":
-            self.model = ConvolutionalAutoencoder(latent_vector, loader[1])
+            self.model = ConvolutionalAutoencoder(latent_vector, channel_size)
         elif model_type == "cvae":
-            self.model = CVAE(loader[1], latent_vector)
+            self.model = CVAE(channel_size, latent_vector)
         else:
-            self.model = CVAE(latent_vector)
+            self.model = CVAE(channel_size,latent_vector)
 
         self.model.training_loop(epochs, loader, beta, name, False)
 
@@ -208,7 +216,7 @@ class ModelGenerator:
                 # print(sample)
                 # print(sample.size())
                 sample = self.model.decode(sample).cpu() 
-                save_image(sample.view(1, 1, 28, 28), filepath)
+                save_image(sample.view(1, sample[1], 28, 28), filepath)
                 # save_image(sample.view(1, 3, 64, 64), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
@@ -244,33 +252,32 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
-    generator.set_latent_size(3)
-    generator.train_model(10)
-    generator.saveModel("defaultModels/BetaVAE1-CIRA10-Epochs-10.pt")
+    generator.train_model(1, 3, "mnist", name="Beta-1-MNIST-1")
+    # generator.saveModel("defaultModels/BetaVAE1-MNIST-Epochs-10.pt")
     
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
     from time import sleep
     # # generator.loadModel("defaultModels/BetaVAE-Fake-Data-Epochs-50.pt")
     generator.generateImage([0.0, 0.0, 0.0])
-    sleep(1)
-    generator.generateImage([0.1, 0.0, 0.0])
-    sleep(1)
-    generator.generateImage([0.2, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.03, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.04, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.05, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.06, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.022, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.024, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.056, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.1, 0.0, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.2, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.03, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.04, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.05, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.06, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.022, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.024, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.056, 0.1, 0.0])
     # generator.loadModel(args.model)
 
     # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
