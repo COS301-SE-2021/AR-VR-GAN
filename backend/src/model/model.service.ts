@@ -75,15 +75,11 @@ export class ModelService {
     }
 
     public listModels(request: listModelsDto): listModelsResponseDto {
-        const resp = new listModelsResponseDto(["mnest","fashion","cifar"]);
-        //return this.grpcService.ListModels(request);     //make sure return is of type loadModelResponseDto
-        return resp;
+        return this.grpcService.ListModels(request);     //make sure return is of type loadModelResponseDto
     }
 
     public currentModel(): currentModelResponseDto {
-        const resp = new currentModelResponseDto("mnest");
-        //return this.grpcService.CurrentModel();     //make sure return is of type loadModelResponseDto
-        return resp;
+        return this.grpcService.CurrentModel();     //make sure return is of type loadModelResponseDto
     }
     
 
