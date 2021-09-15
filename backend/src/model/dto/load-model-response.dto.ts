@@ -1,7 +1,9 @@
 export class loadModelResponseDto {
-    readonly success: boolean;
+    readonly succesful: boolean;
+    readonly message: string;
 
-    constructor(success: boolean) {
-        this.success = success;
+    constructor(succesful: boolean, message: string) {
+        this.succesful = succesful;
+        this.message = message;
     }
 }
