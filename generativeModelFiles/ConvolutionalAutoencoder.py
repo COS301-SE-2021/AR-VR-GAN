@@ -35,8 +35,8 @@ class CAutoencoder(nn.Module):
             nn.ReLU(),
             nn.Conv2d(64, 128, 12, stride=1, padding=1),
             View((-1, 128*1*1)), 
-            nn.Linear(128, self.z),
-            nn.Sigmoid()
+            nn.Linear(128, self.z)
+            # nn.Sigmoid()
         )
         
         # N , latent_vector, <- input
@@ -70,6 +70,7 @@ class CAutoencoder(nn.Module):
         outputs = []
         save = False
         if name == "" : 
+            name = "no-name" 
             save == True
         
         for iter in range(epochs):
@@ -94,6 +95,7 @@ class CAutoencoder(nn.Module):
 
     def details(self):
         model_details: dict = {
+            "name": self.name,
             "epochs_trained": self.epochs,
             "latent_vector_size": self.z,
             "dataset_used": self.datasetUsed

@@ -39,6 +39,11 @@ class ModelGenerationStub(object):
                 request_serializer=modelGenerator__pb2.ListModelsRequest.SerializeToString,
                 response_deserializer=modelGenerator__pb2.ListModelsResponse.FromString,
                 )
+        self.CurrentModel = channel.unary_unary(
+                '/ModelGenerator.ModelGeneration/CurrentModel',
+                request_serializer=modelGenerator__pb2.CurrentModelRequest.SerializeToString,
+                response_deserializer=modelGenerator__pb2.CurrentModelResponse.FromString,
+                )
 
 
 class ModelGenerationServicer(object):
@@ -79,6 +84,13 @@ class ModelGenerationServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def CurrentModel(self, request, context):
+        """- Delete Model // Could be used later
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_ModelGenerationServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -106,6 +118,11 @@ def add_ModelGenerationServicer_to_server(servicer, server):
                     servicer.ListModels,
                     request_deserializer=modelGenerator__pb2.ListModelsRequest.FromString,
                     response_serializer=modelGenerator__pb2.ListModelsResponse.SerializeToString,
+            ),
+            'CurrentModel': grpc.unary_unary_rpc_method_handler(
+                    servicer.CurrentModel,
+                    request_deserializer=modelGenerator__pb2.CurrentModelRequest.FromString,
+                    response_serializer=modelGenerator__pb2.CurrentModelResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -199,5 +216,22 @@ class ModelGeneration(object):
         return grpc.experimental.unary_unary(request, target, '/ModelGenerator.ModelGeneration/ListModels',
             modelGenerator__pb2.ListModelsRequest.SerializeToString,
             modelGenerator__pb2.ListModelsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CurrentModel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ModelGenerator.ModelGeneration/CurrentModel',
+            modelGenerator__pb2.CurrentModelRequest.SerializeToString,
+            modelGenerator__pb2.CurrentModelResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
