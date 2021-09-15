@@ -5,6 +5,7 @@ import asyncio
 import modelGenerator_pb2
 import modelGenerator_pb2_grpc
 from modelGenerator import ModelGenerator
+import json
 # m_generator = ModelGenerator()
 global_vector = []
 SAVED_MODELS_DIR ="./savedModels/"
@@ -12,7 +13,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
     def __init__(self) -> None:
         super().__init__()
         self.m_generator = ModelGenerator()
-        self.m_generator.loadModel("Beta-1-CIFAR-15.pt")
+        self.m_generator.loadModel("Beta-1-CIFAR-1.pt")
 
     async def get_image_data(self, request, context):
         async for item in request:
@@ -47,14 +48,16 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         total_list: list = default_list + saved_list
         total_list = list(set(total_list)) # Removes duplicates from the list
 
-        # temp_mg = ModelGenerator()
-
-        # for model in total_list:
-        #     temp_mg.loadModel(model)
-
-
+        temp_mg = ModelGenerator()
 
         response = modelGenerator_pb2.ListModelsResponse()
+        for model in total_list:
+            temp_mg.loadModel(model)
+            details = temp_mg.model.details()
+            new_dict = {x:str(details[x]) for x in details}
+        
+            response.modelDetails[model] = json.dumps(new_dict).encode('utf-8')
+
         response.models.extend(total_list)
         return response
 
@@ -92,9 +95,17 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
             response.succesful = False
             response.message = f"Unable to load {request.modelName}, try another model."
             return response
-        response.message = "Successful: "+ str(self.m_generator.model.retrieve_latent_size())
+        response.message = "Successful: Latent size "+ str(self.m_generator.model.retrieve_latent_size())
         return response
 
+    def CurrentModel(self, request, context):
+        response = modelGenerator_pb2.CurrentModelResponse()
+        details = self.m_generator.model.details()
+        response.modelName = details['name']
+        for x in details:
+            response.modelDetails[x] = str(details[x])
+
+        return response
 
 async def serve():
     server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=100))
