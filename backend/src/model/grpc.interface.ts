@@ -4,6 +4,7 @@ export interface ModelGeneration {
   generateImage(Request: Observable<RequestProxy>): Observable<any>;
   LoadModel(Request: RequestModel): any;
   ListModels(Request: RequestListModel): any;
+  CurrentModel(): any;
 }
 
 export interface RequestProxy {
