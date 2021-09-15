@@ -89,7 +89,7 @@ class CAutoencoder(nn.Module):
                     save_image(recon.view(recon.shape[0], recon.shape[1], 28, 28), f"./training/{name}-{iter+1}.png")
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon))
-                if i == 350 : break
+                # if i == 350 : break
             if save and self.epochs % 10 == 0:
                 torch.save(self, f"./savedModels/CAE/{name}.pt")
 

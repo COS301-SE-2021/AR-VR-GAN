@@ -121,7 +121,7 @@ class CVAE(nn.Module):
                     save_image(recon_batch.view(recon_batch.shape[0], recon_batch.shape[1], 28, 28), f"./training/{name}-{iter+1}.png")
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon_batch))
-                if i == 350 : break
+                # if i == 350 : break
             if save and self.epochs % 10 == 0:
                 torch.save(self, f"./savedModels/CVAE/{name}.pt")
     
