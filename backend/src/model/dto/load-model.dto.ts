@@ -1,7 +1,7 @@
 export class loadModelDto {
-    readonly dataset: string;
+    readonly modelName: string;
 
-    constructor(dataset: string) {
-        this.dataset = dataset;
+    constructor(modelName: string) {
+        this.modelName = modelName;
     }
 }
