@@ -11,6 +11,7 @@ import { loadModelResponseDto } from './dto/load-model-response.dto';
 import { listModelsDto } from './dto/list-model.dto';
 import { listModelsResponseDto } from './dto/list-model-response.dto';
 import { currentModelResponseDto } from './dto/current-model-response.dto';
+import { currentModelDto } from './dto/current-model.dto';
 
 @Controller('model')
 export class ModelController {
@@ -111,8 +112,8 @@ export class ModelController {
     }
 
     @Post('/currentModel')
-    currentModel(): currentModelResponseDto {
-        return this.modelService.currentModel();
+    currentModel(@Body() request: currentModelDto): currentModelResponseDto {
+        return this.modelService.currentModel(request);
     }
 
 }

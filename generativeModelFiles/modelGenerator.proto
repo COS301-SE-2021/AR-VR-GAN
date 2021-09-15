@@ -39,13 +39,14 @@ message LoadModelRequest{
     string modelName = 1;
 }
 
-message CurrentModelRequest{
-}
-
 message ListModelsRequest{
     bool default = 1; // To show only the default models
     bool saved = 2; // To show only the ones saved by the user 
     // Set both to true if you want both
+}
+
+message CurrentModelRequest{
+    bool details = 1;
 }
 
 message ImageResponse{
@@ -71,8 +72,10 @@ message LoadModelResponse{
 
 message ListModelsResponse{
     repeated string models = 3; // Will return an array of all the names of available models from the specifed folder in the request
+    map<string, bytes> modelDetails = 4;
 }
 
 message CurrentModelResponse{
-    string modelName = 1; // Will return an array of all the names of available models from the specifed folder in the request
+    string modelName = 1;
+    map<string, string> modelDetails = 2;
 }

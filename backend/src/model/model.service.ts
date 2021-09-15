@@ -9,6 +9,7 @@ import { loadModelResponseDto } from './dto/load-model-response.dto';
 import { listModelsDto } from './dto/list-model.dto';
 import { listModelsResponseDto } from './dto/list-model-response.dto';
 import { currentModelResponseDto } from './dto/current-model-response.dto';
+import { currentModelDto } from './dto/current-model.dto';
 
 @Injectable()
 export class ModelService {
@@ -69,21 +70,15 @@ export class ModelService {
     }
 
     public loadModel(request: loadModelDto): loadModelResponseDto {
-        const resp = new loadModelResponseDto(true,"success");
-        //return this.grpcService.LoadModel(request);     //make sure return is of type loadModelResponseDto
-        return resp;
+        return this.grpcService.loadModel(request);     //make sure return is of type loadModelResponseDto
     }
 
     public listModels(request: listModelsDto): listModelsResponseDto {
-        const resp = new listModelsResponseDto(["mnest","fashion","cifar"]);
-        //return this.grpcService.ListModels(request);     //make sure return is of type loadModelResponseDto
-        return resp;
+        return this.grpcService.listModels(request);     //make sure return is of type loadModelResponseDto
     }
 
-    public currentModel(): currentModelResponseDto {
-        const resp = new currentModelResponseDto("mnest");
-        //return this.grpcService.CurrentModel();     //make sure return is of type loadModelResponseDto
-        return resp;
+    public currentModel(request: currentModelDto): currentModelResponseDto {
+        return this.grpcService.currentModel(request);     //make sure return is of type loadModelResponseDto
     }
     
 
