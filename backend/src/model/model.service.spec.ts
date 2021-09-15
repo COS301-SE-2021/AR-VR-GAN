@@ -16,7 +16,7 @@ describe('ModelService', () => {
             transport: Transport.GRPC,
             options: {
               package: 'ModelGenerator',
-              protoPath: join(__dirname, '../../../generativeModelFiles/modelGenerator.proto'),
+              protoPath: join(__dirname, '../../../backend/src/model/modelGenerator.proto'),
               url: "127.0.0.1:50051"
               
             },
