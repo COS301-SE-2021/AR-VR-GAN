@@ -1,7 +1,9 @@
 export class listModelsResponseDto {
-    readonly models: string[];
+    readonly modelName: string;
+    readonly modelDetails: any;
 
-    constructor(models: string[]) {
-        this.models = models;
+    constructor(modelName: string,modelDetails: any) {
+        this.modelName = modelName;
+        this.modelDetails = modelDetails;
     }
 }
