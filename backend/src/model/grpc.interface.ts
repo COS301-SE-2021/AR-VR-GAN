@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 export interface ModelGeneration {
   generateImage(Request: Observable<RequestProxy>): Observable<any>;
   LoadModel(Request: RequestModel): any;
+  ListModels(Request: RequestListModel): any;
 }
 
 export interface RequestProxy {
@@ -11,4 +12,9 @@ export interface RequestProxy {
 
 export interface RequestModel {
   modelName: string;
+}
+
+export interface RequestListModel {
+  default: boolean;
+  saved: boolean;
 }
