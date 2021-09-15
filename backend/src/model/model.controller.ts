@@ -112,7 +112,8 @@ export class ModelController {
     }
 
     @Post('/currentModel')
-    currentModel(@Body() request: currentModelDto): currentModelResponseDto {
+    currentModel(): currentModelResponseDto {
+        const request = new currentModelDto();
         return this.modelService.currentModel(request);
     }
 
