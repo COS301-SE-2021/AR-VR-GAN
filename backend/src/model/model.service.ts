@@ -6,6 +6,8 @@ import { ModelGeneration,RequestProxy } from './grpc.interface';
 import { ReplaySubject} from 'rxjs';
 import { loadModelDto } from './dto/load-model.dto';
 import { loadModelResponseDto } from './dto/load-model-response.dto';
+import { listModelsDto } from './dto/list-model.dto';
+import { listModelsResponseDto } from './dto/list-model-response.dto';
 
 @Injectable()
 export class ModelService {
@@ -66,8 +68,11 @@ export class ModelService {
     }
 
     public loadModel(request: loadModelDto): Promise<loadModelResponseDto> {
-        const ret =this.grpcService.LoadModel(request);
-        return ret;     //make sure return is of type loadModelResponseDto
+        return this.grpcService.LoadModel(request);     //make sure return is of type loadModelResponseDto
+    }
+
+    public listModels(request: listModelsDto): Promise<listModelsResponseDto> {
+        return this.grpcService.ListModels(request);     //make sure return is of type loadModelResponseDto
     }
     
 
