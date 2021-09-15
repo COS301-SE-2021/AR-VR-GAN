@@ -12,6 +12,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
     def __init__(self) -> None:
         super().__init__()
         self.m_generator = ModelGenerator()
+        self.m_generator.loadModel("Beta-1-CIFAR-15.pt")
 
     async def get_image_data(self, request, context):
         async for item in request:
@@ -45,6 +46,13 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         
         total_list: list = default_list + saved_list
         total_list = list(set(total_list)) # Removes duplicates from the list
+
+        # temp_mg = ModelGenerator()
+
+        # for model in total_list:
+        #     temp_mg.loadModel(model)
+
+
 
         response = modelGenerator_pb2.ListModelsResponse()
         response.models.extend(total_list)
