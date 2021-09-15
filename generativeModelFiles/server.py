@@ -47,14 +47,13 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         total_list: list = default_list + saved_list
         total_list = list(set(total_list)) # Removes duplicates from the list
 
-        # temp_mg = ModelGenerator()
-
-        # for model in total_list:
-        #     temp_mg.loadModel(model)
-
-
+        temp_mg = ModelGenerator()
 
         response = modelGenerator_pb2.ListModelsResponse()
+        for model in total_list:
+            temp_mg.loadModel(model)
+            response.modelDetails[model] = bytes(temp_mg.model.details())
+
         response.models.extend(total_list)
         return response
 

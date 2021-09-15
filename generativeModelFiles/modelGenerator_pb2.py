@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x14modelGenerator.proto\x12\x0eModelGenerator\"\x1e\n\x0cImageRequest\x12\x0e\n\x06vector\x18\x01 \x03(\x02\"O\n\x12LoadDatasetRequest\x12\x13\n\x0b\x64\x61tasetName\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x61tasetType\x18\x02 \x01(\t\x12\x0f\n\x07\x64\x61taset\x18\x03 \x01(\x0c\"\x88\x01\n\x11TrainModelRequest\x12\x11\n\tmodelName\x18\x01 \x01(\t\x12\x16\n\x0etrainingEpochs\x18\x02 \x01(\x05\x12\x12\n\nlatentSize\x18\x03 \x01(\x05\x12\x13\n\x0b\x64\x61tasetName\x18\x04 \x01(\t\x12\x0c\n\x04\x62\x65ta\x18\x07 \x01(\x05\x12\x11\n\tmodelType\x18\x08 \x01(\t\"%\n\x10LoadModelRequest\x12\x11\n\tmodelName\x18\x01 \x01(\t\"3\n\x11ListModelsRequest\x12\x0f\n\x07\x64\x65\x66\x61ult\x18\x01 \x01(\x08\x12\r\n\x05saved\x18\x02 \x01(\x08\"=\n\rImageResponse\x12\r\n\x05width\x18\x01 \x01(\x05\x12\x0e\n\x06height\x18\x02 \x01(\x05\x12\r\n\x05image\x18\x03 \x01(\x0c\"9\n\x13LoadDatasetResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"8\n\x12TrainModelResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"7\n\x11LoadModelResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"$\n\x12ListModelsResponse\x12\x0e\n\x06models\x18\x03 \x03(\t2\xb7\x03\n\x0fModelGeneration\x12P\n\rGenerateImage\x12\x1c.ModelGenerator.ImageRequest\x1a\x1d.ModelGenerator.ImageResponse(\x01\x30\x01\x12V\n\x0bLoadDataset\x12\".ModelGenerator.LoadDatasetRequest\x1a#.ModelGenerator.LoadDatasetResponse\x12S\n\nTrainModel\x12!.ModelGenerator.TrainModelRequest\x1a\".ModelGenerator.TrainModelResponse\x12P\n\tLoadModel\x12 .ModelGenerator.LoadModelRequest\x1a!.ModelGenerator.LoadModelResponse\x12S\n\nListModels\x12!.ModelGenerator.ListModelsRequest\x1a\".ModelGenerator.ListModelsResponseb\x06proto3'
+  serialized_pb=b'\n\x14modelGenerator.proto\x12\x0eModelGenerator\"\x1e\n\x0cImageRequest\x12\x0e\n\x06vector\x18\x01 \x03(\x02\"O\n\x12LoadDatasetRequest\x12\x13\n\x0b\x64\x61tasetName\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x61tasetType\x18\x02 \x01(\t\x12\x0f\n\x07\x64\x61taset\x18\x03 \x01(\x0c\"\x88\x01\n\x11TrainModelRequest\x12\x11\n\tmodelName\x18\x01 \x01(\t\x12\x16\n\x0etrainingEpochs\x18\x02 \x01(\x05\x12\x12\n\nlatentSize\x18\x03 \x01(\x05\x12\x13\n\x0b\x64\x61tasetName\x18\x04 \x01(\t\x12\x0c\n\x04\x62\x65ta\x18\x07 \x01(\x05\x12\x11\n\tmodelType\x18\x08 \x01(\t\"%\n\x10LoadModelRequest\x12\x11\n\tmodelName\x18\x01 \x01(\t\"3\n\x11ListModelsRequest\x12\x0f\n\x07\x64\x65\x66\x61ult\x18\x01 \x01(\x08\x12\r\n\x05saved\x18\x02 \x01(\x08\"=\n\rImageResponse\x12\r\n\x05width\x18\x01 \x01(\x05\x12\x0e\n\x06height\x18\x02 \x01(\x05\x12\r\n\x05image\x18\x03 \x01(\x0c\"9\n\x13LoadDatasetResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"8\n\x12TrainModelResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"7\n\x11LoadModelResponse\x12\x11\n\tsuccesful\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"\xa5\x01\n\x12ListModelsResponse\x12\x0e\n\x06models\x18\x03 \x03(\t\x12J\n\x0cmodelDetails\x18\x04 \x03(\x0b\x32\x34.ModelGenerator.ListModelsResponse.ModelDetailsEntry\x1a\x33\n\x11ModelDetailsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x0c:\x02\x38\x01\x32\xb7\x03\n\x0fModelGeneration\x12P\n\rGenerateImage\x12\x1c.ModelGenerator.ImageRequest\x1a\x1d.ModelGenerator.ImageResponse(\x01\x30\x01\x12V\n\x0bLoadDataset\x12\".ModelGenerator.LoadDatasetRequest\x1a#.ModelGenerator.LoadDatasetResponse\x12S\n\nTrainModel\x12!.ModelGenerator.TrainModelRequest\x1a\".ModelGenerator.TrainModelResponse\x12P\n\tLoadModel\x12 .ModelGenerator.LoadModelRequest\x1a!.ModelGenerator.LoadModelResponse\x12S\n\nListModels\x12!.ModelGenerator.ListModelsRequest\x1a\".ModelGenerator.ListModelsResponseb\x06proto3'
 )
 
 
@@ -404,6 +404,44 @@ _LOADMODELRESPONSE = _descriptor.Descriptor(
 )
 
 
+_LISTMODELSRESPONSE_MODELDETAILSENTRY = _descriptor.Descriptor(
+  name='ModelDetailsEntry',
+  full_name='ModelGenerator.ListModelsResponse.ModelDetailsEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='key', full_name='ModelGenerator.ListModelsResponse.ModelDetailsEntry.key', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='value', full_name='ModelGenerator.ListModelsResponse.ModelDetailsEntry.value', index=1,
+      number=2, type=12, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"",
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=b'8\001',
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=736,
+  serialized_end=787,
+)
+
 _LISTMODELSRESPONSE = _descriptor.Descriptor(
   name='ListModelsResponse',
   full_name='ModelGenerator.ListModelsResponse',
@@ -419,10 +457,17 @@ _LISTMODELSRESPONSE = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='modelDetails', full_name='ModelGenerator.ListModelsResponse.modelDetails', index=1,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
-  nested_types=[],
+  nested_types=[_LISTMODELSRESPONSE_MODELDETAILSENTRY, ],
   enum_types=[
   ],
   serialized_options=None,
@@ -431,10 +476,12 @@ _LISTMODELSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=621,
-  serialized_end=657,
+  serialized_start=622,
+  serialized_end=787,
 )
 
+_LISTMODELSRESPONSE_MODELDETAILSENTRY.containing_type = _LISTMODELSRESPONSE
+_LISTMODELSRESPONSE.fields_by_name['modelDetails'].message_type = _LISTMODELSRESPONSE_MODELDETAILSENTRY
 DESCRIPTOR.message_types_by_name['ImageRequest'] = _IMAGEREQUEST
 DESCRIPTOR.message_types_by_name['LoadDatasetRequest'] = _LOADDATASETREQUEST
 DESCRIPTOR.message_types_by_name['TrainModelRequest'] = _TRAINMODELREQUEST
@@ -511,13 +558,22 @@ LoadModelResponse = _reflection.GeneratedProtocolMessageType('LoadModelResponse'
 _sym_db.RegisterMessage(LoadModelResponse)
 
 ListModelsResponse = _reflection.GeneratedProtocolMessageType('ListModelsResponse', (_message.Message,), {
+
+  'ModelDetailsEntry' : _reflection.GeneratedProtocolMessageType('ModelDetailsEntry', (_message.Message,), {
+    'DESCRIPTOR' : _LISTMODELSRESPONSE_MODELDETAILSENTRY,
+    '__module__' : 'modelGenerator_pb2'
+    # @@protoc_insertion_point(class_scope:ModelGenerator.ListModelsResponse.ModelDetailsEntry)
+    })
+  ,
   'DESCRIPTOR' : _LISTMODELSRESPONSE,
   '__module__' : 'modelGenerator_pb2'
   # @@protoc_insertion_point(class_scope:ModelGenerator.ListModelsResponse)
   })
 _sym_db.RegisterMessage(ListModelsResponse)
+_sym_db.RegisterMessage(ListModelsResponse.ModelDetailsEntry)
 
 
+_LISTMODELSRESPONSE_MODELDETAILSENTRY._options = None
 
 _MODELGENERATION = _descriptor.ServiceDescriptor(
   name='ModelGeneration',
@@ -526,8 +582,8 @@ _MODELGENERATION = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=660,
-  serialized_end=1099,
+  serialized_start=790,
+  serialized_end=1229,
   methods=[
   _descriptor.MethodDescriptor(
     name='GenerateImage',

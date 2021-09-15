@@ -37,8 +37,8 @@ class CVAE(nn.Module):
             nn.ReLU(),
             nn.Conv2d(64, 128, 12, stride=1, padding=1),
             View((-1, 128*1*1)), 
-            nn.Linear(128, self.z*2),
-            nn.Sigmoid()
+            nn.Linear(128, self.z*2)
+            # nn.Sigmoid()
         )
         
         # N , latent_vector, <- input
