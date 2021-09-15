@@ -125,7 +125,7 @@ class CVAE(nn.Module):
             if save and self.epochs % 10 == 0:
                 torch.save(self, f"./savedModels/CVAE/{name}.pt")
     
-    def details(self):
+    def details(self) -> dict:
         model_details: dict = {
             "name": self.name,
             "epochs_trained": self.epochs,
