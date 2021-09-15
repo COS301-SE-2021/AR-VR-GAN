@@ -101,17 +101,17 @@ export class ModelController {
     }
 
     @Post('/loadModel')
-    loadModel(@Body() model: loadModelDto): Promise<loadModelResponseDto> {
+    loadModel(@Body() model: loadModelDto): loadModelResponseDto {
         return this.modelService.loadModel(model);
     }
 
     @Post('/listModels')
-    listModels(@Body() request: listModelsDto): Promise<listModelsResponseDto> {
+    listModels(@Body() request: listModelsDto): listModelsResponseDto {
         return this.modelService.listModels(request);
     }
 
     @Post('/currentModel')
-    currentModel(): Promise<currentModelResponseDto> {
+    currentModel(): currentModelResponseDto {
         return this.modelService.currentModel();
     }
 
