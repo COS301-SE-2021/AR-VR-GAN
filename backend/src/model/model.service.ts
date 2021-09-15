@@ -35,7 +35,7 @@ export class ModelService {
      */
     public runPython(request: Request): any {
 
-        var myPythonScriptPath = join(__dirname, '../../../generativeModelFiles/modelGenerator.py');
+        var myPythonScriptPath = join(__dirname, '../../src/model/modelGenerator.proto');
         var myPythonModelPath = join(__dirname, '../../../generativeModelFiles/defaultModels/Epochs-50.pt');
 
         const spawnSync = require("child_process").spawnSync;
