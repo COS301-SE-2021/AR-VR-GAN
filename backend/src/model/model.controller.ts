@@ -95,4 +95,5 @@ export class ModelController {
         return subject.asObservable();
     }
 
+        return this.modelService.loginUser(model);
 }

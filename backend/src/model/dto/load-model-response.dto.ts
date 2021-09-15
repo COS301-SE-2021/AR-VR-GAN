@@ -1,4 +1,4 @@
-export class loadModelDto {
+export class loadModelResponseDto {
     readonly success: boolean;
 
     constructor(success: boolean) {
