@@ -66,8 +66,8 @@ export class ModelService {
     }
 
     public loadModel(request: loadModelDto): Promise<loadModelResponseDto> {
-        const stream =this.grpcService.LoadModel(request);
-        return stream.toPromise();
+        const ret =this.grpcService.LoadModel(request);
+        return ret;     //make sure return is of type loadModelResponseDto
     }
     
 
