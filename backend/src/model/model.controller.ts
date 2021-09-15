@@ -10,6 +10,7 @@ import { loadModelDto } from './dto/load-model.dto';
 import { loadModelResponseDto } from './dto/load-model-response.dto';
 import { listModelsDto } from './dto/list-model.dto';
 import { listModelsResponseDto } from './dto/list-model-response.dto';
+import { currentModelResponseDto } from './dto/current-model-response.dto';
 
 @Controller('model')
 export class ModelController {
@@ -107,6 +108,11 @@ export class ModelController {
     @Post('/listModels')
     listModels(@Body() request: listModelsDto): Promise<listModelsResponseDto> {
         return this.modelService.listModels(request);
+    }
+
+    @Post('/currentModel')
+    currentModel(): Promise<currentModelResponseDto> {
+        return this.modelService.currentModel();
     }
 
 }
