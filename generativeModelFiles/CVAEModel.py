@@ -93,6 +93,7 @@ class CVAE(nn.Module):
         return BCE + BETA*KLD
 
     def training_loop(self, epochs: int, train_loader, beta: int=1, name: str="", show: bool=False ) -> None:
+        self.beta = beta
         optimizer = optim.Adam(self.parameters(), lr=1e-3)
         self.train()
         train_loss = 0
@@ -122,10 +123,11 @@ class CVAE(nn.Module):
                 torch.save(self, f"./savedModels/CVAE/{name}.pt")
     
     def details(self):
-        model_details: dict = {"epochs_trained": self.epochs,
-        "latent_vector_size": self.z,
-        "beta_value": self.beta,
-        "dataset_used": self.datasetUsed
+        model_details: dict = {
+            "epochs_trained": self.epochs,
+            "latent_vector_size": self.z,
+            "beta_value": self.beta,
+            "dataset_used": self.datasetUsed
         }
 
         return model_details

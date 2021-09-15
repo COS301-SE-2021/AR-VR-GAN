@@ -21,7 +21,6 @@ class CAutoencoder(nn.Module):
         # input is Nx1x28x28
         # N, 3, 28, 28
         self.z = latent_vector
-        self.beta = 1
         self.epochs = 0
         self.datasetUsed = ''
 
@@ -94,10 +93,10 @@ class CAutoencoder(nn.Module):
                 torch.save(self, f"./savedModels/CAE/{name}.pt")
 
     def details(self):
-        model_details: dict = {"epochs_trained": self.epochs,
-        "latent_vector_size": self.z,
-        "beta_value": self.beta,
-        "dataset_used": self.datasetUsed
+        model_details: dict = {
+            "epochs_trained": self.epochs,
+            "latent_vector_size": self.z,
+            "dataset_used": self.datasetUsed
         }
 
         return model_details
