@@ -68,16 +68,22 @@ export class ModelService {
         return stream.toPromise();
     }
 
-    public loadModel(request: loadModelDto): Promise<loadModelResponseDto> {
-        return this.grpcService.LoadModel(request);     //make sure return is of type loadModelResponseDto
+    public loadModel(request: loadModelDto): loadModelResponseDto {
+        const resp = new loadModelResponseDto(true,"success");
+        //return this.grpcService.LoadModel(request);     //make sure return is of type loadModelResponseDto
+        return resp;
     }
 
-    public listModels(request: listModelsDto): Promise<listModelsResponseDto> {
-        return this.grpcService.ListModels(request);     //make sure return is of type loadModelResponseDto
+    public listModels(request: listModelsDto): listModelsResponseDto {
+        const resp = new listModelsResponseDto(["mnest","fashion","cifar"]);
+        //return this.grpcService.ListModels(request);     //make sure return is of type loadModelResponseDto
+        return resp;
     }
 
-    public currentModel(): Promise<currentModelResponseDto> {
-        return this.grpcService.CurrentModel();     //make sure return is of type loadModelResponseDto
+    public currentModel(): currentModelResponseDto {
+        const resp = new currentModelResponseDto("mnest");
+        //return this.grpcService.CurrentModel();     //make sure return is of type loadModelResponseDto
+        return resp;
     }
     
 
