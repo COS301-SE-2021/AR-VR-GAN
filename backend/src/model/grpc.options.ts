@@ -5,7 +5,7 @@ export const microserviceOptions: ClientOptions = {
   transport: Transport.GRPC,
   options: {
     package: 'ModelGenerator',
-    protoPath: join(__dirname, '../../../generativeModelFiles/modelGenerator.proto'),
+    protoPath: join(__dirname, '../../src/model/modelGenerator.proto'),
     url: "0.0.0.0:50051"
   },
 };
