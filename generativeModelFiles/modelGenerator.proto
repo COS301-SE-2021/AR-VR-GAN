@@ -46,7 +46,6 @@ message ListModelsRequest{
 }
 
 message CurrentModelRequest{
-    bool details = 1;
 }
 
 message ImageResponse{
