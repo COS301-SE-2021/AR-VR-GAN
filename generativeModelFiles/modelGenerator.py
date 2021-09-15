@@ -267,9 +267,9 @@ if __name__ == "__main__":
     # checkpoint of the model. I adjusted 
     # the training sequence so that it saves the model every 10 epochs so that you can cancel the 
     # training any time with out losing progress. 
-    generator.train_model(1, 3, "cifar10", model_type="cvae", name="Beta-1-CIFAR-1")
+    generator.train_model(50, 4, "cifar10", model_type="cvae", name="Beta-1-CIFAR-50")
     # Remember to save it
-    generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
+    generator.saveModel("savedModels/Beta-1-CIFAR-50.pt")
 
     # generator.generateImage([0.0, 0.0, 0.0])
 
