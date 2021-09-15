@@ -94,6 +94,14 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         response.message = "Successful: "+ str(self.m_generator.model.retrieve_latent_size())
         return response
 
+    def CurrentModel(self, request, context):
+        response = modelGenerator_pb2.CurrentModelResponse()
+        details = self.m_generator.model.details()
+        response.modelName = details['name']
+        for x in details:
+            response.modelDetails[x] = details[x]
+            
+        return response
 
 async def serve():
     server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=100))
