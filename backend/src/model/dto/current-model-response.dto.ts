@@ -1,9 +1,7 @@
 export class currentModelResponseDto {
-    readonly succesful: boolean;
-    readonly message: string;
+    readonly modelName: string;
 
-    constructor(succesful: boolean, message: string) {
-        this.succesful = succesful;
-        this.message = message;
+    constructor(modelName: string) {
+        this.modelName = modelName;
     }
 }
