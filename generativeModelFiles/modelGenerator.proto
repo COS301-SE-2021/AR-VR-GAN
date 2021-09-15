@@ -8,7 +8,7 @@ service ModelGeneration{
     rpc TrainModel (TrainModelRequest) returns (TrainModelResponse); // Implemented
     rpc LoadModel (LoadModelRequest) returns (LoadModelResponse); // Implemented
     rpc ListModels (ListModelsRequest) returns (ListModelsResponse); // Implemented
-    rpc CurrentModel () returns (CurrentModelResponse);
+    rpc CurrentModel (CurrentModelRequest) returns (CurrentModelResponse);
     // - Delete Model // Could be used later
 }
 
@@ -37,6 +37,9 @@ message TrainModelRequest{
 
 message LoadModelRequest{
     string modelName = 1;
+}
+
+message CurrentModelRequest{
 }
 
 message ListModelsRequest{
