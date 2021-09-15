@@ -4,7 +4,6 @@ Frontend/.DS_Store
 generativeModelFiles/training/*
 generativeModelFiles/*.png
 generativeModelFiles/results/*
-generativeModelFiles/savedModels/*
 generativeModelFiles/testing/images/*
 generativeModelFiles/testing/savedModels/*
 generativeModelFiles/savedImages/*.png
