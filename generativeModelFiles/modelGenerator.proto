@@ -67,4 +67,5 @@ message LoadModelResponse{
 
 message ListModelsResponse{
     repeated string models = 3; // Will return an array of all the names of available models from the specifed folder in the request
+    map<string, bytes> modelDetails = 4;
 }

@@ -22,6 +22,10 @@ class CVAE(nn.Module):
         # input is Nx1x28x28
         # N, 3, 28, 28
         self.z = latent_vector
+        self.beta = 1
+        self.epochs = 0
+        self.datasetUsed = ''
+
         self.channels = channels
         self.encoder = nn.Sequential(
             # Note we increase the channels but reduce the size of the image
