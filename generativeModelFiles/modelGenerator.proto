@@ -8,6 +8,7 @@ service ModelGeneration{
     rpc TrainModel (TrainModelRequest) returns (TrainModelResponse); // Implemented
     rpc LoadModel (LoadModelRequest) returns (LoadModelResponse); // Implemented
     rpc ListModels (ListModelsRequest) returns (ListModelsResponse); // Implemented
+    rpc CurrentModel (CurrentModelRequest) returns (CurrentModelResponse);
     // - Delete Model // Could be used later
 }
 
@@ -44,6 +45,10 @@ message ListModelsRequest{
     // Set both to true if you want both
 }
 
+message CurrentModelRequest{
+    
+}
+
 message ImageResponse{
     int32 width = 1;
     int32 height = 2;
@@ -68,4 +73,9 @@ message LoadModelResponse{
 message ListModelsResponse{
     repeated string models = 3; // Will return an array of all the names of available models from the specifed folder in the request
     map<string, bytes> modelDetails = 4;
+}
+
+message CurrentModelResponse{
+    string modelName = 1;
+    map<string, string> modelDetails = 2;
 }
