@@ -8,6 +8,7 @@ import { loadModelDto } from './dto/load-model.dto';
 import { loadModelResponseDto } from './dto/load-model-response.dto';
 import { listModelsDto } from './dto/list-model.dto';
 import { listModelsResponseDto } from './dto/list-model-response.dto';
+import { currentModelResponseDto } from './dto/current-model-response.dto';
 
 @Injectable()
 export class ModelService {
@@ -73,6 +74,10 @@ export class ModelService {
 
     public listModels(request: listModelsDto): Promise<listModelsResponseDto> {
         return this.grpcService.ListModels(request);     //make sure return is of type loadModelResponseDto
+    }
+
+    public currentModel(): Promise<currentModelResponseDto> {
+        return this.grpcService.CurrentModel();     //make sure return is of type loadModelResponseDto
     }
     
 
