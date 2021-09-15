@@ -4,6 +4,8 @@ import { join } from 'path';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ModelGeneration,RequestProxy } from './grpc.interface';
 import { ReplaySubject} from 'rxjs';
+import { loadModelDto } from './dto/load-model.dto';
+import { loadModelResponseDto } from './dto/load-model-response.dto';
 
 @Injectable()
 export class ModelService {
@@ -55,13 +57,18 @@ export class ModelService {
      * @param request the coordinates from the user to be send to the model
      * @returns image byte array
      */
-        public proxy(request: Request): Promise<any> {
-            const subject = new ReplaySubject<RequestProxy>();
-            subject.next({ vector: request.data });
-            subject.complete();
-            const stream =this.grpcService.generateImage(subject.asObservable());
-            return stream.toPromise();
-        }
+    public proxy(request: Request): Promise<any> {
+        const subject = new ReplaySubject<RequestProxy>();
+        subject.next({ vector: request.data });
+        subject.complete();
+        const stream =this.grpcService.generateImage(subject.asObservable());
+        return stream.toPromise();
+    }
+
+    public loadModel(request: loadModelDto): Promise<loadModelResponseDto> {
+        const stream =this.grpcService.LoadModel(request);
+        return stream.toPromise();
+    }
     
 
 }
