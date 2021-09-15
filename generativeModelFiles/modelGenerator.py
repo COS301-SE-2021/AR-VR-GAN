@@ -105,12 +105,15 @@ class ModelGenerator:
 
         if model_type == "convolutional":
             self.model = CAutoencoder(latent_vector, channel_size)
+            self.model.datasetUsed = dataset
             self.model.training_loop(epochs, loader, name, False)
         elif model_type == "cvae":
             self.model = CVAE(channel_size, latent_vector)
+            self.model.datasetUsed = dataset
             self.model.training_loop(epochs, loader, beta, name, False)
         else:
             self.model = CVAE(channel_size,latent_vector)
+            self.model.datasetUsed = dataset
             self.model.training_loop(epochs, loader, beta, name, False)
 
     def loadModel(self, filepath: str="") -> str:

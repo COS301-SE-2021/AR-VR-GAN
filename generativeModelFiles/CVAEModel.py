@@ -22,6 +22,10 @@ class CVAE(nn.Module):
         # input is Nx1x28x28
         # N, 3, 28, 28
         self.z = latent_vector
+        self.beta = 1
+        self.epochs = 0
+        self.datasetUsed = ''
+
         self.channels = channels
         self.encoder = nn.Sequential(
             # Note we increase the channels but reduce the size of the image
@@ -89,6 +93,7 @@ class CVAE(nn.Module):
         return BCE + BETA*KLD
 
     def training_loop(self, epochs: int, train_loader, beta: int=1, name: str="", show: bool=False ) -> None:
+        self.beta = beta
         optimizer = optim.Adam(self.parameters(), lr=1e-3)
         self.train()
         train_loss = 0
@@ -97,10 +102,9 @@ class CVAE(nn.Module):
         if name == "" : 
             save == False
         
-        j = 0
         for iter in range(epochs):
             i = 0
-            j +=1
+            self.epochs +=1
             for (data, _) in train_loader:
                 i+=1
                 recon_batch, mu, logvar = self(data)
@@ -115,6 +119,15 @@ class CVAE(nn.Module):
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon_batch))
                 if i == 350 : break
-            if save and j % 10 == 0:
+            if save and self.epochs % 10 == 0:
                 torch.save(self, f"./savedModels/CVAE/{name}.pt")
     
+    def details(self):
+        model_details: dict = {
+            "epochs_trained": self.epochs,
+            "latent_vector_size": self.z,
+            "beta_value": self.beta,
+            "dataset_used": self.datasetUsed
+        }
+
+        return model_details
