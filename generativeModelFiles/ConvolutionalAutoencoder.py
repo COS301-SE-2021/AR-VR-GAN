@@ -70,6 +70,7 @@ class CAutoencoder(nn.Module):
         outputs = []
         save = False
         if name == "" : 
+            name = "no-name" 
             save == True
         
         for iter in range(epochs):
@@ -94,6 +95,7 @@ class CAutoencoder(nn.Module):
 
     def details(self):
         model_details: dict = {
+            "name": self.name,
             "epochs_trained": self.epochs,
             "latent_vector_size": self.z,
             "dataset_used": self.datasetUsed
