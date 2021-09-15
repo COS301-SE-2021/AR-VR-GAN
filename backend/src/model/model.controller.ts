@@ -1,4 +1,4 @@
-import { Controller} from '@nestjs/common';
+import { Body, Controller, Post} from '@nestjs/common';
 import { Client, ClientGrpc, GrpcStreamMethod, Transport } from '@nestjs/microservices';
 import { Response } from './interfaces/response.interface'
 import { ResponsePython } from './interfaces/responsePython.interface';
@@ -6,6 +6,10 @@ import { Request } from './interfaces/request.interface'
 import { ModelService } from './model.service';
 import { Observable,Subject } from 'rxjs';
 import { join } from 'path';
+import { loadModelDto } from './dto/load-model.dto';
+import { loadModelResponseDto } from './dto/load-model-response.dto';
+import { listModelsDto } from './dto/list-model.dto';
+import { listModelsResponseDto } from './dto/list-model-response.dto';
 
 @Controller('model')
 export class ModelController {
@@ -95,5 +99,14 @@ export class ModelController {
         return subject.asObservable();
     }
 
-        return this.modelService.loginUser(model);
+    @Post('/loadModel')
+    loadModel(@Body() model: loadModelDto): Promise<loadModelResponseDto> {
+        return this.modelService.loadModel(model);
+    }
+
+    @Post('/listModels')
+    listModels(@Body() request: listModelsDto): Promise<listModelsResponseDto> {
+        return this.modelService.listModels(request);
+    }
+
 }
