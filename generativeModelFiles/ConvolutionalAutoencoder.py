@@ -24,7 +24,7 @@ class CAutoencoder(nn.Module):
         self.beta = 1
         self.epochs = 0
         self.datasetUsed = ''
-        
+
         self.channel_size = channel_size
         self.encoder = nn.Sequential(
             # Note we increase the channels but reduce the size of the image
@@ -73,10 +73,9 @@ class CAutoencoder(nn.Module):
         if name == "" : 
             save == True
         
-        j = 0
         for iter in range(epochs):
             i = 0
-            j +=1
+            self.epochs +=1
             for (data, _) in train_loader:
                 i+=1
                 recon = self(data)
@@ -91,5 +90,14 @@ class CAutoencoder(nn.Module):
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon))
                 if i == 350 : break
-            if save and j % 10 == 0:
+            if save and self.epochs % 10 == 0:
                 torch.save(self, f"./savedModels/CAE/{name}.pt")
+
+    def details(self):
+        model_details: dict = {"epochs_trained": self.epochs,
+        "latent_vector_size": self.z,
+        "beta_value": self.beta,
+        "dataset_used": self.datasetUsed
+        }
+
+        return model_details

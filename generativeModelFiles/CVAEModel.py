@@ -101,10 +101,9 @@ class CVAE(nn.Module):
         if name == "" : 
             save == False
         
-        j = 0
         for iter in range(epochs):
             i = 0
-            j +=1
+            self.epochs +=1
             for (data, _) in train_loader:
                 i+=1
                 recon_batch, mu, logvar = self(data)
@@ -119,6 +118,14 @@ class CVAE(nn.Module):
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon_batch))
                 if i == 350 : break
-            if save and j % 10 == 0:
+            if save and self.epochs % 10 == 0:
                 torch.save(self, f"./savedModels/CVAE/{name}.pt")
     
+    def details(self):
+        model_details: dict = {"epochs_trained": self.epochs,
+        "latent_vector_size": self.z,
+        "beta_value": self.beta,
+        "dataset_used": self.datasetUsed
+        }
+
+        return model_details
