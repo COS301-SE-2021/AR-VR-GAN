@@ -1,26 +1,45 @@
 <mat-grid-list cols=5 gutterSize="15px" rowHeight="40px">
     <mat-grid-tile colspan=5></mat-grid-tile>
-    <mat-grid-tile rowspan=8></mat-grid-tile>
-    <mat-grid-tile colspan=3 rowspan=8>
-        <mat-card>
+    <mat-grid-tile rowspan=6></mat-grid-tile>
+    <mat-grid-tile colspan=3 rowspan=6>
+        <mat-card id="choose-option">
             <table>
                 <tr>
                     <mat-form-field appearance="outline">
                         <mat-label>Choose a dataset</mat-label>
                         <mat-select [(value)]="selected" #datasetOption>
-                            <mat-option value="option1">Option 1</mat-option>
-                            <mat-option value="option2">Option 2</mat-option>
-                            <mat-option value="option3">Option 3</mat-option>
+                            <mat-option *ngFor="let value of models" value={{value}}>{{value}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </tr>
                 <tr>
-                    <button mat-raised-button color="primary" (click)="saveChanges(datasetOption.value)">Customize</button>
-                    <br>
-                    <button mat-raised-button color="primary" (click)="fetchCurrentValues()">Fetch</button>
+                    <button mat-raised-button color="primary" (click)="saveChanges(datasetOption.value)">Save</button>
                 </tr>
             </table>
         </mat-card>
     </mat-grid-tile>
-    <mat-grid-tile rowspan=8></mat-grid-tile>
+    <mat-grid-tile rowspan=6></mat-grid-tile>
+    <mat-grid-tile *ngIf="fetchedData" colspan=5 rowspan=2>
+        <mat-card id="the-options-heading">
+            <mat-card-title>
+                Available Models
+            </mat-card-title>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile *ngIf="fetchedData" colspan=5 rowspan=4>
+        <mat-card *ngFor="let value of models" class="model-option">
+            <mat-card-title>
+                {{value}}
+            </mat-card-title>
+            <mat-card-content>
+                <ul>
+                    <li>Name: {{modelDetails[value]['name']}}</li>
+                    <li>Beta value: {{modelDetails[value]['beta_value']}}</li>
+                    <li>Dataset used: {{modelDetails[value]['dataset_used']}}</li>
+                    <li>Epochs: {{modelDetails[value]['epochs_trained']}}</li>
+                    <li>Latent vector size: {{modelDetails[value]['latent_vector_size']}}</li>
+                </ul>
+            </mat-card-content>
+        </mat-card>
+    </mat-grid-tile>
 </mat-grid-list>
