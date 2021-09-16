@@ -10,6 +10,8 @@ import { listModelsDto } from './dto/list-model.dto';
 import { listModelsResponseDto } from './dto/list-model-response.dto';
 import { currentModelResponseDto } from './dto/current-model-response.dto';
 import { currentModelDto } from './dto/current-model.dto';
+import { trainModelResponseDto } from './dto/train-model-response.dto';
+import { trainModelDto } from './dto/train-model.dto';
 
 @Injectable()
 export class ModelService {
@@ -82,5 +84,8 @@ export class ModelService {
         return this.grpcService.currentModel(request);     //make sure return is of type loadModelResponseDto
     }
     
+    public trainModel(request: trainModelDto): trainModelResponseDto {
+        return this.grpcService.trainModel(request);     //make sure return is of type loadModelResponseDto
+    }
 
 }
