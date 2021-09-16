@@ -84,9 +84,8 @@ export class ModelService {
         return this.grpcService.currentModel(request);     //make sure return is of type loadModelResponseDto
     }
 
-    public sendEmail(){
-        const data = new sendEmailDto("ethan","ecoryndonbaker@gmail.com");
-        this.mailService.sendConfirmationEmail(data);
+    public sendEmail(request: sendEmailDto){
+        this.mailService.sendConfirmationEmail(request);
     }
     
 
