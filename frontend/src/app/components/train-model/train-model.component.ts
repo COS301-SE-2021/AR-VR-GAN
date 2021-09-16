@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CookieService } from 'ngx-cookie-service';
 import { HOST_URL } from 'src/config/consts';
 
 @Component({
@@ -24,7 +25,8 @@ export class TrainModelComponent implements OnInit {
   
   constructor(
     private http: HttpClient, 
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cookieService: CookieService
   ) { 
     this.modelName = "Default";
     this.trainingEpochs = 5;
@@ -81,7 +83,8 @@ export class TrainModelComponent implements OnInit {
       'latentSize': this.latentSize,
       'datasetName': datasetName,
       'beta': beta,
-      'modelType': modelType
+      'modelType': modelType,
+      'jwtToken': this.cookieService.get('jwtToken')
     }
 
     console.log(options);
