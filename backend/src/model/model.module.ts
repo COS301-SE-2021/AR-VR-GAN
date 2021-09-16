@@ -4,10 +4,13 @@ import { ModelService } from './model.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { MailModule } from '../mail/mail.module';
+import { UserService } from 'src/user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { UsersModule } from 'src/user/user.module';
 
 @Module({
-  imports: [MailModule,
-    ClientsModule.register([
+  imports: [MailModule, UsersModule,
+      ClientsModule.register([
       {
         name: 'MODEL_PACKAGE',
         transport: Transport.GRPC,
