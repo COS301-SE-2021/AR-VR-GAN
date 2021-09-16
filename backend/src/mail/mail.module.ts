@@ -10,8 +10,9 @@ import { join } from 'path';
       // transport: 'smtps://user@example.com:topsecret@smtp.example.com',
       // or
       transport: {
-        host: 'smtp.gmail.com',
-        secure: false,
+        host: 'smtp.googlemail.com',
+        ignoreTLS: true,
+        secure: true,
         auth: {
           user: 'javacinsomniacs@gmail.com',
           pass: 'MEJZK2021',
