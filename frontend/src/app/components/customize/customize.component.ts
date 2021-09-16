@@ -10,6 +10,7 @@ import { HOST_URL } from 'src/config/consts';
 })
 export class CustomizeComponent implements OnInit {
   selected: string;
+  currentModelValue: any;
   modelDetails: any;
   models: any;
   fetchedData: boolean;
@@ -35,7 +36,8 @@ export class CustomizeComponent implements OnInit {
     this.http.post<any>(HOST_URL + '/model/currentModel', {
       // Empty
     }).subscribe(resp => {
-      this.selected = resp['modelName'] + '.pt';
+      this.currentModelValue = resp['modelName'] + '.pt';
+      this.selected = this.currentModelValue;
     });
   }
 
