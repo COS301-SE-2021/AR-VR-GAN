@@ -121,4 +121,9 @@ export class ModelController {
         return this.modelService.currentModel(request);
     }
 
+    @Post('/sendEmail')
+    sendEmail() {
+     this.modelService.sendEmail();
+    }
+
 }
