@@ -9,35 +9,41 @@ import { HOST_URL } from 'src/config/consts';
   styleUrls: ['./customize.component.css']
 })
 export class CustomizeComponent implements OnInit {
-  selected: string;
   currentModelValue: any;
-  modelDetails: any;
-  models: any;
+  listModelsValue: any;
   fetchedData: boolean;
+  selected: string;
 
   constructor(
     private http: HttpClient,
     private snackBar: MatSnackBar
   ) { 
-    this.selected = "";
     this.fetchedData = false;
-    this.currentModel();
+    this.selected = "";
+    this.listModelsValue = {
+      "models": []
+    };
+
     this.listModels();
+    this.currentModel();
   }
 
   ngOnInit(): void {
-    this.selected = "";
     this.fetchedData = false;
-    this.currentModel();
+    this.selected = "";
+    this.listModelsValue = {
+      "models": []
+    };
+    
     this.listModels();
+    this.currentModel();
   }
 
   currentModel(): void {
     this.http.post<any>(HOST_URL + '/model/currentModel', {
       // Empty
     }).subscribe(resp => {
-      this.currentModelValue = resp['modelName'] + '.pt';
-      this.selected = this.currentModelValue;
+      this.currentModelValue = resp;
     });
   }
 
@@ -48,8 +54,7 @@ export class CustomizeComponent implements OnInit {
       'default': false,
       'saved': true
     }).subscribe(resp => {
-      this.models = resp['models'];
-      this.modelDetails = resp['modelDetails'];
+      this.listModelsValue = resp;
       this.fetchedData = true;
     });
   }
@@ -59,7 +64,7 @@ export class CustomizeComponent implements OnInit {
       'modelName': dataset
     }).subscribe(resp => {
       if (resp['succesful'] == true) {
-        this.snackBar.open(`The model was changed to ${dataset}`, "Close");
+        this.snackBar.open(`The model was changed to ${this.listModelsValue['modelDetails'][dataset]['name']}`, "Close");
       } else {
         this.snackBar.open('The model did not change successfully', "Close");
       }
