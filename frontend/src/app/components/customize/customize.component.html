@@ -6,9 +6,9 @@
             <table>
                 <tr>
                     <mat-form-field appearance="outline">
-                        <mat-label>Choose a dataset</mat-label>
+                        <mat-label>Choose a model</mat-label>
                         <mat-select [(value)]="selected" #datasetOption>
-                            <mat-option *ngFor="let value of models" value={{value}}>{{value}}</mat-option>
+                            <mat-option *ngFor="let value of listModelsValue['models']" value={{value}}>{{listModelsValue['modelDetails'][value]['name']}}</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </tr>
@@ -28,20 +28,19 @@
         </mat-card>
     </mat-grid-tile>
     <mat-grid-tile *ngIf="fetchedData" colspan=5 rowspan=4>
-        <mat-card *ngFor="let value of models" class="model-option">
-            <mat-card-title *ngIf="value !== currentModelValue">
-                {{value}}
+        <mat-card *ngFor="let value of listModelsValue['models']" class="model-option">
+            <mat-card-title *ngIf="listModelsValue['modelDetails'][value]['name'] !== currentModelValue['modelName']">
+                {{listModelsValue['modelDetails'][value]['name']}}
             </mat-card-title>
-            <mat-card-title *ngIf="value === currentModelValue" style="font-weight: bolder;">
-                * {{value}}
+            <mat-card-title *ngIf="listModelsValue['modelDetails'][value]['name'] === currentModelValue['modelName']" style="font-weight: bolder;">
+                * {{listModelsValue['modelDetails'][value]['name']}}
             </mat-card-title>
             <mat-card-content>
                 <ul>
-                    <li>Name: {{modelDetails[value]['name']}}</li>
-                    <li>Beta value: {{modelDetails[value]['beta_value']}}</li>
-                    <li>Dataset used: {{modelDetails[value]['dataset_used']}}</li>
-                    <li>Epochs: {{modelDetails[value]['epochs_trained']}}</li>
-                    <li>Latent vector size: {{modelDetails[value]['latent_vector_size']}}</li>
+                    <li>Beta value: {{listModelsValue['modelDetails'][value]['beta_value']}}</li>
+                    <li>Dataset used: {{listModelsValue['modelDetails'][value]['dataset_used']}}</li>
+                    <li>Epochs: {{listModelsValue['modelDetails'][value]['epochs_trained']}}</li>
+                    <li>Latent vector size: {{listModelsValue['modelDetails'][value]['latent_vector_size']}}</li>
                 </ul>
             </mat-card-content>
         </mat-card>
