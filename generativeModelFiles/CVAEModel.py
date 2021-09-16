@@ -59,7 +59,7 @@ class CVAE(nn.Module):
             nn.ConvTranspose2d(32, 32, 4, 2, 1), # B,  32, 32, 32
             nn.ReLU(True),
             nn.ConvTranspose2d(32, channels, 4, 2, 1),  # B, nc, 64, 64
-            nn.Sigmoid()
+            # nn.Sigmoid()
         )
 
     def forward(self, x):
