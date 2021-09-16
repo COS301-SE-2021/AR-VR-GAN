@@ -1,10 +1,10 @@
-FROM python:3.8-slim-buster
+FROM python:3.7-slim
 
 WORKDIR /python
 
-COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt --use-feature=2020-resolver
+RUN pip3 install grpcio grpcio-tools protobuf torch torchvision matplotlib
 
 COPY . .
 
+EXPOSE 50051
 CMD [ "python3", "server.py"]
