@@ -225,7 +225,7 @@ class ModelGenerator:
                     f = image.read()
                     b = bytearray(f)
 
-                # os.remove(filepath)
+                os.remove(filepath)
                 return list(b)
 
     def clearModel(self) -> None:
@@ -269,11 +269,11 @@ if __name__ == "__main__":
     # training any time with out losing progress. 
     # generator.loadModel("Beta-1-CIFAR-20.pt")
     # print(generator.model.details())
-    generator.train_model(15, 3, "cifar10", model_type="cvae", name="Beta-1-CIFAR-15")
+    generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-CIFAR-15")
     # Remember to save it
-    generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
+    generator.saveModel("savedModels/Beta-1-CIFAR-20.pt")
 
-    generator.generateImage([0.0, 0.0, 0.0])
+    # generator.generateImage([0.0, 0.0, 0.0])
 
     # generator = ModelGenerator()
     # generator.train_model(15, 3, "cifar10", model_type="convolutional", name="Normal-CIFAR-15")
@@ -293,28 +293,28 @@ if __name__ == "__main__":
     
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
-    from time import sleep
+    # from time import sleep
     # generator.saveModel("savedModels/CBeta-1-MNIST-1.pt")
     # sleep(1)
-    generator.generateImage([0.1, 0.0, 0.0])
-    sleep(1)
-    generator.generateImage([0.2, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.53, 0.3, 0.2])
-    sleep(1)
-    generator.generateImage([0.04, 0.1, 1.0])
-    sleep(1)
-    generator.generateImage([0.05, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0.06, 0.1, 0.0])
-    sleep(1)
-    generator.generateImage([0, 0, 1.99999999999999999])
-    sleep(1)
-    generator.generateImage([0.0, 0.0, 0.0])
-    sleep(1)
-    generator.generateImage([50.0, 0.0, 99.0])
-    sleep(1)
-    generator.generateImage([0.056, 0.0000000000000, 0.15530333333333333333333])
+    # generator.generateImage([0.1, 0.0, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.2, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.53, 0.3, 0.2])
+    # sleep(1)
+    # generator.generateImage([0.04, 0.1, 1.0])
+    # sleep(1)
+    # generator.generateImage([0.05, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0.06, 0.1, 0.0])
+    # sleep(1)
+    # generator.generateImage([0, 0, 1.99999999999999999])
+    # sleep(1)
+    # generator.generateImage([0.0, 0.0, 0.0])
+    # sleep(1)
+    # generator.generateImage([50.0, 0.0, 99.0])
+    # sleep(1)
+    # generator.generateImage([0.056, 0.0000000000000, 0.15530333333333333333333])
     # generator.loadModel(args.model)
 
     # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
