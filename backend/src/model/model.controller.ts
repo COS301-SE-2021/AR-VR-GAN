@@ -13,6 +13,9 @@ import { listModelsResponseDto } from './dto/list-model-response.dto';
 import { currentModelResponseDto } from './dto/current-model-response.dto';
 import { currentModelDto } from './dto/current-model.dto';
 import { sendEmailDto } from 'src/mail/dto/send-email.dto';
+import { trainModelDto } from './dto/train-model.dto';
+import { trainModelResponseDto } from './dto/train-model-response.dto';
+
 
 @Controller('model')
 export class ModelController {
@@ -125,6 +128,11 @@ export class ModelController {
     @Post('/sendEmail')
     sendEmail(@Body() request: sendEmailDto) {
         this.modelService.sendEmail(request);
+    }
+    
+    @Post('/trainModel')
+    async trainModel(@Body() request: trainModelDto): Promise<trainModelResponseDto> {
+        return await this.modelService.trainModel(request);
     }
 
 }

@@ -12,6 +12,8 @@ import { currentModelResponseDto } from './dto/current-model-response.dto';
 import { currentModelDto } from './dto/current-model.dto';
 import { MailService } from '../mail/mail.service';
 import { sendEmailDto } from 'src/mail/dto/send-email.dto';
+import { trainModelResponseDto } from './dto/train-model-response.dto';
+import { trainModelDto } from './dto/train-model.dto';
 
 @Injectable()
 export class ModelService {
@@ -72,21 +74,24 @@ export class ModelService {
     }
 
     public loadModel(request: loadModelDto): loadModelResponseDto {
-        return this.grpcService.loadModel(request);     //make sure return is of type loadModelResponseDto
+        return this.grpcService.loadModel(request);     
     }
 
     public async listModels(request: listModelsDto): Promise<listModelsResponseDto> {
         const data = await this.grpcService.listModels(request); 
-        return data.toPromise();                  //make sure return is of type loadModelResponseDto
+        return data.toPromise();                  
     }
 
     public currentModel(request: currentModelDto): currentModelResponseDto {
-        return this.grpcService.currentModel(request);     //make sure return is of type loadModelResponseDto
+        return this.grpcService.currentModel(request);    
     }
 
     public sendEmail(request: sendEmailDto){
         this.mailService.sendConfirmationEmail(request);
     }
     
+    public async trainModel(request: trainModelDto): Promise<trainModelResponseDto> {
+        return await this.grpcService.trainModel(request);    
+    }
 
 }

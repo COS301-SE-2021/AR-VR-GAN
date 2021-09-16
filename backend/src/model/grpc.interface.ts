@@ -5,6 +5,7 @@ export interface ModelGeneration {
   loadModel(Request: RequestModel): any;
   listModels(Request: RequestListModel): any;
   currentModel(Request: RequestCurrentModel): any;
+  trainModel(Request: RequestTrainModel): any;
 }
 
 export interface RequestProxy {
@@ -22,4 +23,13 @@ export interface RequestListModel {
 
 export interface RequestCurrentModel {
 
+}
+
+export interface RequestTrainModel {
+  modelName: string;
+  trainingEpochs: number;
+  latentSize: number;
+  datasetName: string;
+  beta: number;
+  modelType: string;
 }

@@ -4,9 +4,7 @@ import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/form
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { CookieService } from 'ngx-cookie-service';
 import { HOST_URL } from 'src/config/consts';
-import { LoginFormComponent } from '../login-form/login-form.component';
 
 @Component({
   selector: 'app-register-form',
