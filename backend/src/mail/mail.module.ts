@@ -3,6 +3,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { join } from 'path';
+import config from '../config/keys';
 
 @Module({
   imports: [
@@ -10,17 +11,16 @@ import { join } from 'path';
       // transport: 'smtps://user@example.com:topsecret@smtp.example.com',
       // or
       transport: {
-        host: 'smtp.googlemail.com',
+        host: 'smtp.gmail.com',
         port: 465,
-        ignoreTLS: true,
         secure: true,
         auth: {
-          user: 'javacinsomniacs@gmail.com',
-          pass: '',
+          user: config.emailAddress,
+          pass: config.emailPassword
         },
       },
       defaults: {
-        from: '"No Reply" <javacinsomniacs@gmail.com>',
+        from: '"AR/VR-GAN" <javacinsomniacs@gmail.com>',
       },
       template: {
         dir: join(__dirname, 'templates'),
