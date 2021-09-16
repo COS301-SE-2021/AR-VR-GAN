@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { HOST_URL } from 'src/config/consts';
 
 @Component({
@@ -9,40 +10,59 @@ import { HOST_URL } from 'src/config/consts';
 })
 export class CustomizeComponent implements OnInit {
   selected: string;
+  modelDetails: any;
+  models: any;
+  fetchedData: boolean;
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private snackBar: MatSnackBar
   ) { 
-    this.selected = "option1";
+    this.selected = "";
+    this.fetchedData = false;
+    this.currentModel();
+    this.listModels();
   }
 
   ngOnInit(): void {
+    this.selected = "";
+    this.fetchedData = false;
+    this.currentModel();
+    this.listModels();
   }
 
-  fetchCurrentValues(): void {
-    console.log('Fetching');
+  currentModel(): void {
+    this.http.post<any>(HOST_URL + '/model/currentModel', {
+      // Empty
+    }).subscribe(resp => {
+      this.selected = resp['modelName'] + '.pt';
+    });
+  }
+
+  listModels(): void {
+    this.fetchedData = false;
 
     this.http.post<any>(HOST_URL + '/model/listModels', {
       'default': false,
       'saved': true
     }).subscribe(resp => {
-      console.log(resp);
+      this.models = resp['models'];
+      this.modelDetails = resp['modelDetails'];
+      this.fetchedData = true;
     });
   }
 
-  bin2string(array: any){
-    var result = "";
-    for(var i = 0; i < array.length; ++i){
-      result+= (String.fromCharCode(array[i]));
-    }
-    return result;
-  }
-
-  fetchAvailableDatasets(): void {
-
-  }
-
   saveChanges(dataset: string): void {
-    console.log(dataset);
+    this.http.post<any>(HOST_URL + '/model/loadModel', {
+      'modelName': dataset
+    }).subscribe(resp => {
+      if (resp['succesful'] == true) {
+        this.snackBar.open(`The model was changed to ${dataset}`, "Close");
+      } else {
+        this.snackBar.open('The model did not change successfully', "Close");
+      }
+
+      this.currentModel();  
+    });
   }
 }
