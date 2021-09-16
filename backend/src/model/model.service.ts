@@ -3,7 +3,7 @@ import { Request } from './interfaces/request.interface';
 import { join } from 'path';
 import { ClientGrpc } from '@nestjs/microservices';
 import { ModelGeneration,RequestProxy } from './grpc.interface';
-import { ReplaySubject} from 'rxjs';
+import { ReplaySubject, Subject} from 'rxjs';
 import { loadModelDto } from './dto/load-model.dto';
 import { loadModelResponseDto } from './dto/load-model-response.dto';
 import { listModelsDto } from './dto/list-model.dto';
@@ -73,8 +73,9 @@ export class ModelService {
         return this.grpcService.loadModel(request);     //make sure return is of type loadModelResponseDto
     }
 
-    public listModels(request: listModelsDto): listModelsResponseDto {
-        return this.grpcService.listModels(request);     //make sure return is of type loadModelResponseDto
+    public async listModels(request: listModelsDto): Promise<listModelsResponseDto> {
+        const data = await this.grpcService.listModels(request); 
+        return data.toPromise();                  //make sure return is of type loadModelResponseDto
     }
 
     public currentModel(request: currentModelDto): currentModelResponseDto {
