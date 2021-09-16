@@ -86,4 +86,15 @@ describe('UserService', () => {
   
   });
 
-});
+  //JWT preconditions
+  it('JWT token precondition', async () => {
+    const testUsername = "test";
+    const testToken = "";
+    
+    expect(await service.getUserByUsername(testToken,testUsername)).toEqual({
+      message: "Please provide a valid JWTToken.",
+      success: false,
+      user: null
+    });;
+  });
+})
