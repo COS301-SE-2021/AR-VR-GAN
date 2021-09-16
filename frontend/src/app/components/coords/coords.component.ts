@@ -17,6 +17,8 @@ export class CoordsComponent implements OnInit {
   public z: number;
 
   constructor(private http: HttpClient) { 
+    this.image = '../../assets/AR_VR_GAN_logo.png';
+
     this.x = 0;
     this.y = 0;
     this.z = 0;
