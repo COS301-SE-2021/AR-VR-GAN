@@ -9,7 +9,6 @@ export class MailService {
   async sendConfirmationEmail(request: sendEmailDto) {
     await this.mailerService.sendMail({
       to: request.email,
-      // from: '"Support Team" <javacinsomniacs@gmail.com>',
       subject: 'Your Model is ready to use!',
       template: './doneTraining',
       context: {      
