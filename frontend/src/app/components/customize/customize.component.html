@@ -28,8 +28,11 @@
     </mat-grid-tile>
     <mat-grid-tile *ngIf="fetchedData" colspan=5 rowspan=4>
         <mat-card *ngFor="let value of models" class="model-option">
-            <mat-card-title>
+            <mat-card-title *ngIf="value !== currentModelValue">
                 {{value}}
+            </mat-card-title>
+            <mat-card-title *ngIf="value === currentModelValue" style="font-weight: bolder;">
+                * {{value}}
             </mat-card-title>
             <mat-card-content>
                 <ul>
