@@ -13,7 +13,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
     def __init__(self) -> None:
         super().__init__()
         self.m_generator = ModelGenerator()
-        self.m_generator.loadModel("Beta-1-CIFAR-1.pt")
+        self.m_generator.loadModel("Beta-1-MNIST-20.pt")
 
     async def get_image_data(self, request, context):
         async for item in request:

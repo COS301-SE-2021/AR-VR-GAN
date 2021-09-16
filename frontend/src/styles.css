@@ -10,6 +10,6 @@ body {
     background-attachment: fixed;
 }
 
-/* mat-grid-tile {
+mat-grid-tile {
     border: black 1px solid;
-} */
+}

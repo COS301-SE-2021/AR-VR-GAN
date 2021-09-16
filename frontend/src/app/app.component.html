@@ -7,14 +7,14 @@
     <button *ngIf="loggedIn" (click)="logOut()" mat-button>Logout</button>
 </mat-toolbar>
 <mat-tab-group *ngIf="loggedIn" mat-align-tabs="center" dynamicHeight backgroundColor="primary">
+    <mat-tab label="Train Model">
+        <app-train-model></app-train-model>
+    </mat-tab>
     <mat-tab label="Server Coordinate Testing">
         <app-coords></app-coords>
     </mat-tab>
     <mat-tab label="Choose Model">
         <app-customize></app-customize>
-    </mat-tab>
-    <mat-tab label="Train Model">
-        <app-train-model></app-train-model>
     </mat-tab>
 </mat-tab-group>
 <div *ngIf="!loggedIn" class="content">
