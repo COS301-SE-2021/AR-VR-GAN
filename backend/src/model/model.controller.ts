@@ -15,6 +15,7 @@ import { currentModelDto } from './dto/current-model.dto';
 import { sendEmailDto } from 'src/mail/dto/send-email.dto';
 import { trainModelDto } from './dto/train-model.dto';
 import { trainModelResponseDto } from './dto/train-model-response.dto';
+import { UserService } from 'src/user/user.service';
 
 
 @Controller('model')
@@ -28,7 +29,9 @@ export class ModelController {
       })
       client: ClientGrpc;
 
-    constructor(private modelService: ModelService) {}
+    constructor(
+        private modelService: ModelService,
+        private userService: UserService) {}
 
     @GrpcStreamMethod()
     handleCoords(messages: Observable<Request>): Observable<Response> {
@@ -132,7 +135,13 @@ export class ModelController {
     
     @Post('/trainModel')
     async trainModel(@Body() request: trainModelDto): Promise<trainModelResponseDto> {
-        return await this.modelService.trainModel(request);
+        let response = await this.modelService.trainModel(request);
+        let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
+        let emailDto = new sendEmailDto(userResponse.user.username, userResponse.user.email, request.modelName);
+        
+        this.sendEmail(emailDto);
+        
+        return response;
     }
 
 }
