@@ -18,8 +18,8 @@ class View(nn.Module):
 class CAutoencoder(nn.Module):
     def __init__(self, latent_vector: int = 3, channel_size: int=3):
         super().__init__()        
-        # input is Nx1x28x28
-        # N, 3, 28, 28
+        # input is Nx1x64x64
+        # N, 3, 64, 64
         self.z = latent_vector
         self.epochs = 0
         self.datasetUsed = ''

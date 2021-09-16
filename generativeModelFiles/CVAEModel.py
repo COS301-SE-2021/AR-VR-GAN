@@ -19,8 +19,8 @@ class View(nn.Module):
 class CVAE(nn.Module):
     def __init__(self, channels: int = 3,latent_vector: int = 3):
         super().__init__()        
-        # input is Nx1x28x28
-        # N, 3, 28, 28
+        # input is Nx1x64x64
+        # N, channels, 64, 64
         self.z = latent_vector
         self.beta = 1
         self.epochs = 0
@@ -75,25 +75,13 @@ class CVAE(nn.Module):
         return self.z
 
     def reparametrize(self, mu, logvar):
-        # print("logvar",logvar.shape)
         std = torch.exp(0.5*logvar)
         eps = torch.randn_like(std)
-        # print("std",std.shape)
-        # print("eps", eps.shape)
-        # print("mu", mu)
-        # input()
         return mu + std*eps
 
     def loss_function(self,recon_x, x, mu, logvar, beta = 1) -> float:
         BETA = beta
-        # print(x.shape)
-        # input()
         BCE = F.binary_cross_entropy_with_logits(recon_x, x, reduction='sum').div(x.shape[0])
-        # print("BCE", BCE)
-        # see Appendix B from VAE paper:
-        # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
-        # https://arxiv.org/abs/1312.6114
-        # 0.5 * sum(1 + log(sigma^2) - mu^2 - sigma^2)
         KLD = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
 
         return BCE + BETA*KLD
@@ -123,7 +111,7 @@ class CVAE(nn.Module):
                 optimizer.step()
                 # Displays training data
                 if show == True:
-                    save_image(recon_batch.view(recon_batch.shape[0], recon_batch.shape[1], 64, 64), f"./training/{name}-{iter+1}.png")
+                    save_image(recon_batch.view(recon_batch.shape[0], recon_batch.shape[1], recon_batch.shape[2], recon_batch.shape[3]), f"./training/{name}-{iter+1}.png")
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon_batch))
                 if i == 500 : break

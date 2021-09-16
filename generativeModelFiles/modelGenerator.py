@@ -66,14 +66,7 @@ class ModelGenerator:
     """
 
     def __init__(self) -> None:
-        # Sets the seed for generating random numbers. Returns a torch.Generator object.
         torch.manual_seed(1)
-
-        # A torch.device is an object representing the device on which a torch.
-        # Tensor is or will be allocated. The torch.device contains a device type ('cpu' or 'cuda')
-        # and optional device ordinal for the device type. If the device ordinal is not present, 
-        # this object will always represent the current device for the device type, 
-        # even after torch.cuda.set_device() is called.
         self.cuda = torch.cuda.is_available()
         self.device = torch.device("cuda" if self.cuda else "cpu")
 
@@ -216,7 +209,7 @@ class ModelGenerator:
                 sample = torch.tensor([vector]).to(self.device)
                 sample = self.model.decoder(sample).cpu() 
 
-                save_image(sample.view(1, sample.shape[1], 64, 64), filepath)
+                save_image(sample.view(1, sample.shape[1], sample.shape[2], sample.shape[3]), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
@@ -273,24 +266,6 @@ if __name__ == "__main__":
     # Remember to save it
     generator.saveModel("savedModels/Beta-1-CIFAR-20.pt")
 
-    # generator.generateImage([0.0, 0.0, 0.0])
-
-    # generator = ModelGenerator()
-    # generator.train_model(15, 3, "cifar10", model_type="convolutional", name="Normal-CIFAR-15")
-    # generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
-    # generator.generateImage([0.0, 0.0, 0.0])
-
-
-    # generator = ModelGenerator()
-    # generator.train_model(15, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-15")
-    # generator.saveModel("savedModels/Beta-1-MNIST-15.pt")
-    # generator.generateImage([0.0, 0.0, 0.0])
-
-    # generator = ModelGenerator()
-    # generator.train_model(15, 3, "mnist", model_type="convolutional", name="Normal-MNIST-15")
-    # generator.saveModel("savedModels/Normal-MNIST-15.pt")
-    # generator.generateImage([0.0, 0.0, 0.0])
-    
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
     # from time import sleep
@@ -316,5 +291,3 @@ if __name__ == "__main__":
     # sleep(1)
     # generator.generateImage([0.056, 0.0000000000000, 0.15530333333333333333333])
     # generator.loadModel(args.model)
-
-    # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
