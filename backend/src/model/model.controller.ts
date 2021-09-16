@@ -136,12 +136,12 @@ export class ModelController {
     @Post('/trainModel')
     async trainModel(@Body() request: trainModelDto): Promise<trainModelResponseDto> {
         let response = await this.modelService.trainModel(request);
+
         let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
+
         let emailDto = new sendEmailDto(userResponse.user.username, userResponse.user.email, request.modelName);
-        
         this.sendEmail(emailDto);
         
         return response;
     }
-
 }
