@@ -125,8 +125,8 @@ export class ModelController {
     }
 
     @Post('/trainModel')
-    trainModel(@Body() request: trainModelDto): trainModelResponseDto {
-        return this.modelService.trainModel(request);
+    async trainModel(@Body() request: trainModelDto): Promise<trainModelResponseDto> {
+        return await this.modelService.trainModel(request);
     }
 
 }
