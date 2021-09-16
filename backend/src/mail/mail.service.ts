@@ -13,7 +13,8 @@ export class MailService {
       subject: 'Your Model is ready to use!',
       template: './doneTraining',
       context: {      
-        name: request.name
+        name: request.username,
+        modelName: request.modelName
       },
     });
   }
