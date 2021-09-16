@@ -72,20 +72,20 @@ export class ModelService {
     }
 
     public loadModel(request: loadModelDto): loadModelResponseDto {
-        return this.grpcService.loadModel(request);     //make sure return is of type loadModelResponseDto
+        return this.grpcService.loadModel(request);     
     }
 
     public async listModels(request: listModelsDto): Promise<listModelsResponseDto> {
         const data = await this.grpcService.listModels(request); 
-        return data.toPromise();                  //make sure return is of type loadModelResponseDto
+        return data.toPromise();                  
     }
 
     public currentModel(request: currentModelDto): currentModelResponseDto {
-        return this.grpcService.currentModel(request);     //make sure return is of type loadModelResponseDto
+        return this.grpcService.currentModel(request);    
     }
     
-    public trainModel(request: trainModelDto): trainModelResponseDto {
-        return this.grpcService.trainModel(request);     //make sure return is of type loadModelResponseDto
+    public async trainModel(request: trainModelDto): Promise<trainModelResponseDto> {
+        return await this.grpcService.trainModel(request);    
     }
 
 }
