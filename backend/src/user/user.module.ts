@@ -16,5 +16,6 @@ import config from '../config/keys';
   ],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService]
 })
 export class UsersModule {}
