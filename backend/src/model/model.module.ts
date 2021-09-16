@@ -3,9 +3,10 @@ import { ModelController } from './model.controller';
 import { ModelService } from './model.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
-  imports: [
+  imports: [MailModule,
     ClientsModule.register([
       {
         name: 'MODEL_PACKAGE',
