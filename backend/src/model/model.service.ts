@@ -10,11 +10,13 @@ import { listModelsDto } from './dto/list-model.dto';
 import { listModelsResponseDto } from './dto/list-model-response.dto';
 import { currentModelResponseDto } from './dto/current-model-response.dto';
 import { currentModelDto } from './dto/current-model.dto';
+import { MailService } from '../mail/mail.service';
+import { sendEmailDto } from 'src/mail/dto/send-email.dto';
 
 @Injectable()
 export class ModelService {
 
-    constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc) {}
+    constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc,private mailService: MailService) {}
     private grpcService: ModelGeneration;
 
     onModuleInit() {
@@ -80,6 +82,11 @@ export class ModelService {
 
     public currentModel(request: currentModelDto): currentModelResponseDto {
         return this.grpcService.currentModel(request);     //make sure return is of type loadModelResponseDto
+    }
+
+    public sendEmail(){
+        const data = new sendEmailDto("ethan","ecoryndonbaker@gmail.com");
+        this.mailService.sendConfirmationEmail(data);
     }
     
 
