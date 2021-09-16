@@ -216,7 +216,7 @@ class ModelGenerator:
                 sample = torch.tensor([vector]).to(self.device)
                 sample = self.model.decoder(sample).cpu() 
 
-                save_image(sample.view(1, sample.shape[1], 28, 28), filepath)
+                save_image(sample.view(1, sample.shape[1], 64, 64), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
