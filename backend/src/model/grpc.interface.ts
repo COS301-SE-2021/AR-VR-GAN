@@ -21,5 +21,5 @@ export interface RequestListModel {
 }
 
 export interface RequestCurrentModel {
-  details: boolean;
+
 }

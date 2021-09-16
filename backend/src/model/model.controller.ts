@@ -106,12 +106,18 @@ export class ModelController {
     }
 
     @Post('/listModels')
-    listModels(@Body() request: listModelsDto): listModelsResponseDto {
-        return this.modelService.listModels(request);
+    async listModels(@Body() request: listModelsDto): Promise<listModelsResponseDto> {
+        const data = await this.modelService.listModels(request);
+        const details = data.modelDetails
+        for (var i in details) {
+            details[i] = JSON.parse(details[i].toString());
+        }
+        return data;
     }
 
     @Post('/currentModel')
-    currentModel(@Body() request: currentModelDto): currentModelResponseDto {
+    currentModel(): currentModelResponseDto {
+        const request = new currentModelDto();
         return this.modelService.currentModel(request);
     }
 
