@@ -1,9 +1,11 @@
 export class sendEmailDto {
-    readonly name: string;
+    readonly username: string;
     readonly email: string;
+    readonly modelName: string;
 
-    constructor(name: string , email: string) {
-        this.name = name;
+    constructor(name: string , email: string, modelName: string) {
+        this.username = name;
         this.email = email;
+        this.modelName = modelName;
     }
 }
