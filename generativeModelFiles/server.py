@@ -67,6 +67,9 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         latentSize: int = request.latentSize
         datasetName: str = request.datasetName 
         beta: int = request.beta
+        model_type: str = request.modelType
+        if request.modelType == "":
+            model_type = "cvae"
         # Check for model type
 
         # Create a temporary model generator so that a new model can be 
@@ -76,7 +79,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         response.succesful = True
         try:
             temp.set_latent_size(latent_size=latentSize)
-            temp.train_model(epochs=epochs, latent_vector=latentSize, dataset=datasetName.lower(), model_type="cvae", beta=beta, name=modelName)
+            temp.train_model(epochs=epochs, latent_vector=latentSize, dataset=datasetName.lower(), model_type=model_type, beta=beta, name=modelName)
             response.message = temp.saveModel(SAVED_MODELS_DIR+modelName)
         except Exception as e:
             response.succesful = False

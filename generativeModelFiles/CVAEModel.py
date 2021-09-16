@@ -30,31 +30,36 @@ class CVAE(nn.Module):
         self.channels = channels
         self.encoder = nn.Sequential(
             # Note we increase the channels but reduce the size of the image
-            nn.Conv2d(channels, 16, 11, stride=1, padding=1), # -> (N, 16 , (14, 14) <- image size);<-output, reduces image size by half; 1<- input size, 16 <- output channels, 3 <- kernal size, 
-            nn.ReLU(),
-            nn.Conv2d(16, 32, 7, stride=1, padding=1), # -> N, 32, 7, 7;<-output ;16 <- input
-            nn.ReLU(),
-            nn.Conv2d(32, 64, 9, stride=1, padding=1), # -> N, 64, 1, 1
-            nn.ReLU(),
-            nn.Conv2d(64, 128, 12, stride=1, padding=1),
-            View((-1, 128*1*1)), 
-            nn.Linear(128, self.z*2)
+            nn.Conv2d(channels, 32, 4, 2, 1),          # B,  32, 32, 32
+            nn.ReLU(True),
+            nn.Conv2d(32, 32, 4, 2, 1),          # B,  32, 16, 16
+            nn.ReLU(True),
+            nn.Conv2d(32, 64, 4, 2, 1),          # B,  64,  8,  8
+            nn.ReLU(True),
+            nn.Conv2d(64, 64, 4, 2, 1),          # B,  64,  4,  4
+            nn.ReLU(True),
+            nn.Conv2d(64, 256, 4, 1),            # B, 256,  1,  1
+            nn.ReLU(True),
+            View((-1, 256*1*1)),                 # B, 256
+            nn.Linear(256, self.z*2),   
             # nn.Sigmoid()
         )
         
         # N , latent_vector, <- input
         self.decoder = nn.Sequential(
-            nn.Linear(self.z, 128),
-            View((-1, 128, 1, 1)),
-            nn.ReLU(),
-            nn.ConvTranspose2d(128, 64, 12, stride=1, padding=1), # -> N, 32, 7, 7
-            nn.ReLU(),
-            nn.ConvTranspose2d(64, 32, 9, stride=1, padding=1), # N, 16, 14, 14 (N,16,13,13 without output_padding)
-            nn.ReLU(),
-            nn.ConvTranspose2d(32, 16, 7, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
-            nn.ReLU(),
-            nn.ConvTranspose2d(16, channels, 11, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
-            nn.Sigmoid()
+            nn.Linear(self.z, 256),               # B, 256
+            View((-1, 256, 1, 1)),               # B, 256,  1,  1
+            nn.ReLU(True),
+            nn.ConvTranspose2d(256, 64, 4),      # B,  64,  4,  4
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 64, 4, 2, 1), # B,  64,  8,  8
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 32, 4, 2, 1), # B,  32, 16, 16
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, 32, 4, 2, 1), # B,  32, 32, 32
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, channels, 4, 2, 1),  # B, nc, 64, 64
+            # nn.Sigmoid()
         )
 
     def forward(self, x):
@@ -62,7 +67,7 @@ class CVAE(nn.Module):
         mu = distributions[:, :self.z]
         logvar = distributions[:, self.z:]
         z = self.reparametrize(mu, logvar)
-        x_recon = self.decoder(z)
+        x_recon = self.decoder(z).view(x.size())
 
         return x_recon, mu , logvar
     
@@ -83,7 +88,7 @@ class CVAE(nn.Module):
         BETA = beta
         # print(x.shape)
         # input()
-        BCE = F.binary_cross_entropy(recon_x, x, reduction='sum').div(x.shape[0])
+        BCE = F.binary_cross_entropy_with_logits(recon_x, x, reduction='sum').div(x.shape[0])
         # print("BCE", BCE)
         # see Appendix B from VAE paper:
         # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
@@ -118,10 +123,10 @@ class CVAE(nn.Module):
                 optimizer.step()
                 # Displays training data
                 if show == True:
-                    save_image(recon_batch.view(recon_batch.shape[0], recon_batch.shape[1], 28, 28), f"./training/{name}-{iter+1}.png")
+                    save_image(recon_batch.view(recon_batch.shape[0], recon_batch.shape[1], 64, 64), f"./training/{name}-{iter+1}.png")
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon_batch))
-                # if i == 350 : break
+                if i == 500 : break
             if save and self.epochs % 10 == 0:
                 torch.save(self, f"./savedModels/CVAE/{name}.pt")
     

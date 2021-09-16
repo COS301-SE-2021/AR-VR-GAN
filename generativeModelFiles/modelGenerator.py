@@ -81,7 +81,7 @@ class ModelGenerator:
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         im_transform = transforms.Compose([
-            transforms.Resize((28,28)),
+            transforms.Resize((64,64)),
             transforms.ToTensor(),
         ])
         self.data_loaders = DataLoaders(im_transform, kwargs)
@@ -216,7 +216,7 @@ class ModelGenerator:
                 sample = torch.tensor([vector]).to(self.device)
                 sample = self.model.decoder(sample).cpu() 
 
-                save_image(sample.view(1, sample.shape[1], 28, 28), filepath)
+                save_image(sample.view(1, sample.shape[1], 64, 64), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
@@ -225,7 +225,7 @@ class ModelGenerator:
                     f = image.read()
                     b = bytearray(f)
 
-                os.remove(filepath)
+                # os.remove(filepath)
                 return list(b)
 
     def clearModel(self) -> None:
@@ -267,11 +267,13 @@ if __name__ == "__main__":
     # checkpoint of the model. I adjusted 
     # the training sequence so that it saves the model every 10 epochs so that you can cancel the 
     # training any time with out losing progress. 
-    generator.train_model(1, 3, "cifar10", model_type="cvae", name="Beta-1-CIFAR-1")
+    # generator.loadModel("Beta-1-CIFAR-20.pt")
+    # print(generator.model.details())
+    generator.train_model(15, 3, "cifar10", model_type="cvae", name="Beta-1-CIFAR-15")
     # Remember to save it
     generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
 
-    # generator.generateImage([0.0, 0.0, 0.0])
+    generator.generateImage([0.0, 0.0, 0.0])
 
     # generator = ModelGenerator()
     # generator.train_model(15, 3, "cifar10", model_type="convolutional", name="Normal-CIFAR-15")
@@ -294,23 +296,25 @@ if __name__ == "__main__":
     from time import sleep
     # generator.saveModel("savedModels/CBeta-1-MNIST-1.pt")
     # sleep(1)
-    # generator.generateImage([0.1, 0.0, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.2, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.03, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.04, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.05, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.06, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.022, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.024, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.056, 0.1, 0.0])
+    generator.generateImage([0.1, 0.0, 0.0])
+    sleep(1)
+    generator.generateImage([0.2, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.53, 0.3, 0.2])
+    sleep(1)
+    generator.generateImage([0.04, 0.1, 1.0])
+    sleep(1)
+    generator.generateImage([0.05, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0.06, 0.1, 0.0])
+    sleep(1)
+    generator.generateImage([0, 0, 1.99999999999999999])
+    sleep(1)
+    generator.generateImage([0.0, 0.0, 0.0])
+    sleep(1)
+    generator.generateImage([50.0, 0.0, 99.0])
+    sleep(1)
+    generator.generateImage([0.056, 0.0000000000000, 0.15530333333333333333333])
     # generator.loadModel(args.model)
 
     # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")

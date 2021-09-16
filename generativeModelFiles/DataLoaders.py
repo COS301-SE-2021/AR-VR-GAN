@@ -2,13 +2,13 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 class DataLoaders:
-    def __init__(self, transform: transforms = None, kwargs: dict = {}, batch_size: int = 32):
+    def __init__(self, transform: transforms = None, kwargs: dict = {}, batch_size: int = 64):
         self.transform: transforms = transform
         self.batch_size: int = batch_size
         self.kwargs: dict = kwargs
         if transform == None:
             self.transform = transforms.Compose([
-                transforms.Resize((28,28)),
+                transforms.Resize((64,64)),
                 transforms.ToTensor(),
             ])
         
