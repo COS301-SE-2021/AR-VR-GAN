@@ -27,31 +27,35 @@ class CAutoencoder(nn.Module):
         self.channel_size = channel_size
         self.encoder = nn.Sequential(
             # Note we increase the channels but reduce the size of the image
-            nn.Conv2d(channel_size, 16, 11, stride=1, padding=1), # -> (N, 16 , (14, 14) <- image size);<-output, reduces image size by half; 1<- input size, 16 <- output channels, 3 <- kernal size, 
-            nn.ReLU(),
-            nn.Conv2d(16, 32, 7, stride=1, padding=1), # -> N, 32, 7, 7;<-output ;16 <- input
-            nn.ReLU(),
-            nn.Conv2d(32, 64, 9, stride=1, padding=1), # -> N, 64, 1, 1
-            nn.ReLU(),
-            nn.Conv2d(64, 128, 12, stride=1, padding=1),
-            View((-1, 128*1*1)), 
-            nn.Linear(128, self.z)
+            nn.Conv2d(channel_size, 32, 4, 2, 1),          # B,  32, 32, 32
+            nn.ReLU(True),
+            nn.Conv2d(32, 32, 4, 2, 1),          # B,  32, 16, 16
+            nn.ReLU(True),
+            nn.Conv2d(32, 64, 4, 2, 1),          # B,  64,  8,  8
+            nn.ReLU(True),
+            nn.Conv2d(64, 64, 4, 2, 1),          # B,  64,  4,  4
+            nn.ReLU(True),
+            nn.Conv2d(64, 256, 4, 1),            # B, 256,  1,  1
+            nn.ReLU(True),
+            View((-1, 256*1*1)),                 # B, 256
+            nn.Linear(256, self.z), 
             # nn.Sigmoid()
         )
         
         # N , latent_vector, <- input
         self.decoder = nn.Sequential(
-            nn.Linear(self.z, 128),
-            View((-1, 128, 1, 1)),
-            nn.ReLU(),
-            nn.ConvTranspose2d(128, 64, 12, stride=1, padding=1), # -> N, 32, 7, 7
-            nn.ReLU(),
-            nn.ConvTranspose2d(64, 32, 9, stride=1, padding=1), # N, 16, 14, 14 (N,16,13,13 without output_padding)
-            nn.ReLU(),
-            nn.ConvTranspose2d(32, 16, 7, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
-            nn.ReLU(),
-            nn.ConvTranspose2d(16, channel_size, 11, stride=1, padding=1), # N, 1, 28, 28  (N,1,27,27)
-            nn.Sigmoid()
+            nn.Linear(self.z, 256),               # B, 256
+            View((-1, 256, 1, 1)),               # B, 256,  1,  1
+            nn.ReLU(True),
+            nn.ConvTranspose2d(256, 64, 4),      # B,  64,  4,  4
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 64, 4, 2, 1), # B,  64,  8,  8
+            nn.ReLU(True),
+            nn.ConvTranspose2d(64, 32, 4, 2, 1), # B,  32, 16, 16
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, 32, 4, 2, 1), # B,  32, 32, 32
+            nn.ReLU(True),
+            nn.ConvTranspose2d(32, channel_size, 4, 2, 1),  # B, nc, 64, 64
         )
 
     def forward(self, x):
@@ -86,7 +90,7 @@ class CAutoencoder(nn.Module):
                 optimizer.step()
 
                 if show == True:
-                    save_image(recon.view(recon.shape[0], recon.shape[1], 28, 28), f"./training/{name}-{iter+1}.png")
+                    save_image(recon.view(recon.shape[0], recon.shape[1], recon.shape[2], recon.shape[3]), f"./training/{name}-{iter+1}.png")
                 print(f'{i}:Epoch:{iter+1}, Loss:{loss.item():.4f}')
                 outputs.append((iter, data, recon))
                 # if i == 350 : break
