@@ -75,23 +75,46 @@ export class ModelService {
     }
 
     public loadModel(request: loadModelDto): loadModelResponseDto {
+        if (request == null)
+        {
+            const resp = new loadModelResponseDto(false,"The request body was left empty!");
+            return resp;
+        }
         return this.grpcService.loadModel(request);     
     }
 
     public async listModels(request: listModelsDto): Promise<listModelsResponseDto> {
+        if (request == null)
+        {
+            const resp = new listModelsResponseDto(null,null);
+            return resp;
+        }
         const data = await this.grpcService.listModels(request); 
         return data.toPromise();                  
     }
 
     public currentModel(request: currentModelDto): currentModelResponseDto {
+        if (request == null)
+        {
+            const resp = new currentModelResponseDto(null,null);
+            return resp;
+        }
         return this.grpcService.currentModel(request);    
     }
 
     public sendEmail(request: sendEmailDto){
-        this.mailService.sendConfirmationEmail(request);
+        if(request != null)
+        {
+            this.mailService.sendConfirmationEmail(request);
+        }
     }
     
     public async trainModel(request: trainModelDto): Promise<trainModelResponseDto> {
+        if (request == null)
+        {
+            const resp = new trainModelResponseDto(false,"The request body was left empty!");
+            return resp;
+        }
         const response = await this.grpcService.trainModel(request);
         response.subscribe( async data => {
             let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
