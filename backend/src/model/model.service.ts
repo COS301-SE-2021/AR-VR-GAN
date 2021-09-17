@@ -14,11 +14,12 @@ import { MailService } from '../mail/mail.service';
 import { sendEmailDto } from 'src/mail/dto/send-email.dto';
 import { trainModelResponseDto } from './dto/train-model-response.dto';
 import { trainModelDto } from './dto/train-model.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ModelService {
 
-    constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc,private mailService: MailService) {}
+    constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc,private mailService: MailService,private userService: UserService) {}
     private grpcService: ModelGeneration;
 
     onModuleInit() {
@@ -91,7 +92,15 @@ export class ModelService {
     }
     
     public async trainModel(request: trainModelDto): Promise<trainModelResponseDto> {
-        return await this.grpcService.trainModel(request);    
+        const response = await this.grpcService.trainModel(request);
+        response.subscribe( async data => {
+            let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
+
+            let emailDto = new sendEmailDto(userResponse.user.username, userResponse.user.email, request.modelName);
+            this.sendEmail(emailDto);
+        });
+
+        return response;
     }
 
 }
