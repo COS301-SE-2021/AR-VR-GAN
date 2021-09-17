@@ -117,6 +117,10 @@ export class ModelService {
         return this.grpcService.currentModel(request);    
     }
 
+    /**
+     * This function handles the requests that will send emails 
+     * @param request holds the details of the user and the model that was being trained
+     */
     public sendEmail(request: sendEmailDto){
         if(request != null)
         {
@@ -124,6 +128,12 @@ export class ModelService {
         }
     }
     
+    /**
+     * This function handles a request to train a customized model to a user specification,
+     * once the model is trained the function will request an email to be sent
+     * @param request holds all the parameterss that will be needed.
+     * @returns a boolean for whether or not the operation was succesful or not
+     */
     public async trainModel(request: trainModelDto): Promise<trainModelResponseDto> {
         if (request == null)
         {
