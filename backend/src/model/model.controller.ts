@@ -29,9 +29,7 @@ export class ModelController {
       })
       client: ClientGrpc;
 
-    constructor(
-        private modelService: ModelService,
-        private userService: UserService) {}
+    constructor(private modelService: ModelService) {}
 
     @GrpcStreamMethod()
     handleCoords(messages: Observable<Request>): Observable<Response> {
@@ -135,13 +133,7 @@ export class ModelController {
     
     @Post('/trainModel')
     async trainModel(@Body() request: trainModelDto): Promise<trainModelResponseDto> {
-        let response = await this.modelService.trainModel(request);
-
-        let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
-
-        let emailDto = new sendEmailDto(userResponse.user.username, userResponse.user.email, request.modelName);
-        this.sendEmail(emailDto);
-        
+        let response = await this.modelService.trainModel(request);  
         return response;
     }
 }
