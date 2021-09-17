@@ -74,6 +74,11 @@ export class ModelService {
         return stream.toPromise();
     }
 
+    /**
+     * this function handles the changing between models
+     * @param request the request object will hold the name of the model to load 
+     * @returns a boolean value based on whether or not the change was succesful
+     */
     public loadModel(request: loadModelDto): loadModelResponseDto {
         if (request == null)
         {
