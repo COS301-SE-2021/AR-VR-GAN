@@ -11,14 +11,18 @@ export class MailService {
    * @param request the user details
    */
   async sendConfirmationEmail(request: sendEmailDto) {
-    await this.mailerService.sendMail({
-      to: request.email,
-      subject: 'Your Model is ready to use!',
-      template: './doneTraining',
-      context: {      
-        name: request.username,
-        modelName: request.modelName
-      },
-    });
+    if (request != null)
+    {
+      await this.mailerService.sendMail({
+        to: request.email,
+        subject: 'Your Model is ready to use!',
+        template: './doneTraining',
+        context: {      
+          name: request.username,
+          modelName: request.modelName
+        },
+      });
+    }
+
   }
 }
