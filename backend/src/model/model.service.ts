@@ -88,6 +88,11 @@ export class ModelService {
         return this.grpcService.loadModel(request);     
     }
 
+    /**
+     * this function handles a request to list all the models it will retrieve a list and and a byte array
+     * @param request the request object will hold the boolean values for which models to list "default" or "saved"
+     * @returns a promise of the list of models that contains all the details of each model
+     */
     public async listModels(request: listModelsDto): Promise<listModelsResponseDto> {
         if (request == null)
         {
@@ -98,6 +103,11 @@ export class ModelService {
         return data.toPromise();                  
     }
 
+    /**
+     * this function handles a request to retrive the current model name and details
+     * @param request 
+     * @returns the name and details of the current loaded model
+     */
     public currentModel(request: currentModelDto): currentModelResponseDto {
         if (request == null)
         {
