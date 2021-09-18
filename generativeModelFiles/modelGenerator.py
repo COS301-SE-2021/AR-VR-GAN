@@ -4,7 +4,7 @@ import torch
 import torch.utils.data
 from torchvision import transforms
 from torchvision.utils import save_image
-from VAEModel import VAE
+from VAEModel import VAE as OGVAE
 from ConvolutionalAutoencoder import CAutoencoder
 # from CVAEModel import CVAE
 from CVAE import VAE
@@ -100,13 +100,22 @@ class ModelGenerator:
         if model_type == "convolutional":
             self.model = CAutoencoder(latent_vector, channel_size)
             self.model.datasetUsed = dataset
-            self.model.training_loop(epochs, loader, name, False)
+            self.model.training_loop(epochs, loader)
         elif model_type == "cvae":
+            # if dataset == "fashion" or dataset == "mnist":
+            #     self.model = OGVAE(latenet_vector)
+            # else:
+            #     self.model = VAE(channel_size, latent_vector)
+    
             self.model = VAE(channel_size, latent_vector)
             self.model.datasetUsed = dataset
             self.model.name = name
             self.model.training_loop(epochs, loader, beta)
         else:
+            # if dataset == "fashion" or dataset == "mnist":
+            #     self.model = OGVAE(latenet_vector)
+            # else:
+            #     self.model = VAE(channel_size, latent_vector)
             self.model = VAE(channel_size,latent_vector)
             self.model.datasetUsed = dataset
             self.model.name = name
@@ -265,13 +274,14 @@ if __name__ == "__main__":
     # training any time with out losing progress. 
     # generator.loadModel("Beta-1-CIFAR-20.pt")
     # print(generator.model.details())
-    generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-20")
+    # generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-20")
     # Remember to save it
-    generator.saveModel("savedModels/Beta-1-MNIST-20.pt")
+    generator.loadModel("Beta-1-CIFAR-20.pt")
+    
 
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
-    # from time import sleep
+    from time import sleep
     # generator.saveModel("savedModels/CBeta-1-MNIST-1.pt")
     # sleep(1)
     # generator.generateImage([0.1, 0.0, 0.0])
@@ -293,4 +303,4 @@ if __name__ == "__main__":
     # generator.generateImage([50.0, 0.0, 99.0])
     # sleep(1)
     # generator.generateImage([0.056, 0.0000000000000, 0.15530333333333333333333])
-    # generator.loadModel(args.model)
+    # # generator.loadModel(args.model)

@@ -102,7 +102,7 @@ class VAE(nn.Module):
         return model_details
 
     def retrieve_latent_size(self) -> int:
-        return self.latent_size
+        return self.z
 
     def loss_function(self, recon_x, x, mu, logvar, beta=1):
         mse_loss = nn.MSELoss(size_average=False)
@@ -121,6 +121,7 @@ class VAE(nn.Module):
         optimizer = optim.Adam(self.parameters(), lr=1e-3)
         for epoch in range(0, epochs):
             loss_list = []
+            self.epochs += 1
             print("epoch {}...".format(epoch))
             for batch_idx, (data, _) in enumerate(train_loader):
                 if cuda:

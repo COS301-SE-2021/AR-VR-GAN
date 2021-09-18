@@ -16,7 +16,7 @@ class DataLoaders:
             "mnist": datasets.MNIST('../data', train=True, download=True, transform=self.transform), 
             "fashion": datasets.FashionMNIST('../data', train=True, download=True, transform=self.transform),
             "cifar10": datasets.CIFAR10('../data', train=True, transform=self.transform),
-            "celeba": datasets.CelebA('../data', train=True, transform=self.transform)
+            "celeba": datasets.CelebA('../data', split="train", transform=self.transform)
         }
         
     def get_dataloader(self, name: str = "mnist") -> DataLoader:
