@@ -4,9 +4,9 @@ import { ModelService } from './model.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { MailModule } from '../mail/mail.module';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { UsersModule } from 'src/user/user.module';
+import { UsersModule } from '../user/user.module';
 
 @Module({
   imports: [MailModule, UsersModule,

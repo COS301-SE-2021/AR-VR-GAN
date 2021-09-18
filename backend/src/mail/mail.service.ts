@@ -6,15 +6,23 @@ import { sendEmailDto } from './dto/send-email.dto';
 export class MailService {
   constructor(private mailerService: MailerService) {}
 
+  /**
+   * sends an email to the user with the doneTraining template
+   * @param request the user details
+   */
   async sendConfirmationEmail(request: sendEmailDto) {
-    await this.mailerService.sendMail({
-      to: request.email,
-      subject: 'Your Model is ready to use!',
-      template: './doneTraining',
-      context: {      
-        name: request.username,
-        modelName: request.modelName
-      },
-    });
+    if (request != null)
+    {
+      await this.mailerService.sendMail({
+        to: request.email,
+        subject: 'Your Model is ready to use!',
+        template: './doneTraining',
+        context: {      
+          name: request.username,
+          modelName: request.modelName
+        },
+      });
+    }
+
   }
 }
