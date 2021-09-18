@@ -6,7 +6,8 @@ from torchvision import transforms
 from torchvision.utils import save_image
 from VAEModel import VAE
 from ConvolutionalAutoencoder import CAutoencoder
-from CVAEModel import CVAE
+# from CVAEModel import CVAE
+from CVAE import VAE
 import os
 from datetime import datetime, time
 from PIL import Image
@@ -74,7 +75,7 @@ class ModelGenerator:
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         im_transform = transforms.Compose([
-            transforms.Resize((64,64)),
+            transforms.Resize((32,32)),
             transforms.ToTensor(),
         ])
         self.data_loaders = DataLoaders(im_transform, kwargs)
@@ -101,13 +102,15 @@ class ModelGenerator:
             self.model.datasetUsed = dataset
             self.model.training_loop(epochs, loader, name, False)
         elif model_type == "cvae":
-            self.model = CVAE(channel_size, latent_vector)
+            self.model = VAE(channel_size, latent_vector)
             self.model.datasetUsed = dataset
-            self.model.training_loop(epochs, loader, beta, name, False)
+            self.model.name = name
+            self.model.training_loop(epochs, loader, beta)
         else:
-            self.model = CVAE(channel_size,latent_vector)
+            self.model = VAE(channel_size,latent_vector)
             self.model.datasetUsed = dataset
-            self.model.training_loop(epochs, loader, beta, name, False)
+            self.model.name = name
+            self.model.training_loop(epochs, loader, beta)
 
     def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator
@@ -262,9 +265,9 @@ if __name__ == "__main__":
     # training any time with out losing progress. 
     # generator.loadModel("Beta-1-CIFAR-20.pt")
     # print(generator.model.details())
-    generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-CIFAR-15")
+    generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-20")
     # Remember to save it
-    generator.saveModel("savedModels/Beta-1-CIFAR-20.pt")
+    generator.saveModel("savedModels/Beta-1-MNIST-20.pt")
 
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
