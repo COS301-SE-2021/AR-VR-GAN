@@ -98,7 +98,8 @@ export class TrainModelComponent implements OnInit {
       }
 
       this.http.post<any>(HOST_URL + '/model/trainModel/', options).subscribe((resp) => {
-        this.snackBar.open(`The model ${modelName} is ready.`, "Close");
+        this.customizeComponent.fetchData();
+        this.snackBar.open(resp.message.replace('.',''), "Close");
       });
     });
   }
