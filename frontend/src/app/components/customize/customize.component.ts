@@ -45,7 +45,10 @@ export class CustomizeComponent implements OnInit {
     let jsonData: modelDetails[] = [];
 
     this.currentModel().subscribe((currentModel) => {
-      this.listModels(false, true).subscribe((listModels) => {
+      this.listModels().subscribe((listModels) => {
+        console.log(currentModel);
+        console.log(listModels);
+
         for (let model in listModels['modelDetails']) {
           let newModel: modelDetails = {
             "fileName": "",
@@ -91,10 +94,10 @@ export class CustomizeComponent implements OnInit {
     });
   }
 
-  listModels(defaultValue: boolean, savedValue: boolean): Observable<any> {
+  listModels(): Observable<any> {
     return this.http.post<any>(HOST_URL + '/model/listModels', {
-      'default': defaultValue,
-      'saved': savedValue
+      'default': true,
+      'saved': true
     });
   }
 
