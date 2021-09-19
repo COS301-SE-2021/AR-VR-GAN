@@ -191,6 +191,18 @@ describe('testing post request points', () => {
     expect(controller.loadModel(dto)).toEqual(name);
   })
 
+  it('should return the name was not specified', () => {
+    const message = "The model name was not specified!";
+    const dto = new loadModelDto(null)    
+    expect(controller.loadModel(dto).message).toEqual(message);
+  })
+
+  it('should return the request body was not specified', () => {
+    const message = "The request body was left empty!";
+    const dto = null   
+    expect(controller.loadModel(dto).message).toEqual(message);
+  })
+
   it('should return the current model', () => {  
     const name = "current model";  
     expect(controller.currentModel().modelName).toEqual(name);
