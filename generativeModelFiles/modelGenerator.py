@@ -66,7 +66,7 @@ class ModelGenerator:
 
     """
 
-    def __init__(self) -> None:
+    def __init__(self, dataloaders = None) -> None:
         torch.manual_seed(1)
         self.cuda = torch.cuda.is_available()
         self.device = torch.device("cuda" if self.cuda else "cpu")
@@ -78,8 +78,10 @@ class ModelGenerator:
             # transforms.Resize((32,32)),
             transforms.ToTensor(),
         ])
-        self.data_loaders = DataLoaders(im_transform, kwargs)
-        
+        if dataloaders == None:
+            self.data_loaders = DataLoaders(im_transform, kwargs)
+        else:
+            self.data_loaders = dataloaders
         self.model = None
 
     def train_model(self, epochs: int, latent_vector: int, dataset: str = "mnist", model_type: str = "cvae", 

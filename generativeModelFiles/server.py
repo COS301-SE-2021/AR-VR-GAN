@@ -1,4 +1,8 @@
 from concurrent import futures
+import torch
+
+from torchvision import transforms
+from DataLoaders import DataLoaders
 import grpc
 import asyncio
 
@@ -12,7 +16,15 @@ SAVED_MODELS_DIR ="./savedModels/"
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
     def __init__(self) -> None:
         super().__init__()
-        self.m_generator = ModelGenerator()
+        kwargs = {'num_workers': 1, 'pin_memory': True} if torch.cuda.is_available() else {}
+
+        # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
+        im_transform = transforms.Compose([
+            # transforms.Resize((32,32)),
+            transforms.ToTensor(),
+        ])
+        self.data_loaders = DataLoaders(im_transform, kwargs)
+        self.m_generator = ModelGenerator(self.data_loaders)
         self.m_generator.loadModel("Beta-1-CIFAR-20.pt")
 
     async def get_image_data(self, request, context):
@@ -48,7 +60,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         total_list: list = default_list + saved_list
         total_list = list(set(total_list)) # Removes duplicates from the list
 
-        temp_mg = ModelGenerator()
+        temp_mg = ModelGenerator(self.data_loaders)
         
         response = modelGenerator_pb2.ListModelsResponse()
 
@@ -73,7 +85,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         if request.modelType == "":
             model_type = "cvae"
         
-        temp = ModelGenerator()
+        temp = ModelGenerator(self.data_loaders)
         response = modelGenerator_pb2.TrainModelResponse()
         response.succesful = True
         try:
