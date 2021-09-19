@@ -77,6 +77,41 @@ export const MockModelService= {
     }),
 
     trainModel: jest.fn((request) => {
+        if(request.beta == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid beta value.");
+            return resp;
+        }
+        if(request.datasetName == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid dataset name.");
+            return resp;
+        }
+        if(request.jwtToken == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid jwt Token.");
+            return resp;
+        }
+        if(request.latentSize == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid latent size.");
+            return resp;
+        }
+        if(request.modelName == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid model name.");
+            return resp;
+        }
+        if(request.modelType == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid model type.");
+            return resp;
+        }
+        if(request.trainingEpochs == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid training epochs value.");
+            return resp;
+        }
         const name = request.modelName + " trained";
         const resp = new trainModelResponseDto(true,name);
         return resp;
