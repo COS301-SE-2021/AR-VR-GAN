@@ -113,6 +113,7 @@ class ModelGenerator:
             else:
                 self.model = CAutoencoder(latent_vector, channel_size)
             self.model.datasetUsed = dataset
+            self.model.name = name
             self.model.training_loop(epochs, loader)
         else :
             if dataset == "fashion" or dataset == "mnist":
