@@ -142,7 +142,7 @@ class ModelGenerator:
             if the file path is not a pytorch file.
         """
         if filepath == "":
-            filepath = "defaultModels/Epochs-50.pt"
+            filepath = "defaultModels/Beta-1-MNIST-20.pt"
             self.model = torch.load(filepath)
             print("Default VAE Model loaded")
             return filepath
