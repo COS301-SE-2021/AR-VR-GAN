@@ -1,7 +1,9 @@
 import { join } from "path";
+import { sendEmailDto } from "src/mail/dto/send-email.dto";
 import { currentModelResponseDto } from "../dto/current-model-response.dto";
 import { listModelsResponseDto } from "../dto/list-model-response.dto";
 import { loadModelResponseDto } from "../dto/load-model-response.dto";
+import { trainModelResponseDto } from "../dto/train-model-response.dto";
 
 export const MockModelService= {
 
@@ -66,6 +68,12 @@ export const MockModelService= {
 
     currentModel: jest.fn(() => {
         const resp = new currentModelResponseDto("current model","current model");
+        return resp;
+    }),
+
+    trainModel: jest.fn((request) => {
+        const name = request.modelName + " trained";
+        const resp = new trainModelResponseDto(true,name);
         return resp;
     }),
   }
