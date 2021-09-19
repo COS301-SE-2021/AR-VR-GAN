@@ -12,6 +12,7 @@ import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../user/user.module';
 import { loadModelDto } from './dto/load-model.dto';
 import { listModelsDto } from './dto/list-model.dto';
+import { currentModelDto } from './dto/current-model.dto';
 
 describe('test grpc on model controller', () => {
   let server;
@@ -191,9 +192,9 @@ describe('testing post request points', () => {
     expect(controller.loadModel(dto)).toEqual(name);
   })
 
-  it('should return a false success', () => {
-    const dto = null    
-    expect(controller.loadModel(dto).succesful).toEqual(false);
+  it('should return a false success', () => {  
+    const name = "current model";  
+    expect(controller.currentModel().modelName).toEqual(name);
   })
 
 });
