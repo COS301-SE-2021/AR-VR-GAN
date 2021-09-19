@@ -34,10 +34,10 @@ class TestModelGenerator(unittest.TestCase):
         self.assertEqual(exceptionTwo.exception.message, "File needs to be a pytorch file")
         
         # Load Default
-        self.assertEqual("defaultModels/Beta-1-MNIST-20.pt" ,self.generator.loadModel())
+        self.assertEqual("defaultModels/Beta-1-CIFAR-20.pt" ,self.generator.loadModel())
 
         # Load Existing model
-        self.assertEqual("./defaultModels/Beta-1-MNIST-20.pt",self.generator.loadModel("Beta-1-MNIST-20.pt"))
+        self.assertEqual("./defaultModels/Beta-1-CIFAR-20.pt",self.generator.loadModel("Beta-1-CIFAR-20.pt"))
 
     def test_save_model(self):
         # File path not specified
@@ -53,7 +53,7 @@ class TestModelGenerator(unittest.TestCase):
         self.assertTrue(os.path.exists(pathTo))
 
     def test_image_generation(self):
-        self.generator.loadModel("Beta-1-MNIST-20.pt")
+        self.generator.loadModel("Beta-1-CIFAR-20.pt")
 
         with self.assertRaises(ModelException) as exceptionOne:
             self.assertTrue(self.generator.generateImage([0.0],""))
