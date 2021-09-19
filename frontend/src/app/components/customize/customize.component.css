@@ -18,5 +18,6 @@
 }
   
 .mat-row:hover .mat-cell {
-    border-color: currentColor;
+    background-color: black;
+    color: white;
 }
