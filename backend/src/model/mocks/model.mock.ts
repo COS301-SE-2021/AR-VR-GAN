@@ -1,4 +1,5 @@
 import { join } from "path";
+import { listModelsResponseDto } from "../dto/list-model-response.dto";
 import { loadModelResponseDto } from "../dto/load-model-response.dto";
 
 export const MockModelService= {
@@ -40,5 +41,25 @@ export const MockModelService= {
             return resp;
         }
         return request.modelName;
+    }),
+
+    listModels: jest.fn((request) => {
+        if (request == null)
+        {
+            const resp = new listModelsResponseDto(null,null);
+            return resp;
+        }
+        if(request.saved == true && request.default == false)
+        {
+            const resp = new listModelsResponseDto(["saved"],"saved model");
+            return resp;
+        }
+        if(request.default == true && request.saved == false)
+        {
+            const resp = new listModelsResponseDto(["saved"],"default model");
+            return resp;
+        }
+        const resp = new listModelsResponseDto(["model"],"all models");
+        return resp;
     })
   }
