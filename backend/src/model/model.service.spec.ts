@@ -2,14 +2,16 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
 import { join } from 'path';
 import { ModelService } from './model.service';
-import { Request } from './interfaces/request.interface';
+import { MailModule } from '../mail/mail.module';
+import { UsersModule } from '../user/user.module';
+
 
 describe('ModelService', () => {
   let service: ModelService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [
+      imports: [MailModule,UsersModule,
         ClientsModule.register([
           {
             name: 'MODEL_PACKAGE',
@@ -48,4 +50,6 @@ describe('ModelService', () => {
     const dto = {data: [1.1,1.1,1.1]}
     expect(service.runPython(dto)).toBeDefined();
   });
+
+  
 });

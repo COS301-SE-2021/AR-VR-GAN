@@ -15,7 +15,6 @@ import { currentModelDto } from './dto/current-model.dto';
 import { sendEmailDto } from '../mail/dto/send-email.dto';
 import { trainModelDto } from './dto/train-model.dto';
 import { trainModelResponseDto } from './dto/train-model-response.dto';
-import { UserService } from '../user/user.service';
 
 
 @Controller('model')

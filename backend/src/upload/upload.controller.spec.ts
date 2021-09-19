@@ -5,6 +5,9 @@ import { UploadService } from './upload.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { ModelService } from '../../src/model/model.service';
+import { MailModule } from '../mail/mail.module';
+import { ModelModule } from '../model/model.module';
+import { UsersModule } from '../user/user.module';
 
 
 describe('UploadController', () => {
@@ -14,7 +17,7 @@ describe('UploadController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [UploadController],
       providers: [UploadService,ModelService],
-      imports: [
+      imports: [MailModule,ModelModule,UsersModule,
         ClientsModule.register([
           {
             name: 'MODEL_PACKAGE',

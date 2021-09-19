@@ -4,6 +4,7 @@ import { MockUserModel } from './mocks/userRepository.mock'
 import { getModelToken } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
+import { UserResponse } from './dto/user-response.dto';
 
 describe('UserService', () => {
   let service: UserService;
@@ -69,4 +70,25 @@ describe('UserService', () => {
     });;
   });
 
-});
+
+  test('UserResponse', async () => {
+    const obj = new UserResponse(true,"test")
+    expect(obj).toEqual({
+      message: "test",
+      success: true,
+    });
+  
+  });
+
+  //JWT preconditions
+  it('JWT token precondition', async () => {
+    const testUsername = "test";
+    const testToken = "";
+    
+    expect(await service.getUserByUsername(testToken,testUsername)).toEqual({
+      message: "Please provide a valid JWTToken.",
+      success: false,
+      user: null
+    });;
+  });
+})

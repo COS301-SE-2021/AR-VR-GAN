@@ -86,6 +86,11 @@ export class ModelService {
             const resp = new loadModelResponseDto(false,"The request body was left empty!");
             return resp;
         }
+        if(request.modelName == null)
+        {
+            const resp = new loadModelResponseDto(false,"The model name was not specified!");
+            return resp;
+        }
         return this.grpcService.loadModel(request);     
     }
 
@@ -96,6 +101,16 @@ export class ModelService {
      */
     public async listModels(request: listModelsDto): Promise<listModelsResponseDto> {
         if (request == null)
+        {
+            const resp = new listModelsResponseDto(null,null);
+            return resp;
+        }
+        if(request.default == null)
+        {
+            const resp = new listModelsResponseDto(null,null);
+            return resp;
+        }
+        if(request.saved == null)
         {
             const resp = new listModelsResponseDto(null,null);
             return resp;
@@ -138,6 +153,41 @@ export class ModelService {
     public async trainModel(request: trainModelDto): Promise<trainModelResponseDto> {
         if (request == null) {
             let resp = new trainModelResponseDto(false, "Please send a valid request object.");
+            return resp;
+        }
+        if(request.beta == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid beta value.");
+            return resp;
+        }
+        if(request.datasetName == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid dataset name.");
+            return resp;
+        }
+        if(request.jwtToken == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid jwt Token.");
+            return resp;
+        }
+        if(request.latentSize == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid latent size.");
+            return resp;
+        }
+        if(request.modelName == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid model name.");
+            return resp;
+        }
+        if(request.modelType == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid model type.");
+            return resp;
+        }
+        if(request.trainingEpochs == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid training epochs value.");
             return resp;
         }
 
