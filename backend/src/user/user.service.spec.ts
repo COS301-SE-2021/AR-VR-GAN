@@ -4,9 +4,7 @@ import { MockUserModel } from './mocks/userRepository.mock'
 import { getModelToken } from '@nestjs/mongoose';
 import { JwtService } from '@nestjs/jwt';
 import { LoginUserDto } from './dto/login-user.dto';
-import { RegisterUserDto } from './dto/register-user.dto';
 import { UserResponse } from './dto/user-response.dto';
-import { userInfo } from 'os';
 
 describe('UserService', () => {
   let service: UserService;
