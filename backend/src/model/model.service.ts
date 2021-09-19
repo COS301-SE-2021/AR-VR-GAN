@@ -158,7 +158,7 @@ export class ModelService {
             let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
             let emailDto = new sendEmailDto(userResponse.user.username, userResponse.user.email, request.modelName);
             this.sendEmail(emailDto);
-            let trainingFlag = false;
+            trainingFlag = false;
         });
 
         return response;
