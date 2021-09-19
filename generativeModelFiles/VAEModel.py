@@ -94,6 +94,7 @@ class VAE(nn.Module):
             loss_list = []
             print("epoch {}...".format(iter))
             i = 0
+            self.epochs += 1
             for (data, _) in train_loader:
                 i+=1
                 optimizer.zero_grad()

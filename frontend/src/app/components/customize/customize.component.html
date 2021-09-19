@@ -40,7 +40,7 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr 
             mat-row 
-            [class.current-row]="currentModelValue.fileName == row.fileName"
+            [class.current-row]="currentModelValue == row"
             (click)="updateCurrentModel(row)"
             *matRowDef="let row; columns: displayedColumns;"
             ></tr>

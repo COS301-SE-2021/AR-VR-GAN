@@ -43,22 +43,22 @@ export class RegisterFormComponent implements OnInit {
 
   registerUser(username: string, email:string, password: string, passwordConfirmation: string) {    
     if (passwordConfirmation != password) {
-      this.snackBar.open("Please ensure that your confirmation password matches your actual password.", "Close");
+      this.snackBar.open("Please ensure that your confirmation password matches your actual password", "Close");
       return;
     }
 
     if (password.length < 8) {
-      this.snackBar.open("Please ensure that your password is at least 8 characters long.","Close");
+      this.snackBar.open("Please ensure that your password is at least 8 characters long","Close");
       return;
     }
 
     if (username.length < 4) {
-      this.snackBar.open("Please ensure that your username is at least 4 characters long.","Close");
+      this.snackBar.open("Please ensure that your username is at least 4 characters long","Close");
       return;
     }
 
     if ((email.length < 3) || (!email.includes(".")) || (!email.includes("@"))) {
-      this.snackBar.open("Please enter a valid email address.", "Close");
+      this.snackBar.open("Please enter a valid email address", "Close");
       return;
     }
 

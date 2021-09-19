@@ -45,7 +45,7 @@ export class CustomizeComponent implements OnInit {
     let jsonData: modelDetails[] = [];
 
     this.currentModel().subscribe((currentModel) => {
-      this.listModels(false, true).subscribe((listModels) => {
+      this.listModels().subscribe((listModels) => {
         for (let model in listModels['modelDetails']) {
           let newModel: modelDetails = {
             "fileName": "",
@@ -72,6 +72,10 @@ export class CustomizeComponent implements OnInit {
           jsonData.push(newModel);
         }
 
+        jsonData.sort(function(a,b) {
+          return a.dataset < b.dataset ? -1 : 1;
+        });
+
         this.dataSource = jsonData;
         this.fetchedData = true;
       });
@@ -81,7 +85,7 @@ export class CustomizeComponent implements OnInit {
   updateCurrentModel(modelDetails: modelDetails): void {
     this.loadModel(modelDetails.fileName).subscribe((resp) => {
       this.fetchData(false);
-      this.snackBar.open(`The model was set to ${modelDetails.modelName}`,"Close");
+      this.snackBar.open(`The model was updated`,"Close");
     });
   }
 
@@ -91,10 +95,10 @@ export class CustomizeComponent implements OnInit {
     });
   }
 
-  listModels(defaultValue: boolean, savedValue: boolean): Observable<any> {
+  listModels(): Observable<any> {
     return this.http.post<any>(HOST_URL + '/model/listModels', {
-      'default': defaultValue,
-      'saved': savedValue
+      'default': true,
+      'saved': true
     });
   }
 

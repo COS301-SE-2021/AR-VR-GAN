@@ -77,7 +77,7 @@ export class TrainModelComponent implements OnInit {
       return;
     }
 
-    this.customizeComponent.listModels(false, true).subscribe((modelList) => {
+    this.customizeComponent.listModels().subscribe((modelList) => {
       for (let value in modelList['modelDetails']) {
         if (modelList['modelDetails'][value]['name'] === modelName) {
           this.snackBar.open("The model name you chose is already taken", "Close");
@@ -98,7 +98,8 @@ export class TrainModelComponent implements OnInit {
       }
 
       this.http.post<any>(HOST_URL + '/model/trainModel/', options).subscribe((resp) => {
-        this.snackBar.open(`The model ${modelName} is ready.`, "Close");
+        this.customizeComponent.fetchData();
+        this.snackBar.open(resp.message.replace('.',''), "Close");
       });
     });
   }

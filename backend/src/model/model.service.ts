@@ -15,10 +15,10 @@ import { sendEmailDto } from '../mail/dto/send-email.dto';
 import { trainModelResponseDto } from './dto/train-model-response.dto';
 import { trainModelDto } from './dto/train-model.dto';
 import { UserService } from '../user/user.service';
-import { AuthenticateUserDto } from '../user/dto/authenticate-user.dto';
 
 @Injectable()
 export class ModelService {
+    alreadyTraining: boolean = false;
 
     constructor(@Inject('MODEL_PACKAGE') private readonly client: ClientGrpc,private mailService: MailService,private userService: UserService) {}
     private grpcService: ModelGeneration;
@@ -136,32 +136,34 @@ export class ModelService {
      * @returns a boolean for whether or not the operation was succesful or not
      */
     public async trainModel(request: trainModelDto): Promise<trainModelResponseDto> {
-        if (request == null)
-        {
-            const resp = new trainModelResponseDto(false,"The request body was left empty!");
+        if (request == null) {
+            let resp = new trainModelResponseDto(false, "Please send a valid request object.");
             return resp;
         }
 
-        const authenticateResponse = await this.userService.authenticateUser(new AuthenticateUserDto(request.jwtToken))
-        if(authenticateResponse.success == false)
-        {
-            const resp = new trainModelResponseDto(false,"The jwt Token specified does not exist!");
+        let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
+
+        if (userResponse.user == null) {
+            let resp = new trainModelResponseDto(false, "Please login again, your JWT Token has expired.");
             return resp;
         }
 
-        let trainingFlag = true;
+        if (this.alreadyTraining) {
+            let resp = new trainModelResponseDto(false, "There is currently a model being trained. Please try again later.");
+            return resp;
+        }
 
-        const response = await this.grpcService.trainModel(request);
-         
+        this.alreadyTraining = true;
+        let trainResponse = await this.grpcService.trainModel(request).toPromise();
+        this.alreadyTraining = false;
 
-        response.subscribe( async data => {
-            let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
+        if (trainResponse.succesful) {
             let emailDto = new sendEmailDto(userResponse.user.username, userResponse.user.email, request.modelName);
             this.sendEmail(emailDto);
-            trainingFlag = false;
-        });
 
-        return response;
+            return new trainModelResponseDto(true, `The model, ${request.modelName}, was trained successfully.`);
+        } else {
+            return new trainModelResponseDto(false, `The model, ${request.modelName}, was not trained successfully.`);
+        } 
     }
-
 }
