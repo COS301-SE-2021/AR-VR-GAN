@@ -15,6 +15,7 @@ import { sendEmailDto } from '../mail/dto/send-email.dto';
 import { trainModelResponseDto } from './dto/train-model-response.dto';
 import { trainModelDto } from './dto/train-model.dto';
 import { UserService } from '../user/user.service';
+import { AuthenticateUserDto } from 'src/user/dto/authenticate-user.dto';
 
 @Injectable()
 export class ModelService {
@@ -140,12 +141,24 @@ export class ModelService {
             const resp = new trainModelResponseDto(false,"The request body was left empty!");
             return resp;
         }
+
+        const authenticateResponse = await this.userService.authenticateUser(new AuthenticateUserDto(request.jwtToken))
+        if(authenticateResponse.success == false)
+        {
+            const resp = new trainModelResponseDto(false,"The jwt Token specified does not exist!");
+            return resp;
+        }
+
+        let trainingFlag = true;
+
         const response = await this.grpcService.trainModel(request);
+         
+
         response.subscribe( async data => {
             let userResponse = await this.userService.getUserByJWTToken(request.jwtToken);
-
             let emailDto = new sendEmailDto(userResponse.user.username, userResponse.user.email, request.modelName);
             this.sendEmail(emailDto);
+            let trainingFlag = false;
         });
 
         return response;
