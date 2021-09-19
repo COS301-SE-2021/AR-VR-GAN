@@ -123,8 +123,7 @@ class ModelGenerator:
     
             self.model.datasetUsed = dataset
             self.model.name = name
-            self.model.training_loop(epochs, loader, beta)
-
+            self.model.training_loop(epochs, loader, beta)      
 
     def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator

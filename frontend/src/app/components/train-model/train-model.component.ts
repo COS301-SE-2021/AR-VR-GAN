@@ -72,7 +72,7 @@ export class TrainModelComponent implements OnInit {
       return;
     }
 
-    if (!((modelType == "CAE") || (modelType == "CVAE"))) {
+    if (!((modelType == "cvae") || (modelType == "convolutional"))) {
       this.snackBar.open("Please choose a valid model type", "Close");
       return;
     }
@@ -98,8 +98,10 @@ export class TrainModelComponent implements OnInit {
       }
 
       this.http.post<any>(HOST_URL + '/model/trainModel/', options).subscribe((resp) => {
-        this.customizeComponent.fetchData();
-        this.snackBar.open(resp.message.replace('.',''), "Close");
+        if (this.cookieService.check('jwtToken')) {
+          this.customizeComponent.fetchData();
+          this.snackBar.open(resp.message.replace('.',''), "Close");
+        }
       });
     });
   }
