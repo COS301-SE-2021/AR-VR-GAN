@@ -43,6 +43,11 @@ export const MockModelService= {
             const resp = new loadModelResponseDto(false,"The request body was left empty!");
             return resp;
         }
+        if(request.modelName == null)
+        {
+            const resp = new loadModelResponseDto(false,"The model name was not specified!");
+            return resp;
+        }
         return request.modelName;
     }),
 
