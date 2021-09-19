@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 
 export interface ModelGeneration {
   generateImage(Request: Observable<RequestProxy>): Observable<any>;
-  loadModel(Request: RequestModel): any;
+  loadModel(Request: RequestModel): RequestModelResponse;
   listModels(Request: RequestListModel): any;
   currentModel(Request: RequestCurrentModel): any;
   trainModel(Request: RequestTrainModel): any;
@@ -14,6 +14,16 @@ export interface RequestProxy {
 
 export interface RequestModel {
   modelName: string;
+}
+
+export interface RequestModelResponse {
+  succesful: boolean;
+  message:string;
+}
+
+export interface RequestTrainModelResponse {
+  succesful: boolean;
+  message:string;
 }
 
 export interface RequestListModel {
