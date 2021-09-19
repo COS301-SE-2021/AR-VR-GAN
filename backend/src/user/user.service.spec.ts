@@ -72,10 +72,6 @@ describe('UserService', () => {
     });;
   });
 
-  test('RegisterUser', async () => {
-    expect(service.registerUser(new RegisterUserDto("testun","testem","testpw"))).toBeDefined();
-  });
-
 
   test('UserResponse', async () => {
     const obj = new UserResponse(true,"test")
