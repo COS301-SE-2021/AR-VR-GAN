@@ -15,13 +15,13 @@ export class CustomizeComponent implements OnInit {
   currentModelValue: modelDetails | any;
 
   readonly displayedColumns: string[] = [
-    // "fileName",
     "modelName",
     "epochs",
     "latentSize",
     "beta",
     "dataset",
-    // "current"
+    "fileName",
+    // "current",
   ];
 
   constructor(
