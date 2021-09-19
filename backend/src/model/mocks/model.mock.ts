@@ -1,4 +1,5 @@
 import { join } from "path";
+import { loadModelResponseDto } from "../dto/load-model-response.dto";
 
 export const MockModelService= {
 
@@ -30,5 +31,14 @@ export const MockModelService= {
             sum += request.data[i]
         }
         return sum;
+    }),
+
+    loadModel: jest.fn((request) => {
+        if (request == null)
+        {
+            const resp = new loadModelResponseDto(false,"The request body was left empty!");
+            return resp;
+        }
+        return request.modelName;
     })
   }
