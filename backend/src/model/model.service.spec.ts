@@ -50,4 +50,6 @@ describe('ModelService', () => {
     const dto = {data: [1.1,1.1,1.1]}
     expect(service.runPython(dto)).toBeDefined();
   });
+
+  
 });
