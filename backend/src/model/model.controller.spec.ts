@@ -11,8 +11,6 @@ import { Response } from './interfaces/response.interface'
 import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../user/user.module';
 import { loadModelDto } from './dto/load-model.dto';
-import { listModelsDto } from './dto/list-model.dto';
-import { currentModelDto } from './dto/current-model.dto';
 import { trainModelDto } from './dto/train-model.dto';
 
 describe('test grpc on model controller', () => {
