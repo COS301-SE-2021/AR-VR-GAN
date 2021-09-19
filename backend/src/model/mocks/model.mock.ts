@@ -1,4 +1,5 @@
 import { join } from "path";
+import { currentModelResponseDto } from "../dto/current-model-response.dto";
 import { listModelsResponseDto } from "../dto/list-model-response.dto";
 import { loadModelResponseDto } from "../dto/load-model-response.dto";
 
@@ -61,5 +62,10 @@ export const MockModelService= {
         }
         const resp = new listModelsResponseDto(["model"],"all models");
         return resp;
-    })
+    }),
+
+    currentModel: jest.fn(() => {
+        const resp = new currentModelResponseDto("current model","current model");
+        return resp;
+    }),
   }
