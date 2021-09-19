@@ -190,4 +190,9 @@ describe('testing post request points', () => {
     expect(controller.loadModel(dto)).toEqual(name);
   })
 
+  it('should return a false success', () => {
+    const dto = null    
+    expect(controller.loadModel(dto).succesful).toEqual(false);
+  })
+
 });
