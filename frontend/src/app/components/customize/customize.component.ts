@@ -15,13 +15,13 @@ export class CustomizeComponent implements OnInit {
   currentModelValue: modelDetails | any;
 
   readonly displayedColumns: string[] = [
-    "fileName",
+    // "fileName",
     "modelName",
     "epochs",
     "latentSize",
     "beta",
     "dataset",
-    "current"
+    // "current"
   ];
 
   constructor(
@@ -35,8 +35,13 @@ export class CustomizeComponent implements OnInit {
     this.fetchData();
   }
 
-  fetchData(): void {
+  fetchData(empty: boolean = true): void {
     this.fetchedData = false;
+    
+    if (empty) {
+      this.dataSource = [];
+    }
+    
     let jsonData: modelDetails[] = [];
 
     this.currentModel().subscribe((currentModel) => {
@@ -75,7 +80,7 @@ export class CustomizeComponent implements OnInit {
 
   updateCurrentModel(modelDetails: modelDetails): void {
     this.loadModel(modelDetails.fileName).subscribe((resp) => {
-      this.fetchData();
+      this.fetchData(false);
       this.snackBar.open(`The model was set to ${modelDetails.modelName}`,"Close");
     });
   }
