@@ -154,14 +154,16 @@ export class ModelService {
         }
 
         this.alreadyTraining = true;
+        let trainResponse = await this.grpcService.trainModel(request).toPromise();
+        this.alreadyTraining = false;
 
-        this.grpcService.trainModel(request).subscribe((resp) => {
-            this.alreadyTraining = false;
-
+        if (trainResponse.succesful) {
             let emailDto = new sendEmailDto(userResponse.user.username, userResponse.user.email, request.modelName);
             this.sendEmail(emailDto);
-        });
 
-        return new trainModelResponseDto(true, "You will be notified by email when the model is ready.");
+            return new trainModelResponseDto(true, `The model, ${request.modelName}, was trained successfully.`);
+        } else {
+            return new trainModelResponseDto(false, `The model, ${request.modelName}, was not trained successfully.`);
+        } 
     }
 }
