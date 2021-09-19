@@ -31,18 +31,18 @@ export class TrainModelComponent implements OnInit {
     private customizeComponent: CustomizeComponent
   ) { 
     this.modelName = "Default";
-    this.trainingEpochs = 5;
+    this.trainingEpochs = 1;
     this.datasetName = "mnist";
     this.beta = 1;
-    this.modelType = "CAE";
+    this.modelType = "convolutional";
   }
 
   ngOnInit(): void {
     this.modelName = "Default";
-    this.trainingEpochs = 5;
+    this.trainingEpochs = 1;
     this.datasetName = "mnist";
     this.beta = 1;
-    this.modelType = "CAE";
+    this.modelType = "convolutional";
   }
 
   trainModel(): void {
