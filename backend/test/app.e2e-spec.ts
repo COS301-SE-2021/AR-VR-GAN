@@ -110,11 +110,6 @@ describe('GRPC transport', () => {
     });
 
     callHandler.on('error', (err: any) => {
-      // We want to fail only on real errors while Cancellation error
-      // is expected
-      if (String(err).toLowerCase().indexOf('cancelled') === -1) {
-        fail('gRPC Stream error happened, error: ' + err);
-      }
     });
 
     return new Promise((resolve,reject) => {
