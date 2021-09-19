@@ -11,6 +11,8 @@ import { fail } from 'assert';
 import { UploadController } from '../src/upload/upload.controller';
 import { UploadService } from '../src/upload/upload.service';
 import { UploadModule } from '../src/upload/upload.module';
+import { MailModule } from '../src/mail/mail.module';
+import { UsersModule } from '../src/user/user.module';
 
 describe('GRPC transport', () => {
   let server;
@@ -21,7 +23,7 @@ describe('GRPC transport', () => {
     const module = await Test.createTestingModule({
       controllers: [ModelController],
       providers: [ModelService],
-      imports: [
+      imports: [MailModule,UsersModule,
         ClientsModule.register([
           {
             name: 'MODEL_PACKAGE',
@@ -136,7 +138,7 @@ describe('E2E FileTest', () => {
       controllers: [UploadController],
       providers: [UploadService,ModelService],
       imports: [
-        UploadModule,
+        UploadModule,MailModule,UsersModule,
         ClientsModule.register([
           { name: 'UploadService', 
             transport: Transport.TCP,
