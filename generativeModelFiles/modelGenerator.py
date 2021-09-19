@@ -92,6 +92,14 @@ class ModelGenerator:
             The number of iterations the model will be tested
         """
         self.set_latent_size(latent_vector)
+        im_transform = transforms.Compose([
+            transforms.Resize((32,32)),
+            transforms.ToTensor(),
+        ])
+        kwargs = {'num_workers': 1, 'pin_memory': True} if self.cuda else {}
+        if dataset == "celeba":
+            self.data_loaders = DataLoaders(im_transform, kwargs)
+            
         loader = self.data_loaders.get_dataloader(dataset)
         loader_iter = iter(loader)
         images, labels = loader_iter.next()
