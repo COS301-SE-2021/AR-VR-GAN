@@ -8,7 +8,7 @@ class DataLoaders:
         self.kwargs: dict = kwargs
         if transform == None:
             self.transform = transforms.Compose([
-                transforms.Resize((32,32)),
+                # transforms.Resize((32,32)),
                 transforms.ToTensor(),
             ])
         

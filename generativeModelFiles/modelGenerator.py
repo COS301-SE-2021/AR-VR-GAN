@@ -75,7 +75,7 @@ class ModelGenerator:
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         im_transform = transforms.Compose([
-            transforms.Resize((32,32)),
+            # transforms.Resize((32,32)),
             transforms.ToTensor(),
         ])
         self.data_loaders = DataLoaders(im_transform, kwargs)
@@ -102,21 +102,21 @@ class ModelGenerator:
             self.model.datasetUsed = dataset
             self.model.training_loop(epochs, loader)
         elif model_type == "cvae":
-            # if dataset == "fashion" or dataset == "mnist":
-            #     self.model = OGVAE(latenet_vector)
-            # else:
-            #     self.model = VAE(channel_size, latent_vector)
+            if dataset == "fashion" or dataset == "mnist":
+                self.model = OGVAE(latent_vector)
+            else:
+                self.model = VAE(channel_size, latent_vector)
     
-            self.model = VAE(channel_size, latent_vector)
+            # self.model = VAE(channel_size, latent_vector)
             self.model.datasetUsed = dataset
             self.model.name = name
             self.model.training_loop(epochs, loader, beta)
         else:
-            # if dataset == "fashion" or dataset == "mnist":
-            #     self.model = OGVAE(latenet_vector)
-            # else:
-            #     self.model = VAE(channel_size, latent_vector)
-            self.model = VAE(channel_size,latent_vector)
+            if dataset == "fashion" or dataset == "mnist":
+                self.model = OGVAE(latent_vector)
+            else:
+                self.model = VAE(channel_size, latent_vector)
+            # self.model = VAE(channel_size,latent_vector)
             self.model.datasetUsed = dataset
             self.model.name = name
             self.model.training_loop(epochs, loader, beta)

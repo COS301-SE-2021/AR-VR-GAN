@@ -45,9 +45,13 @@ class VAE(nn.Module):
         eps = torch.randn_like(std)
         return mu + eps*std 
 
-    def decoder(self, z) -> Tensor:
+    def decode(self, z) -> Tensor:
         h3 = F.relu(self.fc3(z))
         return torch.sigmoid(self.fc4(h3))
+
+    def decoder(self, z) -> Tensor:
+        h3 = F.relu(self.fc3(z))
+        return torch.sigmoid(self.fc4(h3)).view(h3.shape[0], 1, 28, 28)
 
     def forward(self, x) -> tuple:
         # x.view: Returns a new tensor with the same data as the self tensor but of a different shape
@@ -55,7 +59,7 @@ class VAE(nn.Module):
         # From ouptut this becomes a 128x784
         mu, logvar = self.encode(x.view(-1, 784))
         z = self.reparameterize(mu, logvar)
-        return self.decoder(z), mu, logvar
+        return self.decode(z), mu, logvar
 
     # Reconstruction + KL divergence losses summed over all elements and batch
     def loss_function(self,recon_x, x, mu, logvar, beta = 1) -> float:
@@ -85,7 +89,6 @@ class VAE(nn.Module):
         cuda = torch.cuda.is_available()
         self.train()
         train_loss = 0
-        outputs = []
         self.beta = beta
         for iter in range(epochs):
             loss_list = []
@@ -115,39 +118,39 @@ if __name__ == "__main__":
 
     # print("Hello")
     # input()
-    model.training_loop(1, mnist, 1)
-    sample = torch.tensor([[0.1, 0.0, 0.0]])
-    sample = model.decoder(sample).cpu()
-    sample.view(1, 1, 28,28)
-    print(sample.shape)
-    input()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest1.png")
+    # model.training_loop(1, mnist, 1)
+    # sample = torch.tensor([[0.1, 0.0, 0.0]])
+    # sample = model.decoder(sample).cpu()
+    # sample.view(1, 1, 28,28)
+    # print(sample.shape)
+    # input()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest1.png")
 
-    sample = torch.tensor([[0.2, 0.1, 0.0]])
-    sample = model.decoder(sample).cpu()
+    # sample = torch.tensor([[0.2, 0.1, 0.0]])
+    # sample = model.decoder(sample).cpu()
 
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest2.png")
-    sample = torch.tensor([[0.53, 0.3, 0.2]])
-    sample = model.decoder(sample).cpu()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest3.png")
-    sample = torch.tensor([[0.04, 0.1, 1.0]])
-    sample = model.decoder(sample).cpu()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest4.png")
-    sample = torch.tensor([[0.05, 0.1, 0.0]])
-    sample = model.decoder(sample).cpu()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest5.png")
-    sample = torch.tensor([[0.06, 0.1, 0.0]])
-    sample = model.decoder(sample).cpu()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest6.png")
-    sample = torch.tensor([[0, 0, 1.99999999999999999]])
-    sample = model.decoder(sample).cpu()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest7.png")
-    sample = torch.tensor([[0.0, 0.0, 0.0]])
-    sample = model.decoder(sample).cpu()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest8.png")
-    sample = torch.tensor([[50.0, 0.0, 99.0]])
-    sample = model.decoder(sample).cpu()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest9.png")
-    sample = torch.tensor([[0.056, 0.0000000000000, 0.15530333333333333333333]])
-    sample = model.decoder(sample).cpu()
-    save_image(sample.view(1, 1, 28, 28), "./OGMnistTest10.png")
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest2.png")
+    # sample = torch.tensor([[0.53, 0.3, 0.2]])
+    # sample = model.decoder(sample).cpu()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest3.png")
+    # sample = torch.tensor([[0.04, 0.1, 1.0]])
+    # sample = model.decoder(sample).cpu()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest4.png")
+    # sample = torch.tensor([[0.05, 0.1, 0.0]])
+    # sample = model.decoder(sample).cpu()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest5.png")
+    # sample = torch.tensor([[0.06, 0.1, 0.0]])
+    # sample = model.decoder(sample).cpu()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest6.png")
+    # sample = torch.tensor([[0, 0, 1.99999999999999999]])
+    # sample = model.decoder(sample).cpu()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest7.png")
+    # sample = torch.tensor([[0.0, 0.0, 0.0]])
+    # sample = model.decoder(sample).cpu()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest8.png")
+    # sample = torch.tensor([[50.0, 0.0, 99.0]])
+    # sample = model.decoder(sample).cpu()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest9.png")
+    # sample = torch.tensor([[0.056, 0.0000000000000, 0.15530333333333333333333]])
+    # sample = model.decoder(sample).cpu()
+    # save_image(sample.view(1, 1, 28, 28), "./OGMnistTest10.png")
