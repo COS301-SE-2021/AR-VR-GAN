@@ -72,6 +72,10 @@ export class CustomizeComponent implements OnInit {
           jsonData.push(newModel);
         }
 
+        jsonData.sort(function(a,b) {
+          return a.dataset < b.dataset ? -1 : 1;
+        });
+
         this.dataSource = jsonData;
         this.fetchedData = true;
       });
