@@ -46,9 +46,6 @@ export class CustomizeComponent implements OnInit {
 
     this.currentModel().subscribe((currentModel) => {
       this.listModels().subscribe((listModels) => {
-        console.log(currentModel);
-        console.log(listModels);
-
         for (let model in listModels['modelDetails']) {
           let newModel: modelDetails = {
             "fileName": "",
@@ -84,7 +81,7 @@ export class CustomizeComponent implements OnInit {
   updateCurrentModel(modelDetails: modelDetails): void {
     this.loadModel(modelDetails.fileName).subscribe((resp) => {
       this.fetchData(false);
-      this.snackBar.open(`The model was set to ${modelDetails.modelName}`,"Close");
+      this.snackBar.open(`The model was updated`,"Close");
     });
   }
 
