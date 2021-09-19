@@ -11,6 +11,7 @@ import { GetUserByUsernameResponse } from './dto/get-user-by-usernameResp.dto';
 import { UpdateUserByUsernameDto } from './dto/update-user-by-username.dto';
 import { UserResponse } from './dto/user-response.dto';
 import config from '../config/keys';
+import { AuthenticateUserDto, AuthenticateUserResponseDto } from './dto/authenticate-user.dto';
 
 @Injectable()
 export class UserService {
@@ -366,5 +367,29 @@ export class UserService {
         }
 
         return new UserResponse(true, message);
+    }
+
+
+    /**
+     * Aunthenticates a user by verifying a jwt token
+     * @param user 
+     */
+    async authenticateUser(user: AuthenticateUserDto): Promise<AuthenticateUserResponseDto> {
+        try{
+            const data = await this.jwtService.verifyAsync(user.jwtToken);
+
+            if(!data){
+                const resp = new AuthenticateUserResponseDto(false,"invalid jwt token");
+                return resp;
+            }
+            else{
+                const resp = new AuthenticateUserResponseDto(true,"authorized member");
+                return resp;
+            }
+        }
+        catch(e){
+            const resp = new AuthenticateUserResponseDto(false,"invalid jwt token");
+            return resp;
+        }
     }
 }
