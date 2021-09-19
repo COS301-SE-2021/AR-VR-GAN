@@ -279,14 +279,14 @@ if __name__ == "__main__":
     # training any time with out losing progress. 
     # generator.loadModel("Beta-1-CIFAR-20.pt")
     # print(generator.model.details())
-    # generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-20")
+    generator.train_model(100, 3, "fashion", model_type="cvae", name="Beta-1-Fashion-100")
     # Remember to save it
     # generator.loadModel("Beta-1-CIFAR-20.pt")
     
 
-    # generator.train_model(50, 5)
-    # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
-    from time import sleep
+    #generator.train_model(50, 5)
+    generator.saveModel("defaultModels/Beta-1-Fashion-100")
+    #from time import sleep
     # generator.saveModel("savedModels/CBeta-1-MNIST-1.pt")
     # sleep(1)
     # generator.generateImage([0.1, 0.0, 0.0])

@@ -6,7 +6,7 @@ import { join } from 'path';
 import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../user/user.module';
 
-
+const URL = process.env.URL || "0.0.0.0:50051"
 @Module({
   imports: [MailModule, UsersModule,
       ClientsModule.register([
@@ -16,8 +16,9 @@ import { UsersModule } from '../user/user.module';
         options: {
           package: 'ModelGenerator',
           protoPath: join(__dirname, '../../../backend/src/model/modelGenerator.proto'),
-          url: "127.0.0.1:50051"
-          
+          url: URL,
+          credentials: null
+  
         },
       },
     ]),
