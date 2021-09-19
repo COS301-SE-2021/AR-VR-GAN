@@ -83,7 +83,7 @@ class ModelGenerator:
         self.model = None
 
     def train_model(self, epochs: int, latent_vector: int, dataset: str = "mnist", model_type: str = "cvae", 
-    beta: int=1, name: str="", show: bool=False) -> None:
+    beta: int=1, name: str="") -> None:
         """ Trains and test the model over a set of iterations(epochs)
 
         Parameters
@@ -99,7 +99,7 @@ class ModelGenerator:
         kwargs = {'num_workers': 1, 'pin_memory': True} if self.cuda else {}
         if dataset == "celeba":
             self.data_loaders = DataLoaders(im_transform, kwargs)
-            
+
         loader = self.data_loaders.get_dataloader(dataset)
         loader_iter = iter(loader)
         images, labels = loader_iter.next()
@@ -109,25 +109,16 @@ class ModelGenerator:
             self.model = CAutoencoder(latent_vector, channel_size)
             self.model.datasetUsed = dataset
             self.model.training_loop(epochs, loader)
-        elif model_type == "cvae":
+        else :
             if dataset == "fashion" or dataset == "mnist":
                 self.model = OGVAE(latent_vector)
             else:
                 self.model = VAE(channel_size, latent_vector)
     
-            # self.model = VAE(channel_size, latent_vector)
             self.model.datasetUsed = dataset
             self.model.name = name
             self.model.training_loop(epochs, loader, beta)
-        else:
-            if dataset == "fashion" or dataset == "mnist":
-                self.model = OGVAE(latent_vector)
-            else:
-                self.model = VAE(channel_size, latent_vector)
-            # self.model = VAE(channel_size,latent_vector)
-            self.model.datasetUsed = dataset
-            self.model.name = name
-            self.model.training_loop(epochs, loader, beta)
+
 
     def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator
