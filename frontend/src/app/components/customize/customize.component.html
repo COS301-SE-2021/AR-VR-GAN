@@ -6,17 +6,17 @@
                 <th mat-header-cell *matHeaderCellDef> File name </th>
                 <td mat-cell *matCellDef="let element"> {{element.fileName}} </td>
             </ng-container>
-          
+            
             <ng-container matColumnDef="modelName">
                 <th mat-header-cell *matHeaderCellDef> Model name </th>
                 <td mat-cell *matCellDef="let element"> {{element.modelName}} </td>
             </ng-container>
-          
+            
             <ng-container matColumnDef="epochs">
                 <th mat-header-cell *matHeaderCellDef> Epochs </th>
                 <td mat-cell *matCellDef="let element"> {{element.epochs}} </td>
             </ng-container>
-          
+            
             <ng-container matColumnDef="latentSize">
                 <th mat-header-cell *matHeaderCellDef> Latent size </th>
                 <td mat-cell *matCellDef="let element"> {{element.latentSize}} </td>
@@ -36,7 +36,7 @@
                 <th mat-header-cell *matHeaderCellDef> Current model </th>
                 <td mat-cell *matCellDef="let element"> {{element.current}} </td>
             </ng-container>
-          
+            
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr 
             mat-row 
@@ -44,6 +44,14 @@
             (click)="updateCurrentModel(row)"
             *matRowDef="let row; columns: displayedColumns;"
             ></tr>
-          </table>          
+        </table>
     </mat-grid-tile>
+    <mat-grid-tile colspan=1 rowspan=2></mat-grid-tile>
+    <mat-grid-tile colspan=3 rowspan=2>
+        <mat-card>
+            <button mat-raised-button color="primary" (click)="fetchData()">Refresh</button>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile colspan=1 rowspan=2></mat-grid-tile>
+    <mat-grid-tile colspan=5></mat-grid-tile>
 </mat-grid-list>
