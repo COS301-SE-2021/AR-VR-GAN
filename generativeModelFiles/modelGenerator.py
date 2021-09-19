@@ -114,7 +114,6 @@ class ModelGenerator:
                 self.model = CAutoencoder(latent_vector, channel_size)
             self.model.datasetUsed = dataset
             self.model.training_loop(epochs, loader)
-            print(self.model.details())
         else :
             if dataset == "fashion" or dataset == "mnist":
                 self.model = OGVAE(latent_vector)
