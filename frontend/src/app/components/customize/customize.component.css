@@ -1,19 +1,23 @@
-.model-option {
-    margin-right: 15px;
-    width: 15%;
+.details-table {
+    width: 75%;
 }
 
-#the-options-heading {
-    text-align: center;
-    width: 30%;
-}
-
-#choose-option {
+.mat-column-fileName, .mat-column-modelName, .mat-column-epochs, .mat-column-latentSize, .mat-column-beta, .mat-column-dataset, .mat-column-current  {
+    width: 14%;
     text-align: center;
 }
 
-button {
-    width: 45%;
-    margin-right: 10px;
-    margin-right: 10px;
+.current-row {
+    font-weight: bold;
+}
+
+.mat-row .mat-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+  
+.mat-row:hover .mat-cell {
+    background-color: black;
+    color: white;
 }

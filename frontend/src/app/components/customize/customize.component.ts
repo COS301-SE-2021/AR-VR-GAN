@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 import { HOST_URL } from 'src/config/consts';
 
 @Component({
@@ -9,67 +10,107 @@ import { HOST_URL } from 'src/config/consts';
   styleUrls: ['./customize.component.css']
 })
 export class CustomizeComponent implements OnInit {
-  currentModelValue: any;
-  listModelsValue: any;
-  fetchedData: boolean;
-  selected: string;
+  fetchedData: boolean = false;
+  dataSource: modelDetails[] = [];
+  currentModelValue: modelDetails | any;
+
+  readonly displayedColumns: string[] = [
+    "modelName",
+    "epochs",
+    "latentSize",
+    "beta",
+    "dataset",
+    "fileName",
+    // "current",
+  ];
 
   constructor(
     private http: HttpClient,
     private snackBar: MatSnackBar
   ) { 
-    this.fetchedData = false;
-    this.selected = "";
-    this.listModelsValue = {
-      "models": []
-    };
-
-    this.listModels();
-    this.currentModel();
+    this.fetchData();
   }
 
   ngOnInit(): void {
+    this.fetchData();
+  }
+
+  fetchData(empty: boolean = true): void {
     this.fetchedData = false;
-    this.selected = "";
-    this.listModelsValue = {
-      "models": []
-    };
     
-    this.listModels();
-    this.currentModel();
+    if (empty) {
+      this.dataSource = [];
+    }
+    
+    let jsonData: modelDetails[] = [];
+
+    this.currentModel().subscribe((currentModel) => {
+      this.listModels(false, true).subscribe((listModels) => {
+        for (let model in listModels['modelDetails']) {
+          let newModel: modelDetails = {
+            "fileName": "",
+            "modelName": "",
+            "epochs": 1,
+            "latentSize": 3,
+            "beta": 1,
+            "dataset": "",
+            "current": false
+          };
+
+          newModel.fileName = model;
+          newModel.modelName = listModels['modelDetails'][model]['name'];
+          newModel.epochs = listModels['modelDetails'][model]['epochs_trained'];
+          newModel.latentSize = listModels['modelDetails'][model]['latent_vector_size'];
+          newModel.beta = listModels['modelDetails'][model]['beta_value'];
+          newModel.dataset = listModels['modelDetails'][model]['dataset_used'];
+
+          if (newModel.modelName == currentModel['modelName']) {
+            newModel.current = true;
+            this.currentModelValue = newModel;
+          }
+
+          jsonData.push(newModel);
+        }
+
+        this.dataSource = jsonData;
+        this.fetchedData = true;
+      });
+    });
   }
 
-  currentModel(): void {
-    this.http.post<any>(HOST_URL + '/model/currentModel', {
+  updateCurrentModel(modelDetails: modelDetails): void {
+    this.loadModel(modelDetails.fileName).subscribe((resp) => {
+      this.fetchData(false);
+      this.snackBar.open(`The model was set to ${modelDetails.modelName}`,"Close");
+    });
+  }
+
+  currentModel(): Observable<any> {
+    return this.http.post<any>(HOST_URL + '/model/currentModel', {
       // Empty
-    }).subscribe(resp => {
-      this.currentModelValue = resp;
     });
   }
 
-  listModels(): void {
-    this.fetchedData = false;
-
-    this.http.post<any>(HOST_URL + '/model/listModels', {
-      'default': false,
-      'saved': true
-    }).subscribe(resp => {
-      this.listModelsValue = resp;
-      this.fetchedData = true;
+  listModels(defaultValue: boolean, savedValue: boolean): Observable<any> {
+    return this.http.post<any>(HOST_URL + '/model/listModels', {
+      'default': defaultValue,
+      'saved': savedValue
     });
   }
 
-  saveChanges(dataset: string): void {
-    this.http.post<any>(HOST_URL + '/model/loadModel', {
-      'modelName': dataset
-    }).subscribe(resp => {
-      if (resp['succesful'] == true) {
-        this.snackBar.open(`The model was changed to ${this.listModelsValue['modelDetails'][dataset]['name']}`, "Close");
-      } else {
-        this.snackBar.open('The model did not change successfully', "Close");
-      }
-
-      this.currentModel();  
+  loadModel(fileName: string): Observable<any> {
+    return this.http.post<any>(HOST_URL + '/model/loadModel', {
+      'modelName': fileName
     });
   }
+}
+
+export interface modelDetails {
+  fileName: string;
+  modelName: string;
+  epochs: number;
+  latentSize: number;
+  beta: number;
+  dataset: string;
+  current: boolean;
 }

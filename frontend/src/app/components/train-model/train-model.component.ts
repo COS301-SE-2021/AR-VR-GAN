@@ -1,15 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-import { ErrorStateMatcher } from '@angular/material/core';
+import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CookieService } from 'ngx-cookie-service';
 import { HOST_URL } from 'src/config/consts';
+import { CustomizeComponent } from '../customize/customize.component';
 
 @Component({
   selector: 'app-train-model',
   templateUrl: './train-model.component.html',
-  styleUrls: ['./train-model.component.css']
+  styleUrls: ['./train-model.component.css'],
+  providers: [CustomizeComponent]
 })
 export class TrainModelComponent implements OnInit {
   modelName: string;
@@ -26,7 +27,8 @@ export class TrainModelComponent implements OnInit {
   constructor(
     private http: HttpClient, 
     private snackBar: MatSnackBar,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private customizeComponent: CustomizeComponent
   ) { 
     this.modelName = "Default";
     this.trainingEpochs = 5;
@@ -74,23 +76,30 @@ export class TrainModelComponent implements OnInit {
       this.snackBar.open("Please choose a valid model type", "Close");
       return;
     }
-    
-    this.snackBar.open("The dataset is being trained and you will be notified when it is finished", "Close");
 
-    let options = {
-      'modelName': modelName,
-      'trainingEpochs': trainingEpochs,
-      'latentSize': this.latentSize,
-      'datasetName': datasetName,
-      'beta': beta,
-      'modelType': modelType,
-      'jwtToken': this.cookieService.get('jwtToken')
-    }
+    this.customizeComponent.listModels(false, true).subscribe((modelList) => {
+      for (let value in modelList['modelDetails']) {
+        if (modelList['modelDetails'][value]['name'] === modelName) {
+          this.snackBar.open("The model name you chose is already taken", "Close");
+          return;
+        }
+      }
 
-    console.log(options);
+      this.snackBar.open("You will be emailed when your model is finished training", "Close");
 
-    this.http.post<any>(HOST_URL + '/model/trainModel/', options).subscribe(resp => {
-      this.snackBar.open(`The model ${modelName} is ready.`, "Close");
+      let options = {
+        'modelName': modelName,
+        'trainingEpochs': trainingEpochs,
+        'latentSize': this.latentSize,
+        'datasetName': datasetName,
+        'beta': beta,
+        'modelType': modelType,
+        'jwtToken': this.cookieService.get('jwtToken')
+      }
+
+      this.http.post<any>(HOST_URL + '/model/trainModel/', options).subscribe((resp) => {
+        this.snackBar.open(`The model ${modelName} is ready.`, "Close");
+      });
     });
   }
 }

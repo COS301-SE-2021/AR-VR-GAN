@@ -1,48 +1,57 @@
 <mat-grid-list cols=5 gutterSize="15px" rowHeight="40px">
     <mat-grid-tile colspan=5></mat-grid-tile>
-    <mat-grid-tile rowspan=6></mat-grid-tile>
-    <mat-grid-tile colspan=3 rowspan=6>
-        <mat-card id="choose-option">
-            <table>
-                <tr>
-                    <mat-form-field appearance="outline">
-                        <mat-label>Choose a model</mat-label>
-                        <mat-select [(value)]="selected" #datasetOption>
-                            <mat-option *ngFor="let value of listModelsValue['models']" value={{value}}>{{listModelsValue['modelDetails'][value]['name']}}</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </tr>
-                <tr>
-                    <button mat-raised-button color="primary" (click)="saveChanges(datasetOption.value)">Save</button>
-                    <button mat-raised-button color="primary" (click)="listModels()">Refresh</button> 
-                </tr>
-            </table>
+    <mat-grid-tile colspan=5 rowspan=8>
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 details-table">
+            <ng-container matColumnDef="fileName">
+                <th mat-header-cell *matHeaderCellDef> File name </th>
+                <td mat-cell *matCellDef="let element"> {{element.fileName}} </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="modelName">
+                <th mat-header-cell *matHeaderCellDef> Model name </th>
+                <td mat-cell *matCellDef="let element"> {{element.modelName}} </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="epochs">
+                <th mat-header-cell *matHeaderCellDef> Epochs </th>
+                <td mat-cell *matCellDef="let element"> {{element.epochs}} </td>
+            </ng-container>
+            
+            <ng-container matColumnDef="latentSize">
+                <th mat-header-cell *matHeaderCellDef> Latent size </th>
+                <td mat-cell *matCellDef="let element"> {{element.latentSize}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="beta">
+                <th mat-header-cell *matHeaderCellDef> Beta </th>
+                <td mat-cell *matCellDef="let element"> {{element.beta}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="dataset">
+                <th mat-header-cell *matHeaderCellDef> Dataset </th>
+                <td mat-cell *matCellDef="let element"> {{element.dataset}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="current">
+                <th mat-header-cell *matHeaderCellDef> Current model </th>
+                <td mat-cell *matCellDef="let element"> {{element.current}} </td>
+            </ng-container>
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr 
+            mat-row 
+            [class.current-row]="currentModelValue.fileName == row.fileName"
+            (click)="updateCurrentModel(row)"
+            *matRowDef="let row; columns: displayedColumns;"
+            ></tr>
+        </table>
+    </mat-grid-tile>
+    <mat-grid-tile colspan=1 rowspan=2></mat-grid-tile>
+    <mat-grid-tile colspan=3 rowspan=2>
+        <mat-card>
+            <button mat-raised-button color="primary" (click)="fetchData()">Refresh</button>
         </mat-card>
     </mat-grid-tile>
-    <mat-grid-tile rowspan=6></mat-grid-tile>
-    <mat-grid-tile *ngIf="fetchedData" colspan=5 rowspan=2>
-        <mat-card id="the-options-heading">
-            <mat-card-title>
-                Available Models
-            </mat-card-title>
-        </mat-card>
-    </mat-grid-tile>
-    <mat-grid-tile *ngIf="fetchedData" colspan=5 rowspan=4>
-        <mat-card *ngFor="let value of listModelsValue['models']" class="model-option">
-            <mat-card-title *ngIf="listModelsValue['modelDetails'][value]['name'] !== currentModelValue['modelName']">
-                {{listModelsValue['modelDetails'][value]['name']}}
-            </mat-card-title>
-            <mat-card-title *ngIf="listModelsValue['modelDetails'][value]['name'] === currentModelValue['modelName']" style="font-weight: bolder;">
-                * {{listModelsValue['modelDetails'][value]['name']}}
-            </mat-card-title>
-            <mat-card-content>
-                <ul>
-                    <li>Beta value: {{listModelsValue['modelDetails'][value]['beta_value']}}</li>
-                    <li>Dataset used: {{listModelsValue['modelDetails'][value]['dataset_used']}}</li>
-                    <li>Epochs: {{listModelsValue['modelDetails'][value]['epochs_trained']}}</li>
-                    <li>Latent vector size: {{listModelsValue['modelDetails'][value]['latent_vector_size']}}</li>
-                </ul>
-            </mat-card-content>
-        </mat-card>
-    </mat-grid-tile>
+    <mat-grid-tile colspan=1 rowspan=2></mat-grid-tile>
+    <mat-grid-tile colspan=5></mat-grid-tile>
 </mat-grid-list>

@@ -4,9 +4,10 @@ import torch
 import torch.utils.data
 from torchvision import transforms
 from torchvision.utils import save_image
-from VAEModel import VAE
+from VAEModel import VAE as OGVAE
 from ConvolutionalAutoencoder import CAutoencoder
-from CVAEModel import CVAE
+# from CVAEModel import CVAE
+from CVAE import VAE
 import os
 from datetime import datetime, time
 from PIL import Image
@@ -66,14 +67,7 @@ class ModelGenerator:
     """
 
     def __init__(self) -> None:
-        # Sets the seed for generating random numbers. Returns a torch.Generator object.
         torch.manual_seed(1)
-
-        # A torch.device is an object representing the device on which a torch.
-        # Tensor is or will be allocated. The torch.device contains a device type ('cpu' or 'cuda')
-        # and optional device ordinal for the device type. If the device ordinal is not present, 
-        # this object will always represent the current device for the device type, 
-        # even after torch.cuda.set_device() is called.
         self.cuda = torch.cuda.is_available()
         self.device = torch.device("cuda" if self.cuda else "cpu")
 
@@ -81,7 +75,7 @@ class ModelGenerator:
 
         # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         im_transform = transforms.Compose([
-            transforms.Resize((28,28)),
+            # transforms.Resize((32,32)),
             transforms.ToTensor(),
         ])
         self.data_loaders = DataLoaders(im_transform, kwargs)
@@ -98,6 +92,14 @@ class ModelGenerator:
             The number of iterations the model will be tested
         """
         self.set_latent_size(latent_vector)
+        im_transform = transforms.Compose([
+            transforms.Resize((32,32)),
+            transforms.ToTensor(),
+        ])
+        kwargs = {'num_workers': 1, 'pin_memory': True} if self.cuda else {}
+        if dataset == "celeba":
+            self.data_loaders = DataLoaders(im_transform, kwargs)
+            
         loader = self.data_loaders.get_dataloader(dataset)
         loader_iter = iter(loader)
         images, labels = loader_iter.next()
@@ -106,15 +108,26 @@ class ModelGenerator:
         if model_type == "convolutional":
             self.model = CAutoencoder(latent_vector, channel_size)
             self.model.datasetUsed = dataset
-            self.model.training_loop(epochs, loader, name, False)
+            self.model.training_loop(epochs, loader)
         elif model_type == "cvae":
-            self.model = CVAE(channel_size, latent_vector)
+            if dataset == "fashion" or dataset == "mnist":
+                self.model = OGVAE(latent_vector)
+            else:
+                self.model = VAE(channel_size, latent_vector)
+    
+            # self.model = VAE(channel_size, latent_vector)
             self.model.datasetUsed = dataset
-            self.model.training_loop(epochs, loader, beta, name, False)
+            self.model.name = name
+            self.model.training_loop(epochs, loader, beta)
         else:
-            self.model = CVAE(channel_size,latent_vector)
+            if dataset == "fashion" or dataset == "mnist":
+                self.model = OGVAE(latent_vector)
+            else:
+                self.model = VAE(channel_size, latent_vector)
+            # self.model = VAE(channel_size,latent_vector)
             self.model.datasetUsed = dataset
-            self.model.training_loop(epochs, loader, beta, name, False)
+            self.model.name = name
+            self.model.training_loop(epochs, loader, beta)
 
     def loadModel(self, filepath: str="") -> str:
         """Loads a previously saved model to be used by the model generator
@@ -216,7 +229,7 @@ class ModelGenerator:
                 sample = torch.tensor([vector]).to(self.device)
                 sample = self.model.decoder(sample).cpu() 
 
-                save_image(sample.view(1, sample.shape[1], 64, 64), filepath)
+                save_image(sample.view(1, sample.shape[1], sample.shape[2], sample.shape[3]), filepath)
                 image = Image.open(filepath)
                 new_image = image.resize((400, 400))
                 new_image.save(filepath)
@@ -267,28 +280,13 @@ if __name__ == "__main__":
     # checkpoint of the model. I adjusted 
     # the training sequence so that it saves the model every 10 epochs so that you can cancel the 
     # training any time with out losing progress. 
-    generator.train_model(1, 3, "cifar10", model_type="cvae", name="Beta-1-CIFAR-1")
+    # generator.loadModel("Beta-1-CIFAR-20.pt")
+    # print(generator.model.details())
+    # generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-20")
     # Remember to save it
-    generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
-
-    # generator.generateImage([0.0, 0.0, 0.0])
-
-    # generator = ModelGenerator()
-    # generator.train_model(15, 3, "cifar10", model_type="convolutional", name="Normal-CIFAR-15")
-    # generator.saveModel("savedModels/Beta-1-CIFAR-15.pt")
-    # generator.generateImage([0.0, 0.0, 0.0])
-
-
-    # generator = ModelGenerator()
-    # generator.train_model(15, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-15")
-    # generator.saveModel("savedModels/Beta-1-MNIST-15.pt")
-    # generator.generateImage([0.0, 0.0, 0.0])
-
-    # generator = ModelGenerator()
-    # generator.train_model(15, 3, "mnist", model_type="convolutional", name="Normal-MNIST-15")
-    # generator.saveModel("savedModels/Normal-MNIST-15.pt")
-    # generator.generateImage([0.0, 0.0, 0.0])
+    generator.loadModel("Beta-1-CIFAR-20.pt")
     
+
     # generator.train_model(50, 5)
     # generator.saveModel("defaultModels/BetaVAE5-CIRA10-Epochs-50.pt")
     from time import sleep
@@ -298,19 +296,19 @@ if __name__ == "__main__":
     # sleep(1)
     # generator.generateImage([0.2, 0.1, 0.0])
     # sleep(1)
-    # generator.generateImage([0.03, 0.1, 0.0])
+    # generator.generateImage([0.53, 0.3, 0.2])
     # sleep(1)
-    # generator.generateImage([0.04, 0.1, 0.0])
+    # generator.generateImage([0.04, 0.1, 1.0])
     # sleep(1)
     # generator.generateImage([0.05, 0.1, 0.0])
     # sleep(1)
     # generator.generateImage([0.06, 0.1, 0.0])
     # sleep(1)
-    # generator.generateImage([0.022, 0.1, 0.0])
+    # generator.generateImage([0, 0, 1.99999999999999999])
     # sleep(1)
-    # generator.generateImage([0.024, 0.1, 0.0])
+    # generator.generateImage([0.0, 0.0, 0.0])
     # sleep(1)
-    # generator.generateImage([0.056, 0.1, 0.0])
-    # generator.loadModel(args.model)
-
-    # generator.to_tensorflow("./defaultModels/pytorch/Epochs-50.pt")
+    # generator.generateImage([50.0, 0.0, 99.0])
+    # sleep(1)
+    # generator.generateImage([0.056, 0.0000000000000, 0.15530333333333333333333])
+    # # generator.loadModel(args.model)

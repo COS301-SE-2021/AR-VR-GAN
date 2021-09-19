@@ -21,19 +21,19 @@
                 <tr>
                     <mat-form-field appearance="outline">
                         <mat-label>x</mat-label>
-                        <input matInput type="number" class="inputBoxes" id="x" value="0" step="0.1" [(ngModel)]="x" (change)="postCoords(x, y, z)">
+                        <input matInput type="number" class="inputBoxes" id="x" value="0" min="-1" max="1" step="0.1" [(ngModel)]="x" (change)="postCoords(x, y, z)">
                     </mat-form-field>
                 </tr>
                 <tr>
                     <mat-form-field appearance="outline">
                         <mat-label>y</mat-label>
-                        <input matInput type="number" class="inputBoxes" id="y" value="0" step="0.1" [(ngModel)]="y" (change)="postCoords(x, y, z)">
+                        <input matInput type="number" class="inputBoxes" id="y" value="0" min="-1" max="1" step="0.1" [(ngModel)]="y" (change)="postCoords(x, y, z)">
                     </mat-form-field>
                 </tr>
                 <tr>
                     <mat-form-field appearance="outline">
                         <mat-label>z</mat-label>
-                        <input matInput type="number" class="inputBoxes" id="z" value="0" step="0.1" [(ngModel)]="z" (change)="postCoords(x, y, z)">
+                        <input matInput type="number" class="inputBoxes" id="z" value="0" min="-1" max="1" step="0.1" [(ngModel)]="z" (change)="postCoords(x, y, z)">
                     </mat-form-field>
                 </tr>
             </table>

@@ -26,7 +26,7 @@ async function bootstrap() {
     options: {
       package: 'model', 
       protoPath: join(__dirname, '../src/model/model.proto'),
-      url: '127.0.0.1:3001', 
+      url: '127.0.0.1:3001',          // Change to 0.0.0.0:3001 from 127.0.0.1:3001
     },
   });  
 
