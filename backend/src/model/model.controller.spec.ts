@@ -13,6 +13,7 @@ import { UsersModule } from '../user/user.module';
 import { loadModelDto } from './dto/load-model.dto';
 import { listModelsDto } from './dto/list-model.dto';
 import { currentModelDto } from './dto/current-model.dto';
+import { trainModelDto } from './dto/train-model.dto';
 
 describe('test grpc on model controller', () => {
   let server;
@@ -192,9 +193,15 @@ describe('testing post request points', () => {
     expect(controller.loadModel(dto)).toEqual(name);
   })
 
-  it('should return a false success', () => {  
+  it('should return the current model', () => {  
     const name = "current model";  
     expect(controller.currentModel().modelName).toEqual(name);
+  })
+
+  it('should train a model',async () => {  
+    const name = "modelToTrain";  
+    const dto =new trainModelDto(name,1,1,"mnist",1,"CAE","jwt");
+    expect(await (await controller.trainModel(dto)).message).toEqual(name+" trained");
   })
 
 });
