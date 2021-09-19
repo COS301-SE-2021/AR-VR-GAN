@@ -49,15 +49,17 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         total_list = list(set(total_list)) # Removes duplicates from the list
 
         temp_mg = ModelGenerator()
-
+        
         response = modelGenerator_pb2.ListModelsResponse()
+
         for model in total_list:
             temp_mg.loadModel(model)
             details = temp_mg.model.details()
             new_dict = {x:str(details[x]) for x in details}
-        
+            if "beta_value" in details:
+                new_dict["beta_value"] = "-1"
             response.modelDetails[model] = json.dumps(new_dict).encode('utf-8')
-
+            
         response.models.extend(total_list)
         return response
 
