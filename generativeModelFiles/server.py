@@ -56,7 +56,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
             temp_mg.loadModel(model)
             details = temp_mg.model.details()
             new_dict = {x:str(details[x]) for x in details}
-            if "beta_value" in details:
+            if "beta_value" not in details:
                 new_dict["beta_value"] = "-1"
             response.modelDetails[model] = json.dumps(new_dict).encode('utf-8')
             
