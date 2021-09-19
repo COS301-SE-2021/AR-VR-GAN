@@ -15,7 +15,7 @@ import { sendEmailDto } from '../mail/dto/send-email.dto';
 import { trainModelResponseDto } from './dto/train-model-response.dto';
 import { trainModelDto } from './dto/train-model.dto';
 import { UserService } from '../user/user.service';
-import { AuthenticateUserDto } from 'src/user/dto/authenticate-user.dto';
+import { AuthenticateUserDto } from '../user/dto/authenticate-user.dto';
 
 @Injectable()
 export class ModelService {
