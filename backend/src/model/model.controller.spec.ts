@@ -10,6 +10,7 @@ import * as GRPC from '@grpc/grpc-js';
 import { Response } from './interfaces/response.interface'
 import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../user/user.module';
+import { loadModelDto } from './dto/load-model.dto';
 
 describe('test grpc on model controller', () => {
   let server;
@@ -149,5 +150,44 @@ describe('test grpc on model controller', () => {
   afterEach(async () => {
     await app.close();
   });
+
+});
+
+
+describe('testing post request points', () => {
+  let controller: ModelController;
+
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      controllers: [ModelController],
+      providers: [ModelService],
+      imports: [MailModule,UsersModule,
+        ClientsModule.register([
+          {
+            name: 'MODEL_PACKAGE',
+            transport: Transport.GRPC,
+            options: {
+              package: 'ModelGenerator',
+              protoPath: join(__dirname, '../../../backend/src/model/modelGenerator.proto'),
+              url: "127.0.0.1:50051"
+              
+            },
+          },
+        ]),
+      ],
+    }).overrideProvider(ModelService).useValue(MockModelService).compile();
+
+    controller = module.get<ModelController>(ModelController);
+  });
+
+  it('should be defined', () => {    
+    expect(controller).toBeDefined();
+  })
+
+  it('should return the name of the loaded model', () => {
+    const name = "test model";
+    const dto = new loadModelDto(name)    
+    expect(controller.loadModel(dto)).toEqual(name);
+  })
 
 });
