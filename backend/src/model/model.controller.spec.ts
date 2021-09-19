@@ -77,76 +77,76 @@ describe('test grpc on model controller', () => {
     expect(controller).toBeDefined();
   })
 
-  // it('GRPC Sending and receiving Stream from RX handler', async () => {
-  //   const dto = {data:[1,2,3]}
-  //   const callHandler = client.handleCoords(dto);
+  it('GRPC Sending and receiving Stream from RX handler', async () => {
+    const dto = {data:[1,2,3]}
+    const callHandler = client.handleCoords(dto);
 
-  //   var sum = 0;
-  //   for (let i = 0; i < dto.data.length; i++) {
-  //     sum += dto.data[i]
-  //   }
+    var sum = 0;
+    for (let i = 0; i < dto.data.length; i++) {
+      sum += dto.data[i]
+    }
 
-  //   callHandler.on('data', (msg: Response) => {
-  //     expect(msg.data).toEqual(sum);
-  //     callHandler.cancel();
-  //   });
+    callHandler.on('data', (msg: Response) => {
+      expect(msg.data).toEqual(sum);
+      callHandler.cancel();
+    });
 
-  //   callHandler.on('error', (err: any) => {
-  //     if (String(err).toLowerCase().indexOf('cancelled') === -1) {
-  //       fail('error: ' + err);
-  //     }
-  //   });
+    callHandler.on('error', (err: any) => {
+      if (String(err).toLowerCase().indexOf('cancelled') === -1) {
+        fail('error: ' + err);
+      }
+    });
 
-  //   return new Promise((resolve,reject) => {
-  //     callHandler.write(dto);
-  //     setTimeout(() => resolve(callHandler), 1000);
-  //   });
-  // });
+    return new Promise((resolve,reject) => {
+      callHandler.write(dto);
+      setTimeout(() => resolve(callHandler), 1000);
+    });
+  });
 
-  // it('GRPC streaming the coordinates to run python script', async () => {
-  //   const dto = {data:[1,2,3]}
-  //   const callHandler = client.runPython(dto);
+  it('GRPC streaming the coordinates to run python script', async () => {
+    const dto = {data:[1,2,3]}
+    const callHandler = client.runPython(dto);
 
-  //   callHandler.on('data', (msg: Response) => {
-  //     expect(msg.data).toBeDefined();
-  //     callHandler.cancel();
-  //   });
+    callHandler.on('data', (msg: Response) => {
+      expect(msg.data).toBeDefined();
+      callHandler.cancel();
+    });
 
-  //   callHandler.on('error', (err: any) => {
-  //     // We want to fail only on real errors while Cancellation error
-  //   });
+    callHandler.on('error', (err: any) => {
+      // We want to fail only on real errors while Cancellation error
+    });
 
-  //   return new Promise((resolve,reject) => {
-  //     callHandler.write(dto);
-  //     setTimeout(() => resolve(callHandler), 1000);
-  //   });
-  // });
+    return new Promise((resolve,reject) => {
+      callHandler.write(dto);
+      setTimeout(() => resolve(callHandler), 1000);
+    });
+  });
 
-  // it('should reach the proxy through grpc streaming', async () => {
-  //   const dto = {data:[1,2,3]}
-  //   const callHandler = client.proxy(dto);
+  it('should reach the proxy through grpc streaming', async () => {
+    const dto = {data:[1,2,3]}
+    const callHandler = client.proxy(dto);
 
-  //   var sum = 0;
-  //   for (let i = 0; i < dto.data.length; i++) {
-  //     sum += dto.data[i]
-  //   }
+    var sum = 0;
+    for (let i = 0; i < dto.data.length; i++) {
+      sum += dto.data[i]
+    }
 
-  //   callHandler.on('data', (msg: Response) => {
-  //     expect(msg).toBeDefined();
-  //     callHandler.cancel();
-  //   });
+    callHandler.on('data', (msg: Response) => {
+      expect(msg).toBeDefined();
+      callHandler.cancel();
+    });
 
-  //   callHandler.on('error', (err: any) => {
-  //   });
+    callHandler.on('error', (err: any) => {
+    });
 
-  //   return new Promise((resolve,reject) => {
-  //     callHandler.write(dto);
-  //     setTimeout(() => resolve(callHandler), 1000);
-  //   });
-  // });
+    return new Promise((resolve,reject) => {
+      callHandler.write(dto);
+      setTimeout(() => resolve(callHandler), 1000);
+    });
+  });
 
-  // afterEach(async () => {
-  //   await app.close();
-  // });
+  afterEach(async () => {
+    await app.close();
+  });
 
 });
