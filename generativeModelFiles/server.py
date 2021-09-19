@@ -113,7 +113,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
 async def serve():
     server = grpc.aio.server(futures.ThreadPoolExecutor(max_workers=100))
     modelGenerator_pb2_grpc.add_ModelGenerationServicer_to_server(ModelGenerationServicer(), server)
-    server.add_insecure_port("[::]:50051")
+    server.add_insecure_port("0.0.0.0:50051")
     print(f"Model Generator Server Started. Listening on port 50051")
     await server.start()
     await server.wait_for_termination()
