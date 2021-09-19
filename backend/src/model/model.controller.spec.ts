@@ -10,8 +10,6 @@ import * as GRPC from '@grpc/grpc-js';
 import { Response } from './interfaces/response.interface'
 import { MailModule } from '../mail/mail.module';
 import { UsersModule } from '../user/user.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import config from '../config/keys';
 
 describe('test grpc on model controller', () => {
   let server;
@@ -68,6 +66,7 @@ describe('test grpc on model controller', () => {
 
     controller = module.get<ModelController>(ModelController);
   });
+  
 
   it('should be defined', () => {    
     expect(app).toBeDefined();
@@ -114,6 +113,7 @@ describe('test grpc on model controller', () => {
 
     callHandler.on('error', (err: any) => {
       // We want to fail only on real errors while Cancellation error
+      //callHandler.cancel();
     });
 
     return new Promise((resolve,reject) => {
@@ -137,6 +137,7 @@ describe('test grpc on model controller', () => {
     });
 
     callHandler.on('error', (err: any) => {
+      //callHandler.cancel();
     });
 
     return new Promise((resolve,reject) => {
