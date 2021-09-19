@@ -15,7 +15,7 @@ export class DownloadVrExeComponent implements OnInit {
   downloadExe() {
     let link = document.createElement("a");
     link.download = "background.png";
-    link.href = "../../../assets/background.png";
+    link.href = "../../../assets/Unity_Build.zip";
     link.click();
   }
 }
