@@ -106,9 +106,13 @@ class ModelGenerator:
         channel_size = images.shape[1]
 
         if model_type == "convolutional":
-            self.model = CAutoencoder(latent_vector, channel_size)
+            if dataset != "cifar10":
+                self.model = CAutoencoder(latent_vector, channel_size, images.shape[2])
+            else:
+                self.model = CAutoencoder(latent_vector, channel_size)
             self.model.datasetUsed = dataset
             self.model.training_loop(epochs, loader)
+            print(self.model.details())
         else :
             if dataset == "fashion" or dataset == "mnist":
                 self.model = OGVAE(latent_vector)
@@ -262,6 +266,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
+    generator.train_model(1, 3, "mnist", "convolutional")
     # To create a new model run the function below
     # The first parameter is the number of epochs(iterations), the second is the size of the latent
     # vector (so its best you leave it a 3), the third is dataset you want to train it on, you can 
@@ -275,7 +280,7 @@ if __name__ == "__main__":
     # print(generator.model.details())
     # generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-20")
     # Remember to save it
-    generator.loadModel("Beta-1-CIFAR-20.pt")
+    # generator.loadModel("Beta-1-CIFAR-20.pt")
     
 
     # generator.train_model(50, 5)

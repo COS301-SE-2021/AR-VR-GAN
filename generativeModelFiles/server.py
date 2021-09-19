@@ -72,10 +72,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         model_type: str = request.modelType
         if request.modelType == "":
             model_type = "cvae"
-        # Check for model type
-
-        # Create a temporary model generator so that a new model can be 
-        # trained while the server is running
+        
         temp = ModelGenerator()
         response = modelGenerator_pb2.TrainModelResponse()
         response.succesful = True
