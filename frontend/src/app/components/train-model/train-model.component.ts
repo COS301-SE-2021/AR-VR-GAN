@@ -31,18 +31,18 @@ export class TrainModelComponent implements OnInit {
     private customizeComponent: CustomizeComponent
   ) { 
     this.modelName = "Default";
-    this.trainingEpochs = 5;
+    this.trainingEpochs = 1;
     this.datasetName = "mnist";
     this.beta = 1;
-    this.modelType = "CAE";
+    this.modelType = "convolutional";
   }
 
   ngOnInit(): void {
     this.modelName = "Default";
-    this.trainingEpochs = 5;
+    this.trainingEpochs = 1;
     this.datasetName = "mnist";
     this.beta = 1;
-    this.modelType = "CAE";
+    this.modelType = "convolutional";
   }
 
   trainModel(): void {
@@ -67,7 +67,7 @@ export class TrainModelComponent implements OnInit {
       return;
     }
 
-    if (!((datasetName == "mnist") || (datasetName == "fashion") || (datasetName == "cifar10"))) {
+    if (!((datasetName == "mnist") || (datasetName == "fashion") || (datasetName == "cifar10") || (datasetName == "celeba"))) {
       this.snackBar.open("Please choose a valid dataset", "Close");
       return;
     }

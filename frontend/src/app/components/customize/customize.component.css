@@ -2,7 +2,7 @@
     width: 75%;
 }
 
-.mat-column-fileName, .mat-column-modelName, .mat-column-epochs, .mat-column-latentSize, .mat-column-beta, .mat-column-dataset, .mat-column-current  {
+.mat-column-fileName, .mat-column-modelName, .mat-column-epochs, .mat-column-latentSize, .mat-column-modelType, .mat-column-beta, .mat-column-dataset, .mat-column-current  {
     width: 14%;
     text-align: center;
 }

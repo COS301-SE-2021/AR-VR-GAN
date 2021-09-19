@@ -19,6 +19,7 @@ export class CustomizeComponent implements OnInit {
     "epochs",
     "latentSize",
     "beta",
+    "modelType",
     "dataset",
     "fileName",
     // "current",
@@ -52,7 +53,8 @@ export class CustomizeComponent implements OnInit {
             "modelName": "",
             "epochs": 1,
             "latentSize": 3,
-            "beta": 1,
+            "beta": "",
+            "modelType": "",
             "dataset": "",
             "current": false
           };
@@ -63,6 +65,13 @@ export class CustomizeComponent implements OnInit {
           newModel.latentSize = listModels['modelDetails'][model]['latent_vector_size'];
           newModel.beta = listModels['modelDetails'][model]['beta_value'];
           newModel.dataset = listModels['modelDetails'][model]['dataset_used'];
+
+          if (newModel.beta == "-1") {
+            newModel.modelType = "CAE";
+            newModel.beta = "N/A";
+          } else {
+            newModel.modelType = "CVAE";
+          }
 
           if (newModel.modelName == currentModel['modelName']) {
             newModel.current = true;
@@ -114,7 +123,8 @@ export interface modelDetails {
   modelName: string;
   epochs: number;
   latentSize: number;
-  beta: number;
+  beta: string;
+  modelType: string;
   dataset: string;
   current: boolean;
 }

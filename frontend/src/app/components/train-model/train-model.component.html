@@ -30,6 +30,7 @@
                             <mat-option value="mnist">MNIST</mat-option>
                             <mat-option value="fashion">Fashion MNIST</mat-option>
                             <mat-option value="cifar10">CIFAR-10</mat-option>
+                            <mat-option value="celeba">CelebA</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </tr>
@@ -37,8 +38,8 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Choose a model type</mat-label>
                         <mat-select [(value)]="modelType">
-                            <mat-option value="CAE">CAE</mat-option>
-                            <mat-option value="CVAE">CVAE</mat-option>
+                            <mat-option value="convolutional">CAE</mat-option>
+                            <mat-option value="cvae">CVAE</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </tr>

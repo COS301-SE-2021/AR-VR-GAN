@@ -66,7 +66,7 @@ class ModelGenerator:
 
     """
 
-    def __init__(self) -> None:
+    def __init__(self, dataloaders = None) -> None:
         torch.manual_seed(1)
         self.cuda = torch.cuda.is_available()
         self.device = torch.device("cuda" if self.cuda else "cpu")
@@ -78,8 +78,10 @@ class ModelGenerator:
             # transforms.Resize((32,32)),
             transforms.ToTensor(),
         ])
-        self.data_loaders = DataLoaders(im_transform, kwargs)
-        
+        if dataloaders == None:
+            self.data_loaders = DataLoaders(im_transform, kwargs)
+        else:
+            self.data_loaders = dataloaders
         self.model = None
 
     def train_model(self, epochs: int, latent_vector: int, dataset: str = "mnist", model_type: str = "cvae", 
@@ -106,8 +108,12 @@ class ModelGenerator:
         channel_size = images.shape[1]
 
         if model_type == "convolutional":
-            self.model = CAutoencoder(latent_vector, channel_size)
+            if dataset != "cifar10":
+                self.model = CAutoencoder(latent_vector, channel_size, images.shape[2])
+            else:
+                self.model = CAutoencoder(latent_vector, channel_size)
             self.model.datasetUsed = dataset
+            self.model.name = name
             self.model.training_loop(epochs, loader)
         else :
             if dataset == "fashion" or dataset == "mnist":
@@ -262,6 +268,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     generator = ModelGenerator()
+    generator.train_model(1, 3, "mnist", "convolutional")
     # To create a new model run the function below
     # The first parameter is the number of epochs(iterations), the second is the size of the latent
     # vector (so its best you leave it a 3), the third is dataset you want to train it on, you can 
@@ -275,7 +282,7 @@ if __name__ == "__main__":
     # print(generator.model.details())
     # generator.train_model(20, 3, "mnist", model_type="cvae", name="Beta-1-MNIST-20")
     # Remember to save it
-    generator.loadModel("Beta-1-CIFAR-20.pt")
+    # generator.loadModel("Beta-1-CIFAR-20.pt")
     
 
     # generator.train_model(50, 5)
