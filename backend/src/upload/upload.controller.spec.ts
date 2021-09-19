@@ -6,7 +6,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { ModelService } from '../../src/model/model.service';
 import { MailModule } from '../mail/mail.module';
-import { UserService } from '../user/user.service';
 import { ModelModule } from '../model/model.module';
 import { UsersModule } from '../user/user.module';
 
