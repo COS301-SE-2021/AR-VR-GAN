@@ -31,7 +31,7 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 * 📖 [Software Requirements and Design Specifications (Demo 1)](https://drive.google.com/file/d/10S97oUGjTBAccwdw4-YJi9sKw5L_StH4/view?usp=sharing)
 * 📖 [Software Requirements and Design Specifications (Demo 2)](https://drive.google.com/file/d/10I88Aq-UUbU9Zeo2COIbSa-b-ExoO3KZ/view?usp=sharing)
 * 📖 [Software Requirements and Design Specifications (Demo 3)](https://drive.google.com/file/d/1-J23MT3PBMJatBx8qQZzrxtTfC4qQL-N/view?usp=sharing)
-* 📖 [Software Requirements and Design Specifications (Demo 4)](https://drive.google.com/file/d/1brDGYPZjXmpUXnoGVXIx_JCqOqN5-bj8/view?usp=sharing)
+* 📖 [Software Requirements and Design Specifications (Demo 4)]()
 
 #### Architectural Requirements Document
 
