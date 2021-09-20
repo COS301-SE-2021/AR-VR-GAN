@@ -10,17 +10,14 @@ import modelGenerator_pb2
 import modelGenerator_pb2_grpc
 from modelGenerator import ModelGenerator
 import json
-# m_generator = ModelGenerator()
-global_vector = []
+
 SAVED_MODELS_DIR ="./savedModels/"
 class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
     def __init__(self) -> None:
         super().__init__()
         kwargs = {'num_workers': 1, 'pin_memory': True} if torch.cuda.is_available() else {}
 
-        # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         im_transform = transforms.Compose([
-            # transforms.Resize((32,32)),
             transforms.ToTensor(),
         ])
         self.data_loaders = DataLoaders(im_transform, kwargs)
@@ -130,5 +127,4 @@ async def serve():
     await server.wait_for_termination()
 
 if __name__ == "__main__":
-    # m_generator.loadModel("./defaultModels/Epochs-50.pt")
     asyncio.run(serve())
