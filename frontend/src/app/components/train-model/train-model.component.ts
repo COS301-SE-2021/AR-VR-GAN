@@ -67,7 +67,7 @@ export class TrainModelComponent implements OnInit {
       return;
     }
 
-    if (!((datasetName == "mnist") || (datasetName == "fashion") || (datasetName == "cifar10") || (datasetName == "celeba"))) {
+    if (!((datasetName == "mnist") || (datasetName == "fashion"))) {
       this.snackBar.open("Please choose a valid dataset", "Close");
       return;
     }
