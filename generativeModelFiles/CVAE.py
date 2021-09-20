@@ -1,13 +1,8 @@
 from torch import nn
 import torch
 from torch.autograd import Variable
-import numpy as np
 from torch import optim
-from torchvision import datasets
-from torchvision import transforms
-from torchvision.utils import save_image
-
-from torch.utils.data import DataLoader
+from torch.functional import Tensor
 
 class VAE(nn.Module):
     def __init__(self, channels: int = 3,latent_vector: int = 3):
@@ -50,7 +45,7 @@ class VAE(nn.Module):
 
         self.relu = nn.ReLU()
 
-    def encode(self, x):
+    def encode(self, x) -> Tensor:
         conv1 = self.relu((self.conv1(x)))
         conv2 = self.relu((self.conv2(conv1)))
         conv3 = self.relu((self.conv3(conv2)))
@@ -59,7 +54,7 @@ class VAE(nn.Module):
         fc1 = self.relu((self.fc1(conv4)))
         return self.fc21(fc1), self.fc22(fc1)
 
-    def reparameterize(self, mu, logvar):
+    def reparameterize(self, mu, logvar) -> Tensor:
         if self.training:
             std = logvar.mul(0.5).exp_()
             eps = Variable(std.data.new(std.size()).normal_())
@@ -67,7 +62,7 @@ class VAE(nn.Module):
         else:
             return mu
 
-    def decode(self, z):
+    def decode(self, z) -> Tensor:
         fc3 = self.relu((self.fc3(z)))
         fc4 = self.relu((self.fc4(fc3))).view(-1, 16, 8, 8)
 
@@ -76,7 +71,7 @@ class VAE(nn.Module):
         conv7 = self.relu((self.conv7(conv6)))
         return self.conv8(conv7).view(-1, self.channels, 32, 32)
 
-    def decoder(self, z):
+    def decoder(self, z) -> Tensor:
         fc3 = self.relu((self.fc3(z)))
         fc4 = self.relu((self.fc4(fc3))).view(-1, 16, 8, 8)
 
@@ -85,7 +80,7 @@ class VAE(nn.Module):
         conv7 = self.relu((self.conv7(conv6)))
         return self.conv8(conv7).view(-1, self.channels, 32, 32)
 
-    def forward(self, x):
+    def forward(self, x) -> Tensor:
         mu, logvar = self.encode(x)
         z = self.reparameterize(mu, logvar)
         return self.decode(z), mu, logvar
@@ -104,7 +99,7 @@ class VAE(nn.Module):
     def retrieve_latent_size(self) -> int:
         return self.z
 
-    def loss_function(self, recon_x, x, mu, logvar, beta=1):
+    def loss_function(self, recon_x, x, mu, logvar, beta=1) -> Tensor:
         mse_loss = nn.MSELoss(size_average=False)
         MSE = mse_loss(recon_x, x)
 
@@ -116,7 +111,6 @@ class VAE(nn.Module):
         if torch.cuda.is_available():
             self.cuda()
         self.train()
-        cuda = torch.cuda.is_available()
         device = torch.device("cuda" if self.cuda else "cpu")
 
         self.beta = beta
@@ -126,8 +120,6 @@ class VAE(nn.Module):
             self.epochs += 1
             print("epoch {}...".format(epoch))
             for batch_idx, (data, _) in enumerate(train_loader):
-                # if cuda:
-                #     data = data.cuda()
                 data = data.to(device)
                 data = Variable(data)
                 optimizer.zero_grad()
@@ -137,7 +129,5 @@ class VAE(nn.Module):
                 optimizer.step()
                 loss_list.append(loss.data)
 
-            # print("epoch {}: - loss: {}".format(epoch, np.mean(loss_list)))
-            # save_image(recon_batch.view(-1, 1, 32, 32), f"training/testingMNIST{epoch}.png")
                 
 

@@ -1,5 +1,4 @@
 from __future__ import print_function
-import argparse
 import torch
 import torch.utils.data
 from torchvision import transforms
@@ -24,26 +23,15 @@ class ModelGenerator:
     
     Attributes
     ----------
-    model : VAE
+    model : VAE or CVAE or CAutoencoder
         a formatted string to print out what the animal says
-    train_loader : torch.utils.data.DataLoader
-        An object that stores the set of training images
-    test_loader : torch.utils.data.DataLoader
-        An object that stores the set of test images
+    data_loaders: DataLoaders
+        An object that stores the set of datasets that can be used in the neural networks
 
     Methods
     -------
-    loss_function()
-        Produces the loss the of training iteration
-
-    train_model(epochs)
+    train_model(epochs=int, latent_vector=int, dataset=mnist, model_type=str, beta=int, name=str)
         Trains and test the model over a set of iterations(epochs)
-
-    train(epoch=int)
-        Trains the model on the set of images in train_loader
-
-    test(epoch=int, generate=bool)
-        Tests the accuracy of the model with the set of images in test_loader
 
     loadModel(filepath=str)
         Loads a previously saved model to be used by the model generator
@@ -62,6 +50,9 @@ class ModelGenerator:
 
     loadDataset()
         Loads a new dataset to train the model on 
+    
+    get_available_models(default=bool)
+        Returns a list of available models
 
     """
 
@@ -72,9 +63,7 @@ class ModelGenerator:
 
         kwargs = {'num_workers': 1, 'pin_memory': True} if self.cuda else {}
 
-        # To create a custom dataset go to https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
         im_transform = transforms.Compose([
-            # transforms.Resize((32,32)),
             transforms.ToTensor(),
         ])
         if dataloaders == None:
@@ -206,7 +195,7 @@ class ModelGenerator:
                 print("Model saved as " + filepath)
                 return filepath
     
-    def generateImage(self, vector: list, filepath: str="") -> list:
+    def generateImage(self, vector: list, filepath: str="") -> list(bytes):
         """ Generates an image from the model from the vector pass into the function
 
         Parameters
@@ -255,7 +244,9 @@ class ModelGenerator:
     def set_latent_size(self, latent_size: int) -> None:
         self.latent_size = latent_size
 
-    def get_available_models(self, default: bool = True):
+    def get_available_models(self, default: bool = True) -> list(str):
+        """This function returns a list of models that are either in `defaultModels` folder or 
+        the `savedModels` folder"""
         if default != True:
             mypath = "./savedModels/"
         else:
@@ -265,18 +256,7 @@ class ModelGenerator:
         return onlyfiles
 
 if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description='Model Generator Model')
-    parser.add_argument('--latent-size', type=int, default=3, metavar='N',
-                        help='Determines the size latent size of the model to be trained')
-    parser.add_argument('--model', type=str, default="defaultModels/Epochs-50.pt", metavar='N',
-                        help='Choose the pre-saved model')
-    parser.add_argument('--coordinates', default=None, type=float, nargs='+',
-                        help='the latent vector to be used by the model to generate an image')
-    args = parser.parse_args()
-
     generator = ModelGenerator()
-    generator.train_model(1, 3, "mnist", "convolutional")
     # To create a new model run the function below
     # The first parameter is the number of epochs(iterations), the second is the size of the latent
     # vector (so its best you leave it a 3), the third is dataset you want to train it on, you can 
@@ -285,36 +265,9 @@ if __name__ == "__main__":
     # greater than or equal to one but there are no checks for this and `name` will be the name of the 
     # checkpoint of the model. I adjusted 
     # the training sequence so that it saves the model every 10 epochs so that you can cancel the 
-    # training any time with out losing progress. 
-    # generator.loadModel("Beta-1-CIFAR-20.pt")
-    # print(generator.model.details())
-    generator.train_model(100, 3, "fashion", model_type="cvae", name="Beta-1-Fashion-100")
+    # training any time with out losing progress.
     # Remember to save it
-    # generator.loadModel("Beta-1-CIFAR-20.pt")
-    
-
-    #generator.train_model(50, 5)
-    generator.saveModel("defaultModels/Beta-1-Fashion-100")
-    #from time import sleep
-    # generator.saveModel("savedModels/CBeta-1-MNIST-1.pt")
-    # sleep(1)
-    # generator.generateImage([0.1, 0.0, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.2, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.53, 0.3, 0.2])
-    # sleep(1)
-    # generator.generateImage([0.04, 0.1, 1.0])
-    # sleep(1)
-    # generator.generateImage([0.05, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0.06, 0.1, 0.0])
-    # sleep(1)
-    # generator.generateImage([0, 0, 1.99999999999999999])
-    # sleep(1)
-    # generator.generateImage([0.0, 0.0, 0.0])
-    # sleep(1)
-    # generator.generateImage([50.0, 0.0, 99.0])
-    # sleep(1)
-    # generator.generateImage([0.056, 0.0000000000000, 0.15530333333333333333333])
-    # # generator.loadModel(args.model)
+    # example below
+    # generator = ModelGenerator()
+    # generator.train_model(100, 3, "fashion", model_type="cvae", name="Beta-1-Fashion-100", beta=1)
+    # generator.save("your-name.pt")
