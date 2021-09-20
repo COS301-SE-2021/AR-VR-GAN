@@ -25,7 +25,7 @@ class ModelGenerationServicer(modelGenerator_pb2_grpc.ModelGenerationServicer):
         ])
         self.data_loaders = DataLoaders(im_transform, kwargs)
         self.m_generator = ModelGenerator(self.data_loaders)
-        self.m_generator.loadModel("Beta-1-CIFAR-20.pt")
+        self.m_generator.loadModel("Beta-1-MNIST-50.pt")
 
     async def get_image_data(self, request, context):
         async for item in request:
