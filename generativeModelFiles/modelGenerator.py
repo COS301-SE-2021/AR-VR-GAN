@@ -143,7 +143,10 @@ class ModelGenerator:
         """
         if filepath == "":
             filepath = "defaultModels/Beta-1-CIFAR-20.pt"
-            self.model = torch.load(filepath)
+            if torch.cuda.is_available():
+                self.model = torch.load(filepath)
+            else:
+                self.model = torch.load(filepath, map_location=torch.device('cpu'))
             print("Default VAE Model loaded")
             return filepath
         else:
@@ -152,9 +155,16 @@ class ModelGenerator:
 
             if filepath in self.get_available_models():
                 filepath = "./defaultModels/"+filepath
-                self.model = torch.load(filepath)
+                if torch.cuda.is_available():
+                    self.model = torch.load(filepath)
+                else:
+                    self.model = torch.load(filepath, map_location=torch.device('cpu'))
             elif filepath in self.get_available_models(False):
-                self.model = torch.load("./savedModels/"+filepath)
+                # self.model = torch.load("./savedModels/"+filepath)
+                if torch.cuda.is_available():
+                    self.model = torch.load("./savedModels/"+filepath)
+                else:
+                    self.model = torch.load("./savedModels/"+filepath, map_location=torch.device('cpu'))
             else:
                 raise ModelException(f"File {filepath} does not exist")
 
