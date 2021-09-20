@@ -54,4 +54,4 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 
 #### Testing Policy Document
 
-* 📖 [Testing Policy Document](https://drive.google.com/file/d/1RHcO5kTmh3NuUeMeHJZlWttladviF3Us/view?usp=sharing)
+* 📖 [Testing Policy Document](https://drive.google.com/file/d/1f05YmXmgVlLvmDVJYtDcd6IQQndd7qOt/view?usp=sharing)
