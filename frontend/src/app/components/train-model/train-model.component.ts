@@ -57,8 +57,8 @@ export class TrainModelComponent implements OnInit {
       return;
     }
 
-    if ((trainingEpochs < 1) || (trainingEpochs > 20)) {
-      this.snackBar.open("Please use an epoch value in the range [1,20]", "Close");
+    if ((trainingEpochs < 1) || (trainingEpochs > 250)) {
+      this.snackBar.open("Please use an epoch value in the range [1,250]", "Close");
       return;
     }
 

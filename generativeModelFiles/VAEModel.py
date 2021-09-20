@@ -85,11 +85,16 @@ class VAE(nn.Module):
         return model_details
 
     def training_loop(self, epochs: int, train_loader, beta: int=1 ) -> None:
-        optimizer = optim.Adam(self.parameters(), lr=1e-3)
-        cuda = torch.cuda.is_available()
+        if torch.cuda.is_available():
+              self.cuda()
         self.train()
+        cuda = torch.cuda.is_available()
+        device = torch.device("cuda" if self.cuda else "cpu")
+
         train_loss = 0
+
         self.beta = beta
+        optimizer = optim.Adam(self.parameters(), lr=1e-3)
         for iter in range(epochs):
             loss_list = []
             print("epoch {}...".format(iter))
@@ -98,15 +103,17 @@ class VAE(nn.Module):
             for (data, _) in train_loader:
                 i+=1
                 optimizer.zero_grad()
-                if cuda:
-                    data = data.cuda()
+                # if cuda:
+                #     data = data.cuda()
+                data = data.to(device)
                 recon_batch, mu, logvar = self(data)
                 loss = self.loss_function(recon_batch, data, mu, logvar, beta)
                 loss.backward()
                 train_loss += loss.item()
                 optimizer.step()
                 loss_list.append(loss.data)
-            print("epoch {}: - loss: {}".format(iter, np.mean(loss_list)))
+
+            # print("epoch {}: - loss: {}".format(iter, np.mean(loss_list)))
             # save_image(recon_batch.view(recon_batch.shape[0], 1, 28, 28), f"./training/OGMNIST-{iter}.png")
             
 if __name__ == "__main__":
