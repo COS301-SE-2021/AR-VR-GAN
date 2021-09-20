@@ -70,7 +70,7 @@ export class CustomizeComponent implements OnInit {
             newModel.modelType = "CAE";
             newModel.beta = "N/A";
           } else {
-            newModel.modelType = "CVAE";
+            newModel.modelType = "VAE";
           }
 
           if (newModel.modelName == currentModel['modelName']) {
