@@ -113,6 +113,8 @@ class VAE(nn.Module):
         return MSE + beta*KLD
 
     def training_loop(self, epochs: int, train_loader, beta: int=1) -> None:
+        if torch.cuda.is_available():
+            self.cuda()
         self.train()
         cuda = torch.cuda.is_available()
         device = torch.device("cuda" if self.cuda else "cpu")
@@ -124,8 +126,9 @@ class VAE(nn.Module):
             self.epochs += 1
             print("epoch {}...".format(epoch))
             for batch_idx, (data, _) in enumerate(train_loader):
-                if cuda:
-                    data = data.cuda()
+                # if cuda:
+                #     data = data.cuda()
+                data = data.to(device)
                 data = Variable(data)
                 optimizer.zero_grad()
                 recon_batch, mu, logvar = self(data)
@@ -134,7 +137,7 @@ class VAE(nn.Module):
                 optimizer.step()
                 loss_list.append(loss.data)
 
-            print("epoch {}: - loss: {}".format(epoch, np.mean(loss_list)))
+            # print("epoch {}: - loss: {}".format(epoch, np.mean(loss_list)))
             # save_image(recon_batch.view(-1, 1, 32, 32), f"training/testingMNIST{epoch}.png")
                 
 
