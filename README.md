@@ -50,7 +50,7 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 #### Technical Installation Manual
 
 * 📖 [Technical Installation Manual (Demo 3)](https://drive.google.com/file/d/1-UY_1n9qR1q-CLy_AlHlAD1YcvxAoc04/view?usp=sharing)
-* 📖 [Technical Installation Manual (Demo 4)]()
+* 📖 [Technical Installation Manual (Demo 4)](https://drive.google.com/file/d/11BNm6kQv1o829r1Cp8NuTjyQEGQhdaYq/view?usp=sharing)
 
 #### Testing Policy Document
 
