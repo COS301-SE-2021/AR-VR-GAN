@@ -195,7 +195,7 @@ class ModelGenerator:
                 print("Model saved as " + filepath)
                 return filepath
     
-    def generateImage(self, vector: list, filepath: str="") -> list(bytes):
+    def generateImage(self, vector: list, filepath: str="") -> list:
         """ Generates an image from the model from the vector pass into the function
 
         Parameters
@@ -244,7 +244,7 @@ class ModelGenerator:
     def set_latent_size(self, latent_size: int) -> None:
         self.latent_size = latent_size
 
-    def get_available_models(self, default: bool = True) -> list(str):
+    def get_available_models(self, default: bool = True) -> list:
         """This function returns a list of models that are either in `defaultModels` folder or 
         the `savedModels` folder"""
         if default != True:
