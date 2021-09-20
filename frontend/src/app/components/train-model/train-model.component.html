@@ -19,12 +19,6 @@
                 </tr>
                 <tr>
                     <mat-form-field appearance="outline">
-                        <mat-label>Beta</mat-label>
-                        <input matInput type="number" min="1" max="10" step="1" [(ngModel)]="beta">
-                    </mat-form-field>
-                </tr>
-                <tr>
-                    <mat-form-field appearance="outline">
                         <mat-label>Choose a dataset</mat-label>
                         <mat-select [(value)]="datasetName">
                             <mat-option value="mnist">MNIST</mat-option>
@@ -41,6 +35,12 @@
                             <mat-option value="convolutional">CAE</mat-option>
                             <mat-option value="cvae">CVAE</mat-option>
                         </mat-select>
+                    </mat-form-field>
+                </tr>
+                <tr *ngIf="modelType === 'cvae'">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Beta</mat-label>
+                        <input matInput type="number" min="1" max="10" step="1" [(ngModel)]="beta">
                     </mat-form-field>
                 </tr>
                 <tr>
