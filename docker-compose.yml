@@ -8,7 +8,7 @@ services:
     ports:
       - 50051:50051
     container_name: python
-    image: mattwoodx/generativemodel:latest
+    image: javacinsomniacs/generativemodel:latest
   backend:
     build: ./backend
     networks:
@@ -21,7 +21,7 @@ services:
       - 3000:3000
       - 3001:3001
     container_name: backend
-    image: mattwoodx/backend:latest
+    image: javacinsomniacs/backend:latest
   frontend:
     build: ./frontend
     networks:
@@ -32,7 +32,7 @@ services:
     ports:
       - 8080:8080
     container_name: frontend
-    image: mattwoodx/frontend:latest
+    image: javacinsomniacs/frontend:latest
 
 networks:
   private:
