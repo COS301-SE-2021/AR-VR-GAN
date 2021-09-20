@@ -6,10 +6,9 @@ from torchvision import transforms
 from torchvision.utils import save_image
 from VAEModel import VAE as OGVAE
 from ConvolutionalAutoencoder import CAutoencoder
-# from CVAEModel import CVAE
 from CVAE import VAE
 import os
-from datetime import datetime, time
+from datetime import datetime
 from PIL import Image
 from modelExceptions import ModelException
 from DataLoaders import DataLoaders

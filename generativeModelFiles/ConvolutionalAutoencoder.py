@@ -1,10 +1,7 @@
 from matplotlib import pyplot as plt
 import torch
 import torch.nn as nn
-from torch.nn.modules.activation import Sigmoid
 import torch.optim as optim
-from torchvision import datasets, transforms
-from torchvision.utils import save_image
 import numpy as np
 
 class View(nn.Module):
@@ -19,16 +16,16 @@ class View(nn.Module):
 class CAutoencoder(nn.Module):
     def __init__(self, latent_vector: int = 3, channel_size: int=3, width:int =32):
         super().__init__()        
-        # input is Nx1x64x64
-        # N, 3, 64, 64
         self.z = latent_vector
         self.epochs = 0
         self.datasetUsed = ''
         self.name = ''
         self.pixels = width
         self.width = int(np.sqrt(width*width/16))
-
         self.channel_size = channel_size
+
+        # The input is a tensor with the shape batch_size, no_channel_size, pixels, pixels
+        # Encoder
         self.conv1 = nn.Conv2d(channel_size, 16, kernel_size=3, stride=1, padding=1, bias=False)
         self.bn1 = nn.BatchNorm2d(16)
         self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=2, padding=1, bias=False)
