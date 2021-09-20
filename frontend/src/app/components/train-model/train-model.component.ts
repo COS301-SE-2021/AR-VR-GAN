@@ -30,19 +30,19 @@ export class TrainModelComponent implements OnInit {
     private cookieService: CookieService,
     private customizeComponent: CustomizeComponent
   ) { 
-    this.modelName = "Default";
+    this.modelName = "Beta-1-MNIST-1";
     this.trainingEpochs = 1;
     this.datasetName = "mnist";
     this.beta = 1;
-    this.modelType = "convolutional";
+    this.modelType = "cvae";
   }
 
   ngOnInit(): void {
-    this.modelName = "Default";
+    this.modelName = "Beta-1-MNIST-1";
     this.trainingEpochs = 1;
     this.datasetName = "mnist";
     this.beta = 1;
-    this.modelType = "convolutional";
+    this.modelType = "cvae";
   }
 
   trainModel(): void {
