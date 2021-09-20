@@ -23,6 +23,9 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 * 📺 [Demo 1](https://youtu.be/mmZrfHTx3tM)
 * 📺 [Demo 2](https://youtu.be/jyjrdwUin70)
 * 📺 [Demo 3](https://youtu.be/7ISalljP5uk)
+* 📺 [Demo 4](https://drive.google.com/file/d/1brDGYPZjXmpUXnoGVXIx_JCqOqN5-bj8/view?usp=sharing)
+
+
 
 ## Documentation
 
