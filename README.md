@@ -18,6 +18,9 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 
 * 📖 [GitHub](https://github.com/COS301-SE-2021/AR-VR-GAN/projects/1)
 
+## Deployment Link
+
+* 🐳 [Docker Hub](https://hub.docker.com/u/javacinsomniacs)
 ## Demo Videos
 
 * 📺 [Demo 1](https://youtu.be/mmZrfHTx3tM)
