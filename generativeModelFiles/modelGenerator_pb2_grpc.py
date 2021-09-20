@@ -34,30 +34,57 @@ class ModelGenerationStub(object):
                 request_serializer=modelGenerator__pb2.LoadModelRequest.SerializeToString,
                 response_deserializer=modelGenerator__pb2.LoadModelResponse.FromString,
                 )
+        self.ListModels = channel.unary_unary(
+                '/ModelGenerator.ModelGeneration/ListModels',
+                request_serializer=modelGenerator__pb2.ListModelsRequest.SerializeToString,
+                response_deserializer=modelGenerator__pb2.ListModelsResponse.FromString,
+                )
+        self.CurrentModel = channel.unary_unary(
+                '/ModelGenerator.ModelGeneration/CurrentModel',
+                request_serializer=modelGenerator__pb2.CurrentModelRequest.SerializeToString,
+                response_deserializer=modelGenerator__pb2.CurrentModelResponse.FromString,
+                )
 
 
 class ModelGenerationServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def GenerateImage(self, request_iterator, context):
-        """Missing associated documentation comment in .proto file."""
+        """Implemented
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def LoadDataset(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Not implemented
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def TrainModel(self, request, context):
-        """Missing associated documentation comment in .proto file."""
+        """Implemented
+        """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
     def LoadModel(self, request, context):
+        """Implemented
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ListModels(self, request, context):
+        """Implemented
+        """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def CurrentModel(self, request, context):
         """- Delete Model // Could be used later
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -86,6 +113,16 @@ def add_ModelGenerationServicer_to_server(servicer, server):
                     servicer.LoadModel,
                     request_deserializer=modelGenerator__pb2.LoadModelRequest.FromString,
                     response_serializer=modelGenerator__pb2.LoadModelResponse.SerializeToString,
+            ),
+            'ListModels': grpc.unary_unary_rpc_method_handler(
+                    servicer.ListModels,
+                    request_deserializer=modelGenerator__pb2.ListModelsRequest.FromString,
+                    response_serializer=modelGenerator__pb2.ListModelsResponse.SerializeToString,
+            ),
+            'CurrentModel': grpc.unary_unary_rpc_method_handler(
+                    servicer.CurrentModel,
+                    request_deserializer=modelGenerator__pb2.CurrentModelRequest.FromString,
+                    response_serializer=modelGenerator__pb2.CurrentModelResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -162,5 +199,39 @@ class ModelGeneration(object):
         return grpc.experimental.unary_unary(request, target, '/ModelGenerator.ModelGeneration/LoadModel',
             modelGenerator__pb2.LoadModelRequest.SerializeToString,
             modelGenerator__pb2.LoadModelResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ListModels(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ModelGenerator.ModelGeneration/ListModels',
+            modelGenerator__pb2.ListModelsRequest.SerializeToString,
+            modelGenerator__pb2.ListModelsResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def CurrentModel(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ModelGenerator.ModelGeneration/CurrentModel',
+            modelGenerator__pb2.CurrentModelRequest.SerializeToString,
+            modelGenerator__pb2.CurrentModelResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

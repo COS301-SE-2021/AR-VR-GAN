@@ -1,0 +1,23 @@
+.details-table {
+    width: 75%;
+}
+
+.mat-column-fileName, .mat-column-modelName, .mat-column-epochs, .mat-column-latentSize, .mat-column-modelType, .mat-column-beta, .mat-column-dataset, .mat-column-current  {
+    width: 14%;
+    text-align: center;
+}
+
+.current-row {
+    font-weight: bold;
+}
+
+.mat-row .mat-cell {
+    border-bottom: 1px solid transparent;
+    border-top: 1px solid transparent;
+    cursor: pointer;
+}
+  
+.mat-row:hover .mat-cell {
+    background-color: black;
+    color: white;
+}

@@ -1,4 +1,17 @@
-body {
-    margin: 0;
-    background-color: greenyellow;
+html, body { 
+    height: 100%; 
 }
+
+body { 
+    margin: 0; 
+    font-family: Roboto, 
+    "Helvetica Neue", sans-serif; 
+    background-image: url("./assets/background.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+/* mat-grid-tile {
+    border: black 1px solid;
+} */

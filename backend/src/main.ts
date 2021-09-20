@@ -10,12 +10,12 @@ async function bootstrap() {
    * hadles the TCP communications on server, POST/GET requests that are done to the server 
    * runs on port 3000
    */
-  const microserviceTCP = app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.TCP,
-    options: {
-      port: 3000,
-    }
-  });
+  // const microserviceTCP = app.connectMicroservice<MicroserviceOptions>({
+  //   transport: Transport.TCP,
+  //   options: {
+  //     port: 3000,
+  //   }
+  // });
 
   /**
    * handles the GRPC communication on the server
@@ -26,7 +26,7 @@ async function bootstrap() {
     options: {
       package: 'model', 
       protoPath: join(__dirname, '../src/model/model.proto'),
-      url: '127.0.0.1:3001', 
+      url: '0.0.0.0:3001',          // Change to 0.0.0.0:3001 from 127.0.0.1:3001
     },
   });  
 

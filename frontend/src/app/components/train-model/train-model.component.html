@@ -1,0 +1,51 @@
+<mat-grid-list cols=5 gutterSize="15px" rowHeight="40px">
+    <mat-grid-tile colspan=5></mat-grid-tile>
+
+    <mat-grid-tile rowspan=10></mat-grid-tile>
+    <mat-grid-tile colspan=3 rowspan=10>
+        <mat-card id="train-card">
+            <table>
+                <tr>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter a model name</mat-label>
+                        <input matInput type="text" [(ngModel)]="modelName">
+                    </mat-form-field>
+                </tr>
+                <tr>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Epochs</mat-label>
+                        <input matInput type="number" min="1" max="250" step="1" [(ngModel)]="trainingEpochs">
+                    </mat-form-field>
+                </tr>
+                <tr>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Choose a dataset</mat-label>
+                        <mat-select [(value)]="datasetName">
+                            <mat-option value="mnist">MNIST</mat-option>
+                            <mat-option value="fashion">Fashion MNIST</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </tr>
+                <tr>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Choose a model type</mat-label>
+                        <mat-select [(value)]="modelType">
+                            <mat-option value="convolutional">CAE</mat-option>
+                            <mat-option value="cvae">CVAE</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </tr>
+                <tr *ngIf="modelType === 'cvae'">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Beta</mat-label>
+                        <input matInput type="number" min="1" max="10" step="1" [(ngModel)]="beta">
+                    </mat-form-field>
+                </tr>
+                <tr>
+                    <button mat-raised-button color="primary" (click)="trainModel()">Train</button>
+                </tr>
+            </table>
+        </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile rowspan=10></mat-grid-tile>
+</mat-grid-list>

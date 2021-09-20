@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  python:
+    build: ./generativeModelFiles
+    networks:
+      - private
+    ports:
+      - 50051:50051
+    container_name: python
+    image: javacinsomniacs/generativemodel:latest
+  backend:
+    build: ./backend
+    networks:
+      - private
+    environment:
+      - URL=python:50051
+    depends_on:
+      - python
+    ports:
+      - 3000:3000
+      - 3001:3001
+    container_name: backend
+    image: javacinsomniacs/backend:latest
+  frontend:
+    build: ./frontend
+    networks:
+      - private
+    depends_on:
+      - python
+      - backend
+    ports:
+      - 8080:8080
+    container_name: frontend
+    image: javacinsomniacs/frontend:latest
+
+networks:
+  private:

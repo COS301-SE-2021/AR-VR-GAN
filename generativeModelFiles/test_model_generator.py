@@ -23,7 +23,7 @@ class TestModelGenerator(unittest.TestCase):
 
     def test_load_model(self):
         # Load random file
-        random_file = "RandomFileName"
+        random_file = "RandomFileName.pt"
         with self.assertRaises(ModelException) as exceptionOne:
             self.generator.loadModel(random_file)
         self.assertEqual(exceptionOne.exception.message, f"File {random_file} does not exist")
@@ -34,10 +34,10 @@ class TestModelGenerator(unittest.TestCase):
         self.assertEqual(exceptionTwo.exception.message, "File needs to be a pytorch file")
         
         # Load Default
-        self.assertEqual("defaultModels/Epochs-50.pt" ,self.generator.loadModel())
+        self.assertEqual("defaultModels/Beta-1-MNIST-50.pt" ,self.generator.loadModel())
 
         # Load Existing model
-        self.assertEqual("defaultModels/Epochs-50-Fashion.pt",self.generator.loadModel("defaultModels/Epochs-50-Fashion.pt"))
+        self.assertEqual("./defaultModels/Beta-1-MNIST-50.pt",self.generator.loadModel("Beta-1-MNIST-50.pt"))
 
     def test_save_model(self):
         # File path not specified
@@ -53,7 +53,7 @@ class TestModelGenerator(unittest.TestCase):
         self.assertTrue(os.path.exists(pathTo))
 
     def test_image_generation(self):
-        self.generator.loadModel("defaultModels/Epochs-50-Fashion.pt")
+        self.generator.loadModel("Beta-1-MNIST-50.pt")
 
         with self.assertRaises(ModelException) as exceptionOne:
             self.assertTrue(self.generator.generateImage([0.0],""))

@@ -1,53 +1,48 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatToolbarModule } from '@angular/material/toolbar';
-
-import { RouterModule } from '@angular/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { UploadsComponent } from './uploads/uploads.component';
-import { HeaderComponent } from './header/header.component';
-import { CoordsComponent } from './coords/coords.component';
-import { LoginComponent } from './login/login.component';
-import { LandingComponent } from './landing/landing.component';
-import { LoginFormComponent } from './login-form/login-form.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { CookieService } from 'ngx-cookie-service';
-import { RegisterComponent } from './register/register.component';
-import { RegisterFormComponent } from './register-form/register-form.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { MaterialModule } from './material/material.module';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { HomeComponent } from './components/home/home.component';
+import { AboutParagraphComponent } from './components/about-paragraph/about-paragraph.component';
+import { LoginFormComponent } from './components/login-form/login-form.component';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS } from '@angular/material/snack-bar';
+import { RegisterFormComponent } from './components/register-form/register-form.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CoordsComponent } from './components/coords/coords.component';
+import { DownloadVrExeComponent } from './components/download-vr-exe/download-vr-exe.component';
+import { CustomizeComponent } from './components/customize/customize.component';
+import { TrainModelComponent } from './components/train-model/train-model.component';
 
 @NgModule({
-  schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   declarations: [
     AppComponent,
-    UploadsComponent,
-    HeaderComponent,
-    CoordsComponent,
     LoginComponent,
-    LandingComponent,
-    LoginFormComponent,
     RegisterComponent,
-    RegisterFormComponent
+    HomeComponent,
+    AboutParagraphComponent,
+    LoginFormComponent,
+    RegisterFormComponent,
+    CoordsComponent,
+    DownloadVrExeComponent,
+    CustomizeComponent,
+    TrainModelComponent
   ],
   imports: [
-    FormsModule,
     BrowserModule,
     AppRoutingModule,
-    MatGridListModule,
-    MatToolbarModule,
-    RouterModule.forRoot([
-      {path: 'login', component: LoginComponent},
-      {path: 'landing', component: LandingComponent},
-      {path: 'register', component: RegisterComponent},
-      {path: '', redirectTo: '/login', pathMatch: 'full'},
-    ]),
     BrowserAnimationsModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
-  providers: [CookieService],
+  providers: [
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -23,9 +23,7 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 * 📺 [Demo 1](https://youtu.be/mmZrfHTx3tM)
 * 📺 [Demo 2](https://youtu.be/jyjrdwUin70)
 * 📺 [Demo 3](https://youtu.be/7ISalljP5uk)
-* 📺 [Demo 4](https://drive.google.com/file/d/1brDGYPZjXmpUXnoGVXIx_JCqOqN5-bj8/view?usp=sharing)
-
-
+* 📺 [Demo 4](https://youtu.be/BRucRfunpfk)
 
 ## Documentation
 
@@ -42,7 +40,8 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 
 #### User Manual
 
-* 📖 [User Manual](https://drive.google.com/file/d/1-6fSYeDynZ-xo0RNO5tF68zJHmW6vbHc/view?usp=sharing)
+* 📖 [User Manual (Demo 3)](https://drive.google.com/file/d/1-6fSYeDynZ-xo0RNO5tF68zJHmW6vbHc/view?usp=sharing)
+* 📖 [User Manual (Demo 4)](https://drive.google.com/file/d/10T44mNMICgUuiHw-lJdX96KrjHxHMKxz/view?usp=sharing)
 
 #### Coding Standards Document
 
@@ -50,7 +49,8 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 
 #### Technical Installation Manual
 
-* 📖 [Technical Installation Manual](https://drive.google.com/file/d/1-UY_1n9qR1q-CLy_AlHlAD1YcvxAoc04/view?usp=sharing)
+* 📖 [Technical Installation Manual (Demo 3)](https://drive.google.com/file/d/1-UY_1n9qR1q-CLy_AlHlAD1YcvxAoc04/view?usp=sharing)
+* 📖 [Technical Installation Manual (Demo 4)]()
 
 #### Testing Policy Document
 

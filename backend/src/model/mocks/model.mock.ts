@@ -1,4 +1,9 @@
 import { join } from "path";
+import { sendEmailDto } from "src/mail/dto/send-email.dto";
+import { currentModelResponseDto } from "../dto/current-model-response.dto";
+import { listModelsResponseDto } from "../dto/list-model-response.dto";
+import { loadModelResponseDto } from "../dto/load-model-response.dto";
+import { trainModelResponseDto } from "../dto/train-model-response.dto";
 
 export const MockModelService= {
 
@@ -30,5 +35,85 @@ export const MockModelService= {
             sum += request.data[i]
         }
         return sum;
-    })
+    }),
+
+    loadModel: jest.fn((request) => {
+        if (request == null)
+        {
+            const resp = new loadModelResponseDto(false,"The request body was left empty!");
+            return resp;
+        }
+        if(request.modelName == null)
+        {
+            const resp = new loadModelResponseDto(false,"The model name was not specified!");
+            return resp;
+        }
+        return request.modelName;
+    }),
+
+    listModels: jest.fn((request) => {
+        if (request == null)
+        {
+            const resp = new listModelsResponseDto(null,null);
+            return resp;
+        }
+        if(request.saved == true && request.default == false)
+        {
+            const resp = new listModelsResponseDto(["saved"],"saved model");
+            return resp;
+        }
+        if(request.default == true && request.saved == false)
+        {
+            const resp = new listModelsResponseDto(["saved"],"default model");
+            return resp;
+        }
+        const resp = new listModelsResponseDto(["model"],"all models");
+        return resp;
+    }),
+
+    currentModel: jest.fn(() => {
+        const resp = new currentModelResponseDto("current model","current model");
+        return resp;
+    }),
+
+    trainModel: jest.fn((request) => {
+        if(request.beta == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid beta value.");
+            return resp;
+        }
+        if(request.datasetName == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid dataset name.");
+            return resp;
+        }
+        if(request.jwtToken == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid jwt Token.");
+            return resp;
+        }
+        if(request.latentSize == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid latent size.");
+            return resp;
+        }
+        if(request.modelName == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid model name.");
+            return resp;
+        }
+        if(request.modelType == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid model type.");
+            return resp;
+        }
+        if(request.trainingEpochs == null)
+        {
+            let resp = new trainModelResponseDto(false, "Please send a valid training epochs value.");
+            return resp;
+        }
+        const name = request.modelName + " trained";
+        const resp = new trainModelResponseDto(true,name);
+        return resp;
+    }),
   }
