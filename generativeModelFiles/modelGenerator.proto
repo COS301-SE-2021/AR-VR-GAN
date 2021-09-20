@@ -8,7 +8,7 @@ service ModelGeneration{
     rpc TrainModel (TrainModelRequest) returns (TrainModelResponse); // Implemented
     rpc LoadModel (LoadModelRequest) returns (LoadModelResponse); // Implemented
     rpc ListModels (ListModelsRequest) returns (ListModelsResponse); // Implemented
-    rpc CurrentModel (CurrentModelRequest) returns (CurrentModelResponse);
+    rpc CurrentModel (CurrentModelRequest) returns (CurrentModelResponse); // Implemented
     // - Delete Model // Could be used later
 }
 
@@ -28,11 +28,11 @@ message TrainModelRequest{
     string modelName = 1; // The name that model will be saved as; will be saved in the savedModels directory
     int32 trainingEpochs = 2; // The number of iterations that will be used to train the model; a good number is 30
     int32 latentSize = 3; // The size of the latent vector; good size is 3
-    string datasetName = 4; // only 3 options available, mnist, fashion and cifar10
+    string datasetName = 4; // only 4 options available, mnist, fashion, cifar10, celeba
     // bytes dataset = 5;
     // bool beta = 6;
     int32 beta = 7; // must be greater than or equal to 1
-    string modelType = 8; // 2 options available CVAE and CAE; you don't have to use this rn
+    string modelType = 8; // 2 options available cvae and convolutional
 }
 
 message LoadModelRequest{
