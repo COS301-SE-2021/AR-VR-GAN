@@ -142,7 +142,7 @@ class ModelGenerator:
             if the file path is not a pytorch file.
         """
         if filepath == "":
-            filepath = "defaultModels/Beta-1-CIFAR-20.pt"
+            filepath = "defaultModels/Beta-1-MNIST-50.pt"
             if torch.cuda.is_available():
                 self.model = torch.load(filepath)
             else:
