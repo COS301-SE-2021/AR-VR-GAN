@@ -108,8 +108,8 @@ class VAE(nn.Module):
         return MSE + beta*KLD
 
     def training_loop(self, epochs: int, train_loader, beta: int=1) -> None:
-        if torch.cuda.is_available():
-            self.cuda()
+        # if torch.cuda.is_available():
+        #     self.cuda()
         self.train()
         device = torch.device("cuda" if self.cuda else "cpu")
 
@@ -120,7 +120,7 @@ class VAE(nn.Module):
             self.epochs += 1
             print("epoch {}...".format(epoch))
             for batch_idx, (data, _) in enumerate(train_loader):
-                data = data.to(device)
+                # data = data.to(device)
                 data = Variable(data)
                 optimizer.zero_grad()
                 recon_batch, mu, logvar = self(data)

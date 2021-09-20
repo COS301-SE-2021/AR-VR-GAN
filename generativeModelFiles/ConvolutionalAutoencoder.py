@@ -93,8 +93,8 @@ class CAutoencoder(nn.Module):
 
 
     def training_loop(self, epochs: int, train_loader, name: str="") -> None:
-        if torch.cuda.is_available():
-            self.cuda()
+        # if torch.cuda.is_available():
+        #     self.cuda()
         self.train()
         criterion = nn.MSELoss()
         optimizer = optim.Adam(self.parameters(), lr=1e-3)

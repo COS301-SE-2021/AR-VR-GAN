@@ -79,8 +79,8 @@ class VAE(nn.Module):
         return model_details
 
     def training_loop(self, epochs: int, train_loader, beta: int=1 ) -> None:
-        if torch.cuda.is_available():
-              self.cuda()
+        # if torch.cuda.is_available():
+        #       self.cuda()
         self.train()
         device = torch.device("cuda" if self.cuda else "cpu")
 
@@ -98,7 +98,7 @@ class VAE(nn.Module):
                 if torch.cuda.is_available():
                     data = data.cuda()
                 optimizer.zero_grad()
-                data = data.to(device)
+                # data = data.to(device)
                 recon_batch, mu, logvar = self(data)
                 loss = self.loss_function(recon_batch, data, mu, logvar, beta)
                 loss.backward()
