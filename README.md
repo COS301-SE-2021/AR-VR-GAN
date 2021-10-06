@@ -36,17 +36,20 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 * 📖 [Software Requirements and Design Specifications (Demo 2)](https://drive.google.com/file/d/10I88Aq-UUbU9Zeo2COIbSa-b-ExoO3KZ/view?usp=sharing)
 * 📖 [Software Requirements and Design Specifications (Demo 3)](https://drive.google.com/file/d/1-J23MT3PBMJatBx8qQZzrxtTfC4qQL-N/view?usp=sharing)
 * 📖 [Software Requirements and Design Specifications (Demo 4)](https://drive.google.com/file/d/1gDwLi9zdB0_VDsZgOO8EY4zHTHEEKeCv/view?usp=sharing)
+* 📖 [Software Requirements and Design Specifications (Final)](https://drive.google.com/file/d/12IaQ2O9YeQ58PTftNIQMij8WUW9Xa3UJ/view?usp=sharing)
 
 #### Architectural Requirements Document
 
 * 📖 [Architectural Requirements Document (Demo 2)](https://drive.google.com/file/d/11qE0VNahERCVnTS4Z8TVUOS482Zt58lR/view?usp=sharing)
 * 📖 [Architectural Requirements Document (Demo 3)](https://drive.google.com/file/d/19gNv_kpwC-vWH4GJ0OwSZo9ElKB7CBmS/view?usp=sharing) 
 * 📖 [Architectural Requirements Document (Demo 4)](https://drive.google.com/file/d/1wraNAbfq2u1xkZMxPWjZJD9p3jYNrgJQ/view?usp=sharing) 
+* 📖 [Architectural Requirements Document (Final)](https://drive.google.com/file/d/12C19tV_2ZYw42lU9BDJADpVApMi7jy6_/view?usp=sharing)
 
 #### User Manual
 
 * 📖 [User Manual (Demo 3)](https://drive.google.com/file/d/1-6fSYeDynZ-xo0RNO5tF68zJHmW6vbHc/view?usp=sharing)
 * 📖 [User Manual (Demo 4)](https://drive.google.com/file/d/10T44mNMICgUuiHw-lJdX96KrjHxHMKxz/view?usp=sharing)
+* 📖 [User Manual (Final)](https://drive.google.com/file/d/12OP7t6kf_ce9bYJ7Y9ZZt2nC2nlobnYc/view?usp=sharing)
 
 #### Coding Standards Document
 
@@ -54,8 +57,15 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 
 #### Technical Installation Manual
 
-* 📖 [Technical Installation Manual (Demo 3)](https://drive.google.com/file/d/1-UY_1n9qR1q-CLy_AlHlAD1YcvxAoc04/view?usp=sharing)
-* 📖 [Technical Installation Manual (Demo 4)](https://drive.google.com/file/d/11BNm6kQv1o829r1Cp8NuTjyQEGQhdaYq/view?usp=sharing)
+* <details>
+    <summary>History</summary>
+
+    * 📖 [Technical Installation Manual (Demo 3)](https://drive.google.com/file/d/1-UY_1n9qR1q-CLy_AlHlAD1YcvxAoc04/view?usp=sharing)
+    * 📖 [Technical Installation Manual (Demo 4)](https://drive.google.com/file/d/11BNm6kQv1o829r1Cp8NuTjyQEGQhdaYq/view?usp=sharing)
+</details>
+
+
+* 📖 [Technical Installation Manual (Final)](https://drive.google.com/file/d/12KRywUhVUo-uc_BHhA16cglgpYZL2IXM/view?usp=sharing)
 
 #### Testing Policy Document
 
