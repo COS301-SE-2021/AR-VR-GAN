@@ -23,10 +23,11 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 * 🐳 [Docker Hub](https://hub.docker.com/u/javacinsomniacs)
 ## Demo Videos
 
-* 📺 [Demo 1](https://youtu.be/mmZrfHTx3tM)
-* 📺 [Demo 2](https://youtu.be/jyjrdwUin70)
-* 📺 [Demo 3](https://youtu.be/7ISalljP5uk)
-* 📺 [Demo 4](https://youtu.be/BRucRfunpfk)
+* 📺 [Demo 1](https://youtu.be/UlvGK8q2ncU)
+* 📺 [Demo 2](https://youtu.be/jLR_pXhEZiA)
+* 📺 [Demo 3](https://youtu.be/pHymeyT33I0)
+* 📺 [Demo 4](https://youtu.be/4cjKR-STRMY)
+* 📺 [YouTube Playlist](https://youtube.com/playlist?list=PLowshK56RPh-stHaRzmPL_lCUey8l37GC)
 
 ## Documentation
 
