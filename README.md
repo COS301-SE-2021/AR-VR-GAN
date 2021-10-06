@@ -31,6 +31,10 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 
 ## Documentation
 
+#### All Documentation
+
+* 📖 [All Documentation](https://drive.google.com/drive/folders/1-IbI9DjOATeWdPx0EA-6kVngEqLSMP3Q?usp=sharing)
+
 #### Software Requirements and Design Specifications
 
 * <details>
@@ -85,3 +89,9 @@ AR/VR-GAN is a visualization tool allowing a user to explore the feature space o
 #### Coding Standards Document
 
 * 📖 [Coding Standards Document](https://drive.google.com/file/d/1-OIiicuXN1hwqxxklAdR0ZCBKBZRerSt/view?usp=sharing)
+
+## Prize Justification Documents
+
+* 🏆 [Innovation (EPI-USE Labs)](https://drive.google.com/file/d/12VSqaF3nzVKwq-g_pcQTatsbvUhcZ0aj/view?usp=sharing)
+* 🏆 [Architectural Awareness (Entelect)](https://drive.google.com/file/d/12UGhvQRCaSd4NkisVdlQcnuy3LU6dHuu/view?usp=sharing)
+* 🏆 [User Experience (Allegiance Consulting Pty Ltd)](https://drive.google.com/file/d/12_cBZ6ssMdyRGNozOQ9xFZNTHlwFNR42/view?usp=sharing)
