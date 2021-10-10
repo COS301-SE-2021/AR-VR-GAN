@@ -67,10 +67,10 @@ export class CustomizeComponent implements OnInit {
           newModel.dataset = listModels['modelDetails'][model]['dataset_used'];
 
           if (newModel.beta == "-1") {
-            newModel.modelType = "CAE";
+            newModel.modelType = "CVAE";
             newModel.beta = "N/A";
           } else {
-            newModel.modelType = "VAE";
+            newModel.modelType = "Beta-CVAE";
           }
 
           if (newModel.modelName == currentModel['modelName']) {
