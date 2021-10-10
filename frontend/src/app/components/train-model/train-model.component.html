@@ -30,14 +30,14 @@
                     <mat-form-field appearance="outline">
                         <mat-label>Choose a model type</mat-label>
                         <mat-select [(value)]="modelType">
-                            <mat-option value="convolutional">CAE</mat-option>
-                            <mat-option value="cvae">VAE</mat-option>
+                            <mat-option value="convolutional">CVAE</mat-option>
+                            <mat-option value="cvae">Beta-CVAE</mat-option>
                         </mat-select>
                     </mat-form-field>
                 </tr>
                 <tr *ngIf="modelType === 'cvae'">
                     <mat-form-field appearance="outline">
-                        <mat-label>Beta</mat-label>
+                        <mat-label>&beta;</mat-label>
                         <input matInput type="number" min="1" max="10" step="1" [(ngModel)]="beta">
                     </mat-form-field>
                 </tr>
